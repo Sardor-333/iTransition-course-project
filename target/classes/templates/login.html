@@ -72,7 +72,9 @@
                                 <div class="form-body">
                                     <form class="row g-3" method="post" th:action="@{/api/v1/auth/login}">
 
-                                        <p th:text="${error}" class="alert alert-danger" role="alert"></p>
+                                        <p th:if="${param.error}" th:text="#{usernameOrPasswordError}"
+                                           class="alert alert-danger">
+                                        </p>
 
                                         <div class="col-12">
                                             <label for="inputUsername" class="form-label">Username</label>

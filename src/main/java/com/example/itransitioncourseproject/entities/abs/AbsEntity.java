@@ -29,8 +29,6 @@ public abstract class AbsEntity {
     @UpdateTimestamp
     protected LocalDateTime updatedAt = LocalDateTime.now();
 
-    protected LocalDateTime loggedAt;
-
     protected Long createdBy;
 
     protected Long updatedBy;

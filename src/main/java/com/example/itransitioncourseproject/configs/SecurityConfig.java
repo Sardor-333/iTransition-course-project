@@ -33,7 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/assets/fonts/**",
             "/assets/images/**",
             "/assets/js/**",
-            "/assets/plugins/**"
+            "/assets/plugins/**",
+            "/webjars/**"
     };
 
     private final UserDetailsService userDetailsService;
@@ -57,10 +58,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .formLogin()
-                .loginPage(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/auth/login");
+                .loginPage(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/auth/login")
+                .defaultSuccessUrl(BaseUrl.API_HOME);
 
         http
                 .logout()
+                .logoutSuccessUrl("/home")
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");

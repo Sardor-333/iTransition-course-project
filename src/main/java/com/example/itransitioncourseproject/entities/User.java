@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -42,6 +43,8 @@ public class User extends AbsEntity implements UserDetails {
 
     @Column(nullable = false)
     boolean enabled = true;
+
+    protected LocalDateTime loggedAt;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "photo_id", referencedColumnName = "id")

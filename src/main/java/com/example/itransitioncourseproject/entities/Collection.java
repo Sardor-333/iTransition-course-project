@@ -22,7 +22,7 @@ public class Collection extends AbsEntity {
     String description;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resource_id", nullable = false)
+    @JoinColumn(name = "resource_id")
     CloudinaryResource cloudinaryResource;
 
     @ManyToOne(fetch = FetchType.LAZY)

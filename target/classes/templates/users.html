@@ -140,8 +140,7 @@
                                 <td th:text="${user.loggedAt}"></td>
 
                                 <!-- Block & Unblock -->
-                                <!-- Todo : If (super admin) then false(implement with response)  -->
-                                <td sec:authorize="!hasRole('ROLE_SUPER_ADMIN')">
+                                <td th:if="${user.role.name != 'ROLE_SUPER_ADMIN'}">
                                     <button th:if="${user.enabled}"
                                             class="btn btn-danger"
                                             th:text="Block"
@@ -153,8 +152,7 @@
                                 </td>
 
                                 <!-- Delete -->
-                                <!-- Todo : If (super admin) then false(implement with response)  -->
-                                <td sec:authorize="!hasRole('ROLE_SUPER_ADMIN')">
+                                <td th:if="${user.role.name != 'ROLE_SUPER_ADMIN'}">
                                     <button class="btn btn-danger"
                                             th:text="Delete"
                                             th:onclick="'deleteUser(\'' + ${user.id} + '\');'">

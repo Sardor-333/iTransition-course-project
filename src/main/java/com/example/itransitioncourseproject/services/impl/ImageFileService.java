@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -19,10 +18,7 @@ public class ImageFileService implements FileService {
 
     @Override
     public File save(MultipartFile multipartFile, String directoryPath) throws IOException {
-        if (multipartFile == null
-                || multipartFile.isEmpty()
-                || multipartFile.getOriginalFilename() == null
-                || !isSupportedContentType(multipartFile))
+        if (!validateMultipart(multipartFile))
             return null;
 
         Path directory = Paths.get(directoryPath);
@@ -44,22 +40,9 @@ public class ImageFileService implements FileService {
     }
 
     @Override
-    public void deleteIfExists(Path path) throws IOException {
-        Files.deleteIfExists(path);
-    }
-
-    @Override
     public boolean isSupportedContentType(MultipartFile multipartFile) {
         if (multipartFile == null) return false;
         String contentType = multipartFile.getContentType();
         return contentType != null && (contentType.equals(ContentType.IMAGE_PNG.getMimeType()) || contentType.equals(ContentType.IMAGE_JPEG.getMimeType()));
-    }
-
-    @Override
-    public boolean validateMultipart(MultipartFile multipartFile) {
-        return !(multipartFile == null ||
-                multipartFile.getOriginalFilename() == null ||
-                multipartFile.getOriginalFilename().equals("") ||
-                multipartFile.getSize() == 0);
     }
 }

@@ -6,5 +6,6 @@ public enum FieldType {
     textarea,
     number,
     date,
-    checkbox
+    checkbox,
+    file
 }

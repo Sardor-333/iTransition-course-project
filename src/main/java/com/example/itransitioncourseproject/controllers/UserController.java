@@ -35,18 +35,18 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
-    @PostMapping("/profile/{id}/enableOrDisable")
-    public RedirectView enableOrDisableUser(@PathVariable Long id,
+    @PostMapping("/profile/{userId}/enableOrDisable")
+    public RedirectView enableOrDisableUser(@PathVariable Long userId,
                                             HttpServletRequest request,
                                             @AuthenticationPrincipal User currentUser,
                                             RedirectAttributes redirectAttrs) {
-        ApiResponse response = userService.enableOrDisableUser(id, request, currentUser);
+        ApiResponse response = userService.enableOrDisableUser(userId, request, currentUser);
         redirectAttrs.addFlashAttribute("response", response);
         return new RedirectView(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/users");
     }
 
     @GetMapping("/profile")
-    public ModelAndView getUserProfileForUser(@AuthenticationPrincipal User currentUser, ModelMap model) {
+    public ModelAndView getUserProfile(@AuthenticationPrincipal User currentUser, ModelMap model) {
         UserProjection user = userService.getUser(currentUser);
         model.addAttribute("user", user);
         return new ModelAndView("profile", model);
@@ -55,6 +55,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable Long id) {
+        // todo : implement delete user
         return null;
     }
 }

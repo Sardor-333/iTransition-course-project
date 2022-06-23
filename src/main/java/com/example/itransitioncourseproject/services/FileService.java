@@ -15,11 +15,15 @@ public interface FileService {
         }
     }
 
+    default boolean validateMultipart(MultipartFile multipartFile) {
+        return !(multipartFile == null ||
+                multipartFile.getOriginalFilename() == null ||
+                multipartFile.getOriginalFilename().equals("") ||
+                multipartFile.getSize() == 0 ||
+                !this.isSupportedContentType(multipartFile));
+    }
+
     File save(MultipartFile upload, String directoryPath) throws IOException;
 
-    void deleteIfExists(Path path) throws IOException;
-
     boolean isSupportedContentType(MultipartFile multipartFile);
-
-    boolean validateMultipart(MultipartFile multipartFile);
 }

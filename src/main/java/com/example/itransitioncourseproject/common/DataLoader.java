@@ -6,7 +6,6 @@ import com.example.itransitioncourseproject.enums.UserRole;
 import com.example.itransitioncourseproject.repositories.RoleRepo;
 import com.example.itransitioncourseproject.repositories.UserRepo;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.ap.internal.util.Collections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -57,7 +56,7 @@ public class DataLoader implements CommandLineRunner {
                         "Shermatov",
                         "sardor",
                         passwordEncoder.encode("sardor"),
-                        Collections.asSet(roleSuperAdmin)
+                        roleSuperAdmin
                 );
                 userRepo.save(admin);
             }

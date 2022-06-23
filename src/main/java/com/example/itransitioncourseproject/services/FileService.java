@@ -20,4 +20,6 @@ public interface FileService {
     void deleteIfExists(Path path) throws IOException;
 
     boolean isSupportedContentType(MultipartFile multipartFile);
+
+    boolean validateMultipart(MultipartFile multipartFile);
 }

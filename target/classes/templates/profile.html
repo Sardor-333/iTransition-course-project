@@ -67,12 +67,9 @@
                                     <!-- USER ROLES -->
                                     <div class="row mb-3">
                                         <div class="col-sm-3">
-                                            <h6 class="mb-0">Roles</h6>
+                                            <h6 class="mb-0">Role</h6>
                                         </div>
-                                        <select name="roleIdList" class="selectpicker" multiple data-live-search="true">
-                                            <option th:each="role: ${user.roles}" th:value="${role.id}"
-                                                    th:text="${role.name}" selected></option>
-                                        </select>
+                                        <span th:text="${user.role.name}" class="col-sm-9 text-secondary"></span>
                                     </div>
 
                                     <div class="row mb-3">

@@ -22,12 +22,11 @@ public interface RoleRepo extends JpaRepository<Role, Long> {
                     "       to_char(r.created_at, 'yyyy-MM-dd HH24:MI') as createdAt,\n" +
                     "       to_char(r.updated_at, 'yyyy-MM-dd HH24:MI') as updatedAt,\n" +
                     "       r.role_name                                 as name\n" +
-                    "from users_roles ur\n" +
-                    "         join roles r on ur.role_id = r.id\n" +
-                    "         join users u on ur.user_id = u.id\n" +
+                    "from roles r\n" +
+                    "         join users u on u.role_id = r.id\n" +
                     "where u.id = :userId"
     )
-    Set<RoleProjection> getRoleByUserId(@Param("userId") Long userId);
+    RoleProjection getRoleByUserId(@Param("userId") Long userId);
 
     @Query(
             nativeQuery = true,

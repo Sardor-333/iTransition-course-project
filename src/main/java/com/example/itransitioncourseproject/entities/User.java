@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.mapstruct.ap.internal.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,7 +13,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -54,13 +54,9 @@ public class User extends AbsEntity implements UserDetails {
     @OnDelete(action = OnDeleteAction.CASCADE)
     CloudinaryResource photo;
 
-    @ManyToMany
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false, referencedColumnName = "id")
-    )
-    Set<Role> roles;
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false, referencedColumnName = "id")
+    Role role;
 
     @OneToMany(mappedBy = "owner")
     List<com.example.itransitioncourseproject.entities.Collection> collections;
@@ -73,7 +69,7 @@ public class User extends AbsEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
+        return Collections.asSet(this.role);
     }
 
     @Override
@@ -96,11 +92,11 @@ public class User extends AbsEntity implements UserDetails {
         return this.enabled;
     }
 
-    public User(String firstName, String lastName, String username, String password, Set<Role> roles) {
+    public User(String firstName, String lastName, String username, String password, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
-        this.roles = roles;
+        this.role = role;
     }
 }

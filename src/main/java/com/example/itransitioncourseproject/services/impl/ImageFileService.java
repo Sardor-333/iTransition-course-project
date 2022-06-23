@@ -54,4 +54,12 @@ public class ImageFileService implements FileService {
         String contentType = multipartFile.getContentType();
         return contentType != null && (contentType.equals(ContentType.IMAGE_PNG.getMimeType()) || contentType.equals(ContentType.IMAGE_JPEG.getMimeType()));
     }
+
+    @Override
+    public boolean validateMultipart(MultipartFile multipartFile) {
+        return !(multipartFile == null ||
+                multipartFile.getOriginalFilename() == null ||
+                multipartFile.getOriginalFilename().equals("") ||
+                multipartFile.getSize() == 0);
+    }
 }

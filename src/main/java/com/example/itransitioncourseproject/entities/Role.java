@@ -22,7 +22,7 @@ public class Role extends AbsEntity implements GrantedAuthority {
     @Column(nullable = false, unique = true, updatable = false)
     UserRole roleName;
 
-    @ManyToMany(mappedBy = "roles")
+    @OneToMany(mappedBy = "role")
     List<User> users;
 
     @Override

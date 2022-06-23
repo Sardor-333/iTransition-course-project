@@ -12,7 +12,6 @@ import com.example.itransitioncourseproject.services.AuthService;
 import com.example.itransitioncourseproject.services.CloudinaryService;
 import com.example.itransitioncourseproject.services.FileService;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.ap.internal.util.Collections;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Service;
 
@@ -43,15 +42,17 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User user = userMapper.mapFromRegisterDtoToUser(registerDto);
-        user.setRoles(Collections.asSet(roleRepo.getByRoleName(UserRole.ROLE_USER)));
+        user.setRole(roleRepo.getByRoleName(UserRole.ROLE_USER));
 
-        try {
-            File saved = fileService.save(registerDto.getProfileImg(), DIRECTORY_UPLOAD);
-            CloudinaryResource resource = cloudinaryService.uploadFile(saved);
-            saved.delete();
-            user.setPhoto(resource);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (fileService.validateMultipart(registerDto.getProfileImg())) {
+            try {
+                File saved = fileService.save(registerDto.getProfileImg(), DIRECTORY_UPLOAD);
+                CloudinaryResource resource = cloudinaryService.uploadFile(saved);
+                saved.delete();
+                user.setPhoto(resource);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         userRepo.save(user);

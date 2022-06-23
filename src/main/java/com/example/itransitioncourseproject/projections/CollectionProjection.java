@@ -1,7 +1,5 @@
 package com.example.itransitioncourseproject.projections;
 
-import org.springframework.beans.factory.annotation.Value;
-
 public interface CollectionProjection {
 
     Long getId();
@@ -12,6 +10,5 @@ public interface CollectionProjection {
 
     String getImgUrl();
 
-    @Value("#{@itemRepo.countAllByCollectionId(target.id)}")
-    Long getItemsCount();
+    Integer getItemsCount();
 }

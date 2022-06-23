@@ -2,6 +2,7 @@ package com.example.itransitioncourseproject.payloads.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -26,4 +27,6 @@ public class RegisterDto {
     @NotBlank(message = "Password mustn't be blank!")
     @Min(value = 6, message = "Password length must be at least 6")
     String password;
+
+    MultipartFile profileImg;
 }

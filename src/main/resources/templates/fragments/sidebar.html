@@ -1,0 +1,55 @@
+<div class="sidebar-wrapper" data-simplebar="true" xmlns:sec="http://www.w3.org/1999/xhtml" th:fragment="sidebar">
+    <div class="sidebar-header">
+        <div>
+            <img th:src="@{/assets/images/logo-icon.png}" class="logo-icon" alt="logo icon">
+        </div>
+        <div>
+            <h4>
+                <a th:href="@{/home}" class="logo-text">iTransition</a>
+            </h4>
+        </div>
+        <div class="toggle-icon ms-auto"><i class='bx bx-arrow-to-left'></i>
+        </div>
+    </div>
+
+    <ul class="metismenu" id="menu">
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class='bx bx-home-circle'></i>
+                </div>
+                <div class="menu-title" th:text="#{menu.main}"></div>
+            </a>
+            <ul>
+                <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                    <a th:href="@{/api/v1/users}" th:text="#{menu.users}">
+                        <i class="bx bx-right-arrow-alt"></i>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/api/v1/topics}" th:text="#{menu.topics}">
+                        <i class="bx bx-right-arrow-alt"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a class="has-arrow" href="javascript:;">
+                <div class="parent-icon"><i class="bx bx-lock"></i>
+                </div>
+                <div class="menu-title" th:text="#{menu.authentication}"></div>
+            </a>
+            <ul>
+                <li sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/api/v1/auth/login}" th:text="#{menu.signin}">
+                        <i class="bx bx-right-arrow-alt"></i>
+                    </a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/api/v1/users/profile}" th:text="#{menu.profile}">
+                        <i class="bx bx-right-arrow-alt"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

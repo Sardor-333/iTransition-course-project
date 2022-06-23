@@ -22,7 +22,6 @@ spring:
 
 server:
   port: 8080
-
 cloudinary:
   cloud-name: itransition-course-project
   api-key: 581912988294536

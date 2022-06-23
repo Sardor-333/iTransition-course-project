@@ -6,12 +6,12 @@ import com.example.itransitioncourseproject.enums.UserRole;
 import com.example.itransitioncourseproject.repositories.RoleRepo;
 import com.example.itransitioncourseproject.repositories.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.ap.internal.util.Collections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 @Component
@@ -43,15 +43,22 @@ public class DataLoader implements CommandLineRunner {
                 roleRepo.save(roleAdmin);
             }
 
+            Role roleSuperAdmin = roleRepo.findByRoleName(UserRole.ROLE_SUPER_ADMIN).orElse(null);
+            if (roleSuperAdmin == null) {
+                roleSuperAdmin = new Role(UserRole.ROLE_SUPER_ADMIN);
+                roleRepo.save(roleSuperAdmin);
+            }
+
             // ADMIN
-            User admin = userRepo.findByUsername("admin").orElse(null);
+            User admin = userRepo.findByUsername("sardor").orElse(null);
             if (admin == null) {
                 admin = new User(
-                        "Admin",
-                        "Adminov",
-                        "admin",
-                        passwordEncoder.encode("admin"),
-                        Arrays.asList(roleAdmin));
+                        "Sardor",
+                        "Shermatov",
+                        "sardor",
+                        passwordEncoder.encode("sardor"),
+                        Collections.asSet(roleSuperAdmin)
+                );
                 userRepo.save(admin);
             }
         }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TopicController {
 
     @GetMapping
-    public String getItems() {
+    public String getTopics() {
         return null;
     }
 }

@@ -24,7 +24,7 @@ public class CloudinaryResource extends AbsEntity {
     @Column(nullable = false)
     String resourceType;
 
-    @Column(nullable = false, updatable = false, unique = true)
+    @Column(nullable = false, updatable = false)
     String secureUrl;
 
     @Column(nullable = false, updatable = false)
@@ -35,4 +35,11 @@ public class CloudinaryResource extends AbsEntity {
 
     @OneToOne(mappedBy = "photo")
     User user;
+
+    public CloudinaryResource(String ext, String resourceType, String secureUrl, String fileOriginalName) {
+        this.ext = ext;
+        this.resourceType = resourceType;
+        this.secureUrl = secureUrl;
+        this.fileOriginalName = fileOriginalName;
+    }
 }

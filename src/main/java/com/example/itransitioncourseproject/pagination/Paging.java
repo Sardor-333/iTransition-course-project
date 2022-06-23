@@ -69,15 +69,12 @@ public class Paging {
 
         if (totalPages < PAGINATION_STEP * 2 + 6) {
             paging.addPageItems(1, totalPages + 1, pageNumber);
-
         } else if (pageNumber < PAGINATION_STEP * 2 + 1) {
             paging.addPageItems(1, PAGINATION_STEP * 2 + 4, pageNumber);
             paging.last(totalPages);
-
         } else if (pageNumber > totalPages - PAGINATION_STEP * 2) {
             paging.first(pageNumber);
             paging.addPageItems(totalPages - PAGINATION_STEP * 2 - 2, totalPages + 1, pageNumber);
-
         } else {
             paging.first(pageNumber);
             paging.addPageItems(pageNumber - PAGINATION_STEP, pageNumber + PAGINATION_STEP + 1, pageNumber);

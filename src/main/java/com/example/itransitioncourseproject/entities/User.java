@@ -3,6 +3,8 @@ package com.example.itransitioncourseproject.entities;
 import com.example.itransitioncourseproject.entities.abs.AbsEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,6 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -46,16 +49,18 @@ public class User extends AbsEntity implements UserDetails {
 
     protected LocalDateTime loggedAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "photo_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     CloudinaryResource photo;
 
     @ManyToMany
     @JoinTable(
+            name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false, referencedColumnName = "id")
     )
-    List<Role> roles;
+    Set<Role> roles;
 
     @OneToMany(mappedBy = "owner")
     List<com.example.itransitioncourseproject.entities.Collection> collections;
@@ -91,7 +96,7 @@ public class User extends AbsEntity implements UserDetails {
         return this.enabled;
     }
 
-    public User(String firstName, String lastName, String username, String password, List<Role> roles) {
+    public User(String firstName, String lastName, String username, String password, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;

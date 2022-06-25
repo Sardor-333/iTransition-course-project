@@ -4,7 +4,6 @@ import com.example.itransitioncourseproject.entities.abs.AbsEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -18,16 +17,12 @@ import javax.persistence.Table;
 @Table(name = "cloudinary_resources")
 public class CloudinaryResource extends AbsEntity {
 
-    @Column(nullable = false)
-    String ext;
+    String extension;
 
-    @Column(nullable = false)
     String resourceType;
 
-    @Column(nullable = false, updatable = false)
     String secureUrl;
 
-    @Column(nullable = false, updatable = false)
     String fileOriginalName;
 
     @OneToOne(mappedBy = "cloudinaryResource")
@@ -36,8 +31,8 @@ public class CloudinaryResource extends AbsEntity {
     @OneToOne(mappedBy = "photo")
     User user;
 
-    public CloudinaryResource(String ext, String resourceType, String secureUrl, String fileOriginalName) {
-        this.ext = ext;
+    public CloudinaryResource(String extension, String resourceType, String secureUrl, String fileOriginalName) {
+        this.extension = extension;
         this.resourceType = resourceType;
         this.secureUrl = secureUrl;
         this.fileOriginalName = fileOriginalName;

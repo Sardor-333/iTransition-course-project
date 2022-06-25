@@ -29,7 +29,7 @@
                         </div>
                         <div class="col-lg-8">
                             <div class="card">
-                                <form class="card-body" th:action="@{/api/v1/users/profile}" method="post">
+                                <form class="card-body" th:action="@{/api/v1/users/profile}" method="post" enctype="multipart/form-data">
 
                                     <!-- FIRST NAME -->
                                     <div class="row mb-3">
@@ -77,7 +77,7 @@
                                             <h6 class="mb-0">Upload image</h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
-                                            <input type="file" class="form-control" id="inputGroupFile04"
+                                            <input type="file" name="profileImg" class="form-control" id="inputGroupFile04"
                                                    aria-describedby="inputGroupFileAddon04" aria-label="Upload">
                                         </div>
                                     </div>
@@ -86,7 +86,7 @@
                                     <div class="row">
                                         <div class="col-sm-3"></div>
                                         <div class="col-sm-9 text-secondary">
-                                            <input type="button" class="btn btn-primary px-4" value="Save Changes"/>
+                                            <input type="submit" class="btn btn-primary px-4" value="Save Changes"/>
                                         </div>
                                     </div>
                                 </form>

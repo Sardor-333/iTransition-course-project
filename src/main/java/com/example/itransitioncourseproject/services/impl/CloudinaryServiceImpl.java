@@ -4,7 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.itransitioncourseproject.entities.CloudinaryResource;
 import com.example.itransitioncourseproject.services.CloudinaryService;
-import com.example.itransitioncourseproject.utils.CloudinaryConstants;
+import com.example.itransitioncourseproject.utils.CloudinaryUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +25,10 @@ public class CloudinaryServiceImpl implements CloudinaryService {
                 "public_id", UUID.randomUUID().toString()
         ));
         return new CloudinaryResource(
-                (String) map.get(CloudinaryConstants.FIELD_FORMAT),
-                (String) map.get(CloudinaryConstants.FIELD_RESOURCE_TYPE),
-                (String) map.get(CloudinaryConstants.FIELD_SECURE_URL),
-                (String) map.get(CloudinaryConstants.FIELD_ORIGINAL_FILE_NAME)
+                (String) map.get(CloudinaryUtils.FIELD_FORMAT),
+                (String) map.get(CloudinaryUtils.FIELD_RESOURCE_TYPE),
+                (String) map.get(CloudinaryUtils.FIELD_SECURE_URL),
+                (String) map.get(CloudinaryUtils.FIELD_ORIGINAL_FILE_NAME)
         );
     }
 }

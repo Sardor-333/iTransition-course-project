@@ -1,7 +1,8 @@
 package com.example.itransitioncourseproject.services.impl;
 
 import com.example.itransitioncourseproject.services.FileService;
-import org.apache.http.entity.ContentType;
+import com.example.itransitioncourseproject.services.MultipartService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,13 +17,19 @@ import java.util.UUID;
 @Service
 public class ImageFileService implements FileService {
 
+    private final MultipartService multipartService;
+
+    public ImageFileService(@Lazy MultipartService multipartService) {
+        this.multipartService = multipartService;
+    }
+
     @Override
     public File save(MultipartFile multipartFile, String directoryPath) throws IOException {
-        if (!validateMultipart(multipartFile))
+        if (!multipartService.isValidMultipart(multipartFile))
             return null;
 
         Path directory = Paths.get(directoryPath);
-        this.init(directory);
+        multipartService.initFileOrDirectory(directory);
 
         String[] split = multipartFile.getOriginalFilename().split("\\.");
         if (split.length >= 2) {
@@ -37,12 +44,5 @@ public class ImageFileService implements FileService {
             }
         }
         return null;
-    }
-
-    @Override
-    public boolean isSupportedContentType(MultipartFile multipartFile) {
-        if (multipartFile == null) return false;
-        String contentType = multipartFile.getContentType();
-        return contentType != null && (contentType.equals(ContentType.IMAGE_PNG.getMimeType()) || contentType.equals(ContentType.IMAGE_JPEG.getMimeType()));
     }
 }

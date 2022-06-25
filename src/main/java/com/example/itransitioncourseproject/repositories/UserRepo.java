@@ -16,6 +16,8 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     boolean existsByUsername(String username);
 
+    boolean existsByUsernameAndIdNot(String username, Long id); // when updating username
+
     @Query(
             nativeQuery = true,
             value = "select u.id                                                as id,\n" +

@@ -2,6 +2,7 @@ package com.example.itransitioncourseproject.services;
 
 import com.example.itransitioncourseproject.entities.User;
 import com.example.itransitioncourseproject.pagination.Paged;
+import com.example.itransitioncourseproject.payloads.request.ProfileDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
 import com.example.itransitioncourseproject.projections.UserProjection;
 
@@ -16,4 +17,6 @@ public interface UserService {
     UserProjection getUser(User user);
 
     ApiResponse deleteUser(Long id);
+
+    ApiResponse editProfile(ProfileDto profileDto, User currentUser);
 }

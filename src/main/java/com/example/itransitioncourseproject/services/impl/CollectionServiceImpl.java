@@ -5,7 +5,7 @@ import com.example.itransitioncourseproject.pagination.Paging;
 import com.example.itransitioncourseproject.projections.CollectionProjection;
 import com.example.itransitioncourseproject.repositories.CollectionRepo;
 import com.example.itransitioncourseproject.services.CollectionService;
-import com.example.itransitioncourseproject.utils.Validator;
+import com.example.itransitioncourseproject.utils.PageSizeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +19,7 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public Paged<CollectionProjection> getCollections(Integer page, Integer size) {
-        Validator.validatePageAndSize(page, size);
+        PageSizeUtils.validatePageAndSize(page, size);
         Page<CollectionProjection> collectionsPage = collectionRepo.getCollectionsPageable(PageRequest.of(page - 1, size));
         return new Paged<>(collectionsPage, Paging.of(collectionsPage.getTotalPages(), page, size));
     }

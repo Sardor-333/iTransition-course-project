@@ -1,7 +1,7 @@
 package com.example.itransitioncourseproject.controllers;
 
 import com.example.itransitioncourseproject.services.CollectionService;
-import com.example.itransitioncourseproject.utils.AppConstants;
+import com.example.itransitioncourseproject.utils.PageSizeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +17,8 @@ public class HomeController {
     private final CollectionService collectionService;
 
     @GetMapping(path = {"/", "home"})
-    public String home(@RequestParam(name = "page", required = false, defaultValue = AppConstants.DEFAULT_PAGE) Integer page,
-                       @RequestParam(name = "size", required = false, defaultValue = AppConstants.DEFAULT_SIZE) Integer size,
+    public String home(@RequestParam(name = "page", required = false, defaultValue = PageSizeUtils.DEFAULT_PAGE) Integer page,
+                       @RequestParam(name = "size", required = false, defaultValue = PageSizeUtils.DEFAULT_SIZE) Integer size,
                        Model model) {
         model.addAttribute("collections", collectionService.getCollections(page, size));
         return "home";

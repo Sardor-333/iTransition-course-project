@@ -34,7 +34,7 @@
                 <ul class="pagination" th:if="${collections.page.getTotalPages() > 1}">
                     <li class="page-item" th:classappend="${!collections.paging.isPrevEnabled()? 'disabled' : ''}">
                         <a class="page-link" th:href="@{'/?page=' + ${collections.paging.pageNumber - 1}}"
-                           tabindex="-1" th:text="#{previous}"></a>
+                           tabindex="-1" th:text="#{menu.previous}"></a>
                     </li>
                     <th:block th:each="item : ${collections.paging.getItems()}">
                         <li class="page-item"
@@ -49,7 +49,7 @@
                     </th:block>
                     <li class="page-item" th:classappend="${!collections.paging.isNextEnabled()? 'disabled' : ''}">
                         <a class="page-link" th:href="@{'/?page=' + ${collections.paging.pageNumber + 1}}"
-                           th:text="#{next}"></a>
+                           th:text="#{menu.next}"></a>
                     </li>
                 </ul>
             </nav>

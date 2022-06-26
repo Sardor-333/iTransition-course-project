@@ -13,50 +13,34 @@
         <div class="page-content">
 
             <h1>Latest items</h1>
-            <!--      Todo load 5 latest items (pagination)       -->
 
             <div class="card" th:each="item : ${items}" style="width: 18rem; display: inline-flex">
-                <a class="card-body" th:text="${item.name}" th:href="@{'/api/v1/items/' + ${item.id}}">
-                </a>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item" th:text="'Collection: ' + ${item.collection.name}"></li>
-                    <li class="list-group-item"
-                        th:text="'Author: ' + ${item.collection.author.firstName} + ' ' + ${item.collection.author.lastName}"></li>
-                    <div class="card-body">
-                        <div class="card-link" th:text="'Likes: ' + ${item.likesCount}">Card link</div>
-                        <div class="card-link" th:text="'Comments: ' + ${item.commentsCount}"></div>
-                    </div>
-                </ul>
+                <div class="card-body">
+                    <div class="card-title" th:text="${item.name}"></div>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" th:text="'Collection: ' + ${item.collection.name}"></div>
+                    <div class="card-title" th:text="'Author: ' + ${item.collection.author.firstName} + ' ' + ${item.collection.author.lastName}"></div>
+                    <div class="card-title" th:text="'Likes: ' + ${item.likesCount}"></div>
+                    <div class="card-title" th:text="'Comments: ' + ${item.commentsCount}"></div>
+                </div>
+                <a th:href="@{'/api/v1/items/' + ${item.id}}" class="btn btn-primary">Detail</a>
             </div>
-
-            <!--            <div class="card" style="width: 18rem;">-->
-            <!--                <div class="card-body">-->
-            <!--                    <h5 class="card-title">Card title</h5>-->
-            <!--                </div>-->
-            <!--                <ul class="list-group list-group-flush">-->
-            <!--                    <li class="list-group-item">Cras justo odio</li>-->
-            <!--                    <li class="list-group-item">Dapibus ac facilisis in</li>-->
-            <!--                </ul>-->
-            <!--                <div class="card-body">-->
-            <!--                    <a href="#" class="card-link">Card link</a>-->
-            <!--                    <a href="#" class="card-link">Another link</a>-->
-            <!--                </div>-->
-            <!--            </div>-->
 
             <h1>Top 5 Largest collections</h1>
-            <!--     Content       -->
-            <div class="card-group shadow">
-                <a th:href="@{'/api/v1/collections/' + ${collection.id}}" class="card border-end shadow-none"
-                   th:each="collection: ${collections}">
-                    <img th:src="${collection.imgUrl}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${collection.name}"></h5>
-                        <h5 class="card-title text-muted" th:text="#{menu.itemsCount} + ${collection.itemsCount}"></h5>
-                        <p class="card-text" th:text="${collection.description}"></p>
-                    </div>
-                </a>
-            </div>
 
+            <div class="card" th:each="collection : ${collections}" style="width: 18rem; display: inline-flex">
+                <img class="card-img-top" th:src="${collection.imgUrl}" alt="Card image cap">
+                <div class="card-body">
+                    <div class="card-title" th:text="${collection.name}"></div>
+                    <div class="card-text" th:text="${collection.description}"></div>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" th:text="'Author: ' + ${collection.author.firstName} + ' ' + ${collection.author.lastName}"></div>
+                    <div class="card-title" th:text="#{menu.items} + ${collection.itemsCount}"></div>
+                </div>
+                <a th:href="@{'/api/v1/collections/' + ${collection.id}}" class="btn btn-primary">Detail</a>
+            </div>
         </div>
     </div>
 

@@ -6,7 +6,9 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,4 +21,7 @@ public class Tag extends AbsEntity {
 
     @Column(nullable = false, updatable = false, unique = true)
     String name;
+
+    @ManyToMany(mappedBy = "tags")
+    List<Item> items;
 }

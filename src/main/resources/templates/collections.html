@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+
+<body>
+<div class="wrapper">
+
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <header th:replace="fragments/header :: header"></header>
+
+    <div class="page-wrapper">
+        <div class="page-content">
+            <!--     Content       -->
+            <div class="card" th:each="collection : ${collections.page}" style="width: 18rem; display: inline-flex">
+                <img class="card-img-top" th:src="${collection.imgUrl}" alt="Card image cap">
+                <div class="card-body">
+                    <div class="card-title" th:text="${collection.name}"></div>
+                    <div class="card-text" th:text="${collection.description}"></div>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" th:text="'Author: ' + ${collection.author.firstName} + ' ' + ${collection.author.lastName}"></div>
+                    <div class="card-title" th:text="#{menu.items} + ${collection.itemsCount}"></div>
+                </div>
+                <a th:href="@{'/api/v1/items/collection/' + ${collection.id}}" class="btn btn-primary">View items</a>
+            </div>
+
+            <!--     Pagination       -->
+            <nav aria-label="Page navigation" class="paging">
+                <ul class="pagination" th:if="${collections.page.getTotalPages() > 1}">
+                    <li class="page-item" th:classappend="${!collections.paging.isPrevEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/api/v1/collections?page=' + ${collections.paging.pageNumber - 1}}"
+                           tabindex="-1" th:text="#{menu.previous}"></a>
+                    </li>
+                    <th:block th:each="item : ${collections.paging.getItems()}">
+                        <li class="page-item"
+                            th:classappend="${item.index == collections.paging.pageNumber? 'active' : ''}"
+                            th:if="${item.pageItemType.name() == 'PAGE'}">
+                            <a class="page-link" th:href="@{'/?page=' + ${item.index}}"
+                               th:text="${item.index}"></a>
+                        </li>
+                        <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${!collections.paging.isNextEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/api/v1/collections?page=' + ${collections.paging.pageNumber + 1}}"
+                           th:text="#{menu.next}"></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+<!-- Theme Customizer -->
+<div th:replace="fragments/theme-customizer :: theme-customizer"></div>
+
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/plugins/simplebar/js/simplebar.min.js}"></script>
+<script th:src="@{/assets/plugins/metismenu/js/metisMenu.min.js}"></script>
+<script th:src="@{/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/js/app.js}"></script>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+
+</html>

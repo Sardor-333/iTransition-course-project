@@ -12,7 +12,7 @@
     <div class="page-wrapper">
         <div class="page-content">
 
-            <h1>Latest items</h1>
+            <h1 th:text="#{menu.latestItems}"></h1>
 
             <div class="card" th:each="item : ${items}" style="width: 18rem; display: inline-flex">
                 <div class="card-body">
@@ -27,7 +27,7 @@
                 <a th:href="@{'/api/v1/items/' + ${item.id}}" class="btn btn-primary">Detail</a>
             </div>
 
-            <h1>Top 5 Largest collections</h1>
+            <h1 th:text="#{menu.top5BiggestCollections}"></h1>
 
             <div class="card" th:each="collection : ${collections}" style="width: 18rem; display: inline-flex">
                 <img class="card-img-top" th:src="${collection.imgUrl}" alt="Card image cap">
@@ -39,8 +39,11 @@
                     <div class="card-title" th:text="'Author: ' + ${collection.author.firstName} + ' ' + ${collection.author.lastName}"></div>
                     <div class="card-title" th:text="#{menu.items} + ${collection.itemsCount}"></div>
                 </div>
-                <a th:href="@{'/api/v1/collections/' + ${collection.id}}" class="btn btn-primary">Detail</a>
+                <a th:href="@{'/api/v1/collections/' + ${collection.id}}" class="btn btn-primary">View items</a>
             </div>
+
+            <h1 th:text="#{menu.tagCloud}"></h1>
+            <a style="margin-right: 10px;" th:href="@{/api/v1/items/tag/${tag.id}}" class="btn btn-primary btn-lg" th:each="tag: ${tags}" th:text="${tag.name}"></a>
         </div>
     </div>
 

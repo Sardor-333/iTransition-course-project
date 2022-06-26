@@ -28,6 +28,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/auth/register",
             BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/auth/login",
 
+            // COLLECTIONS
+            BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/collections",
+
+            // ITEMS
+            BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/items",
+
             "/assets/css/**",
             "/assets/flags/**",
             "/assets/fonts/**",
@@ -63,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .logout()
-                .logoutSuccessUrl("/home")
+                .logoutSuccessUrl(BaseUrl.API_HOME)
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");

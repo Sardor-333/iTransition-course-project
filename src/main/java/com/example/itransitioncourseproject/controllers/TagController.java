@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/topics")
-public class TopicController {
+public class TagController {
 
     @GetMapping
     public String getTopics() {

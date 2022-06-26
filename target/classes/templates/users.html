@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <!-- Required meta tags -->
@@ -86,8 +86,9 @@
                                 <th>Created Time</th>
                                 <th>Updated Time</th>
                                 <th>Logged Time</th>
-                                <th>Action</th>
-                                <th>Action</th>
+                                <th>Status</th>
+                                <th>Delete</th>
+                                <th>Role</th>
                             </tr>
                             </thead>
 
@@ -158,6 +159,23 @@
                                             th:onclick="'deleteUser(\'' + ${user.id} + '\');'">
                                     </button>
                                 </td>
+
+                                <!-- Change role -->
+                                <td th:if="${user.role.name != 'ROLE_SUPER_ADMIN'}">
+                                    <!-- IF ADMIN THEN MAKE USER -->
+                                    <button class="btn btn-primary"
+                                            th:if="${user.role.name == 'ROLE_ADMIN'}"
+                                            th:text="#{menu.makeUser}"
+                                            th:onclick="'changeRole(\'' + ${user.id} + '\');'">
+                                    </button>
+
+                                    <!-- IF USER THEN MAKE ADMIN -->
+                                    <button class="btn btn-primary"
+                                            th:if="${user.role.name == 'ROLE_USER'}"
+                                            th:text="#{menu.makeAdmin}"
+                                            th:onclick="'changeRole(\'' + ${user.id} + '\');'">
+                                    </button>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -209,6 +227,12 @@
     function deleteUser(userId) {
         fetch('/api/v1/users/' + userId, {
             method: 'delete'
+        }).then(response => location.reload());
+    }
+
+    function changeRole(userId) {
+        fetch('/api/v1/users/' + userId + '/changeRole', {
+            method: 'post'
         }).then(response => location.reload());
     }
 

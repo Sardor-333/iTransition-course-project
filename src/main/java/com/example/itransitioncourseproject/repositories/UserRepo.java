@@ -50,4 +50,22 @@ public interface UserRepo extends JpaRepository<User, Long> {
                     "where u.id = :id"
     )
     UserProjection getUser(@Param("id") Long id);
+
+    @Query(
+            nativeQuery = true,
+            value = "select u.id                                                as id,\n" +
+                    "       to_char(u.created_at, 'yyyy-MM-dd HH24:MI') as createdAt,\n" +
+                    "       to_char(u.updated_at, 'yyyy-MM-dd HH24:MI') as updatedAt,\n" +
+                    "       u.first_name                                        as firstName,\n" +
+                    "       u.last_name                                         as lastName,\n" +
+                    "       u.username                                          as username,\n" +
+                    "       u.enabled                                           as enabled,\n" +
+                    "       to_char(u.logged_at, 'yyyy-MM-dd HH24:MI')  as loggedAt,\n" +
+                    "       cr.secure_url                                       as imgUrl\n" +
+                    "from users u\n" +
+                    "         left join cloudinary_resources cr on cr.id = u.photo_id\n " +
+                    "join collections c on u.id = c.user_id " +
+                    "where c.id = :collectionId"
+    )
+    UserProjection getUserByCollectionId(@Param("collectionId") Long id);
 }

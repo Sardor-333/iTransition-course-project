@@ -6,13 +6,11 @@ import com.example.itransitioncourseproject.services.FileService;
 import com.example.itransitioncourseproject.services.MultipartService;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.entity.ContentType;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 @Service
 @RequiredArgsConstructor

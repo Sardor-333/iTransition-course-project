@@ -1,13 +1,12 @@
 package com.example.itransitioncourseproject.controllers;
 
 import com.example.itransitioncourseproject.services.CollectionService;
-import com.example.itransitioncourseproject.utils.PageSizeUtils;
+import com.example.itransitioncourseproject.services.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/")
@@ -15,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomeController {
 
     private final CollectionService collectionService;
+    private final ItemService itemService;
 
     @GetMapping(path = {"/", "home"})
-    public String home(@RequestParam(name = "page", required = false, defaultValue = PageSizeUtils.DEFAULT_PAGE) Integer page,
-                       @RequestParam(name = "size", required = false, defaultValue = PageSizeUtils.DEFAULT_SIZE) Integer size,
-                       Model model) {
-        model.addAttribute("collections", collectionService.getCollections(page, size));
+    public String home(Model model) {
+        model.addAttribute("collections", collectionService.getTop5LargestCollections());
+        model.addAttribute("items", itemService.get5LatestAddedItems());
         return "home";
     }
 }

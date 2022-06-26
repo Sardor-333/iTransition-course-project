@@ -10,6 +10,7 @@ import com.example.itransitioncourseproject.payloads.request.ProfileDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
 import com.example.itransitioncourseproject.projections.UserProjection;
 import com.example.itransitioncourseproject.repositories.CloudinaryResourceRepo;
+import com.example.itransitioncourseproject.repositories.RoleRepo;
 import com.example.itransitioncourseproject.repositories.UserRepo;
 import com.example.itransitioncourseproject.services.MultipartService;
 import com.example.itransitioncourseproject.services.UserService;
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final ResourceBundleMessageSource messageSource;
     private final MultipartService multipartService;
     private final CloudinaryResourceRepo cloudinaryResourceRepo;
+    private final RoleRepo roleRepo;
 
     @Override
     public Paged<UserProjection> getUsers(Integer page, Integer size) {
@@ -51,7 +53,7 @@ public class UserServiceImpl implements UserService {
             User user = optional.get();
 
             if (hasRoleSuperAdmin(user))
-                return new ApiResponse(false, messageSource.getMessage("error.superAdminStatusCannotBeEdited", null, Locale.getDefault()));
+                return new ApiResponse(false, messageSource.getMessage("error.superAdminCannotBeEdited", null, Locale.getDefault()));
 
             enableOrDisable(user, currentUser, request);
             return new ApiResponse(true, messageSource.getMessage(
@@ -99,6 +101,24 @@ public class UserServiceImpl implements UserService {
 
         userRepo.save(currentUser);
         return new ApiResponse(true, messageSource.getMessage("ok.profileEdited", null, Locale.getDefault()));
+    }
+
+    @Override
+    public ApiResponse changeRole(Long userId) {
+        Optional<User> optionalUser = userRepo.findById(userId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (hasRoleSuperAdmin(user))
+                return new ApiResponse(false, messageSource.getMessage("error.superAdminCannotBeEdited", null, Locale.getDefault()));
+
+            if (user.getRole().getRoleName() == UserRole.ROLE_ADMIN)
+                user.setRole(roleRepo.getByRoleName(UserRole.ROLE_USER));
+            else user.setRole(roleRepo.getByRoleName(UserRole.ROLE_ADMIN));
+
+            userRepo.save(user);
+            return new ApiResponse(false, messageSource.getMessage("ok.userRoleChanged", new Object[]{user.getRole().getRoleName()}, Locale.getDefault()));
+        }
+        return new ApiResponse(false, messageSource.getMessage("error.userNotFound", new Object[]{userId}, Locale.getDefault()));
     }
 
     private void enableOrDisable(User user, User currentUser, HttpServletRequest request) {

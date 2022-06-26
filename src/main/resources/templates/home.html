@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head"> </head>
+<head th:replace="fragments/head :: head"></head>
 
 <body>
 <div class="wrapper">
@@ -15,11 +15,39 @@
             <h1>Latest items</h1>
             <!--      Todo load 5 latest items (pagination)       -->
 
+            <div class="card" th:each="item : ${items}" style="width: 18rem; display: inline-flex">
+                <a class="card-body" th:text="${item.name}" th:href="@{'/api/v1/items/' + ${item.id}}">
+                </a>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" th:text="'Collection: ' + ${item.collection.name}"></li>
+                    <li class="list-group-item"
+                        th:text="'Author: ' + ${item.collection.author.firstName} + ' ' + ${item.collection.author.lastName}"></li>
+                    <div class="card-body">
+                        <div class="card-link" th:text="'Likes: ' + ${item.likesCount}">Card link</div>
+                        <div class="card-link" th:text="'Comments: ' + ${item.commentsCount}"></div>
+                    </div>
+                </ul>
+            </div>
+
+            <!--            <div class="card" style="width: 18rem;">-->
+            <!--                <div class="card-body">-->
+            <!--                    <h5 class="card-title">Card title</h5>-->
+            <!--                </div>-->
+            <!--                <ul class="list-group list-group-flush">-->
+            <!--                    <li class="list-group-item">Cras justo odio</li>-->
+            <!--                    <li class="list-group-item">Dapibus ac facilisis in</li>-->
+            <!--                </ul>-->
+            <!--                <div class="card-body">-->
+            <!--                    <a href="#" class="card-link">Card link</a>-->
+            <!--                    <a href="#" class="card-link">Another link</a>-->
+            <!--                </div>-->
+            <!--            </div>-->
+
             <h1>Top 5 Largest collections</h1>
             <!--     Content       -->
             <div class="card-group shadow">
                 <a th:href="@{'/api/v1/collections/' + ${collection.id}}" class="card border-end shadow-none"
-                   th:each="collection: ${collections.page}">
+                   th:each="collection: ${collections}">
                     <img th:src="${collection.imgUrl}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${collection.name}"></h5>
@@ -29,30 +57,6 @@
                 </a>
             </div>
 
-            <!--     Pagination       -->
-            <nav aria-label="Page navigation" class="paging">
-                <ul class="pagination" th:if="${collections.page.getTotalPages() > 1}">
-                    <li class="page-item" th:classappend="${!collections.paging.isPrevEnabled()? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{'/?page=' + ${collections.paging.pageNumber - 1}}"
-                           tabindex="-1" th:text="#{menu.previous}"></a>
-                    </li>
-                    <th:block th:each="item : ${collections.paging.getItems()}">
-                        <li class="page-item"
-                            th:classappend="${item.index == collections.paging.pageNumber? 'active' : ''}"
-                            th:if="${item.pageItemType.name() == 'PAGE'}">
-                            <a class="page-link" th:href="@{'/?page=' + ${item.index}}"
-                               th:text="${item.index}"></a>
-                        </li>
-                        <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
-                            <a class="page-link" href="#">...</a>
-                        </li>
-                    </th:block>
-                    <li class="page-item" th:classappend="${!collections.paging.isNextEnabled()? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{'/?page=' + ${collections.paging.pageNumber + 1}}"
-                           th:text="#{menu.next}"></a>
-                    </li>
-                </ul>
-            </nav>
         </div>
     </div>
 

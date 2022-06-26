@@ -61,4 +61,12 @@ public class UserController {
         redirectAttrs.addFlashAttribute("response", apiResponse);
         return new RedirectView(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/users/profile");
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
+    @PostMapping("/{userId}/changeRole")
+    public RedirectView changeRole(@PathVariable Long userId, RedirectAttributes redirectAttrs) {
+        ApiResponse apiResponse = userService.changeRole(userId);
+        redirectAttrs.addFlashAttribute("response", apiResponse);
+        return new RedirectView(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/users");
+    }
 }

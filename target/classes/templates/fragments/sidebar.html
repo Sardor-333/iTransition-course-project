@@ -54,6 +54,11 @@
                         <i class="bx bx-right-arrow-alt"></i>
                     </a>
                 </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/api/v1/collections/my}" th:text="#{sidebar.myCollections}">
+                        <i class="bx bx-right-arrow-alt"></i>
+                    </a>
+                </li>
             </ul>
         </li>
     </ul>

@@ -36,7 +36,7 @@
                         <li class="page-item"
                             th:classappend="${item.index == collections.paging.pageNumber? 'active' : ''}"
                             th:if="${item.pageItemType.name() == 'PAGE'}">
-                            <a class="page-link" th:href="@{'/?page=' + ${item.index}}"
+                            <a class="page-link" th:href="@{'/api/v1/collections?page=' + ${item.index}}"
                                th:text="${item.index}"></a>
                         </li>
                         <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">

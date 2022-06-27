@@ -18,4 +18,19 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemProjection> get5LatestAddedItems() {
         return itemRepo.get5LatestAddedItems();
     }
+
+    @Override
+    public List<ItemProjection> getItems() {
+        return itemRepo.getAllItems();
+    }
+
+    @Override
+    public List<ItemProjection> getItemsByCollectionId(Long collectionId) {
+        return itemRepo.getItemsByCollectionId(collectionId);
+    }
+
+    @Override
+    public List<ItemProjection> getItemsByTagId(Long collectionId) {
+        return itemRepo.getItemsByTagId(collectionId);
+    }
 }

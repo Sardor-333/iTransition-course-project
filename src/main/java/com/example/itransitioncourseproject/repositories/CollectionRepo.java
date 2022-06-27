@@ -57,4 +57,20 @@ public interface CollectionRepo extends JpaRepository<Collection, Long> {
                     "group by c.id, c.name, c.description, cr.secure_url"
     )
     CollectionProjection getCollectionByItemId(@Param("itemId") Long itemId);
+
+    @Query(
+            nativeQuery = true,
+            value = "select c.id          as id,\n" +
+                    "       c.name        as name,\n" +
+                    "       c.description as description,\n" +
+                    "       cr.secure_url as imgUrl,\n" +
+                    "       count(i.*)    as itemsCount\n" +
+                    "from collections c\n" +
+                    "         left outer join cloudinary_resources cr on cr.id = c.resource_id\n" +
+                    "         left join items i on c.id = i.collection_id\n" +
+                    "where c.user_id = :userId\n" +
+                    "group by c.id, c.name, c.description, cr.secure_url, c.created_at " +
+                    "order by c.created_at desc"
+    )
+    Page<CollectionProjection> getMyCollections(@Param("userId") Long userId, Pageable pageable);
 }

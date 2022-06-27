@@ -1,5 +1,6 @@
 package com.example.itransitioncourseproject.services.impl;
 
+import com.example.itransitioncourseproject.entities.User;
 import com.example.itransitioncourseproject.pagination.Paged;
 import com.example.itransitioncourseproject.pagination.Paging;
 import com.example.itransitioncourseproject.projections.CollectionProjection;
@@ -28,6 +29,12 @@ public class CollectionServiceImpl implements CollectionService {
     public Paged<CollectionProjection> getCollections(Integer page, Integer size) {
         PageSizeUtils.validatePageAndSize(page, size);
         Page<CollectionProjection> collectionsPage = collectionRepo.getCollectionsPageable(PageRequest.of(page - 1, size));
+        return new Paged<>(collectionsPage, Paging.of(collectionsPage.getTotalPages(), page, size));
+    }
+
+    @Override
+    public Paged<CollectionProjection> getMyCollections(Integer page, Integer size, User currentUser) {
+        Page<CollectionProjection> collectionsPage = collectionRepo.getMyCollections(currentUser.getId(), PageRequest.of(page - 1, size));
         return new Paged<>(collectionsPage, Paging.of(collectionsPage.getTotalPages(), page, size));
     }
 }

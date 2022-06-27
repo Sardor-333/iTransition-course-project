@@ -39,11 +39,11 @@
                     <div class="card-title" th:text="'Author: ' + ${collection.author.firstName} + ' ' + ${collection.author.lastName}"></div>
                     <div class="card-title" th:text="#{menu.items} + ${collection.itemsCount}"></div>
                 </div>
-                <a th:href="@{'/api/v1/collections/' + ${collection.id}}" class="btn btn-primary">View items</a>
+                <a th:href="@{'/api/v1/items/collection/' + ${collection.id}}" class="btn btn-primary">View items</a>
             </div>
 
             <h1 th:text="#{menu.tagCloud}"></h1>
-            <a style="margin-right: 10px;" th:href="@{/api/v1/items/tag/${tag.id}}" class="btn btn-primary btn-lg" th:each="tag: ${tags}" th:text="${tag.name}"></a>
+            <a style="margin-right: 10px;" th:href="@{'/api/v1/items/tag/'+${tag.id}}" class="btn btn-primary btn-lg" th:each="tag: ${tags}" th:text="${tag.name}"></a>
         </div>
     </div>
 

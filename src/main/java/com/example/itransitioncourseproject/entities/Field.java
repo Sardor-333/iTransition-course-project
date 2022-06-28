@@ -25,7 +25,6 @@ public class Field extends AbsEntity {
     FieldType fieldType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "collection_id", nullable = false, referencedColumnName = "id")
     Collection collection;
 
     @OneToMany(mappedBy = "field")

@@ -36,6 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             BaseUrl.API_PREFIX+BaseUrl.API_VERSION+"/items/collection/*",
             BaseUrl.API_PREFIX+BaseUrl.API_VERSION+"/items/tag/*",
 
+            // TOPICS
+            BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/topics",
+
             "/assets/css/**",
             "/assets/flags/**",
             "/assets/fonts/**",

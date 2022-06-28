@@ -15,12 +15,12 @@ import javax.persistence.*;
 @Table(name = "values")
 public class Value extends AbsEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "item_id", nullable = false, referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
     Item item;
 
-    @ManyToOne
-    @JoinColumn(name = "field_id", nullable = false, referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
     Field field;
 
     @Column(nullable = false)

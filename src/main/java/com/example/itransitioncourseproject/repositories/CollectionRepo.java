@@ -73,4 +73,6 @@ public interface CollectionRepo extends JpaRepository<Collection, Long> {
                     "order by c.created_at desc"
     )
     Page<CollectionProjection> getMyCollections(@Param("userId") Long userId, Pageable pageable);
+
+    boolean existsByNameAndUserId(String name, Long owner_id);
 }

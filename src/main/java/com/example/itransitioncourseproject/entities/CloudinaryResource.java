@@ -25,7 +25,7 @@ public class CloudinaryResource extends AbsEntity {
 
     String fileOriginalName;
 
-    @OneToOne(mappedBy = "cloudinaryResource")
+    @OneToOne(mappedBy = "img")
     Collection collection;
 
     @OneToOne(mappedBy = "photo")

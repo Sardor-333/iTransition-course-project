@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/topics")
+@RequestMapping(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/tags")
 public class TagController {
 
     @GetMapping
-    public String getTopics() {
+    public String getTags() {
         return null;
     }
 }

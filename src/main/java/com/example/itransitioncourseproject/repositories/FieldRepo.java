@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface FieldRepo extends JpaRepository<Field, Long> {
 
     Optional<Field> findByFieldType(FieldType fieldType);
+
+    boolean existsByNameAndCollectionId(String name, Long collection_id);
 }

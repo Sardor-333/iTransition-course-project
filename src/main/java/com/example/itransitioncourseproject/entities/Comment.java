@@ -16,11 +16,11 @@ import javax.persistence.*;
 public class Comment extends AbsEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(nullable = false)
     User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(nullable = false)
     Item item;
 
     @Column(nullable = false)

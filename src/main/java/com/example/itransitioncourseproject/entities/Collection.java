@@ -21,17 +21,21 @@ public class Collection extends AbsEntity {
 
     String description;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "resource_id")
-    CloudinaryResource cloudinaryResource;
+    CloudinaryResource img;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
-    User owner;
+    @JoinColumn(nullable = false)
+    User user;
 
     @OneToMany(mappedBy = "collection")
     List<Item> items;
 
-    @OneToMany(mappedBy = "collection")
+    @OneToMany(mappedBy = "collection", cascade = CascadeType.ALL)
     List<Field> fields;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    Topic topic;
 }

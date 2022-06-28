@@ -55,7 +55,7 @@ public class User extends AbsEntity implements UserDetails {
     @JoinColumn(name = "role_id", nullable = false, referencedColumnName = "id")
     Role role;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "user")
     List<com.example.itransitioncourseproject.entities.Collection> collections;
 
     @OneToMany(mappedBy = "likedBy")

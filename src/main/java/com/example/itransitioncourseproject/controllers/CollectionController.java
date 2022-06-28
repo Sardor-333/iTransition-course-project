@@ -2,17 +2,20 @@ package com.example.itransitioncourseproject.controllers;
 
 import com.example.itransitioncourseproject.entities.User;
 import com.example.itransitioncourseproject.pagination.Paged;
+import com.example.itransitioncourseproject.payloads.request.CollectionDto;
+import com.example.itransitioncourseproject.payloads.response.ApiResponse;
 import com.example.itransitioncourseproject.projections.CollectionProjection;
 import com.example.itransitioncourseproject.services.CollectionService;
 import com.example.itransitioncourseproject.utils.BaseUrl;
 import com.example.itransitioncourseproject.utils.PageSizeUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -38,5 +41,19 @@ public class CollectionController {
         Paged<CollectionProjection> myCollections = collectionService.getMyCollections(page, size, user);
         model.addAttribute("collections", myCollections);
         return new ModelAndView("my-collections", model);
+    }
+
+    @GetMapping("/create")
+    public String getCollectionCreatePage() {
+        return "create-collection";
+    }
+
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody
+    public ResponseEntity<ApiResponse> createCollection(@RequestPart(name = "photo", required = false) MultipartFile photo,
+                                                        @RequestPart(name = "collection") CollectionDto collectionDto,
+                                                        @AuthenticationPrincipal User currentUser) {
+        ApiResponse response = collectionService.createCollection(collectionDto, photo, currentUser);
+        return ResponseEntity.status(response.isSuccess() ? 200 : 409).body(response);
     }
 }

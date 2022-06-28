@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+
+<body>
+<div class="wrapper">
+
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <header th:replace="fragments/header :: header"></header>
+
+    <div class="page-wrapper">
+        <div class="page-content">
+
+            <h1>Create new collection</h1>
+
+            <div id="response"></div>
+
+            <form id="create-collection-form" th:action="@{/api/v1/collections/create}" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <!-- Collection name -->
+                    <div class="col">
+                        <label for="collection-name">Collection nam</label>
+                        <input id="collection-name" name="name" type="text" class="form-control">
+                    </div>
+
+                    <!-- Collection photo -->
+                    <div class="col">
+                        <label for="collection-photo">Collection description</label>
+                        <input name="collection-photo" id="collection-photo" type="file" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+
+                    <!-- Description -->
+                    <div class="col">
+                            <label for="collection-description">Collection description</label>
+                            <textarea name="description" class="form-control" id="collection-description" rows="3"></textarea>
+                    </div>
+
+                    <!-- Topics -->
+                    <div class="col">
+                        <label for="topic-id">Topic</label>
+                            <select id="topic-id" class="form-control">
+                            </select>
+                    </div>
+                </div>
+
+                <a class="btn btn-primary" id="add-field">Add field</a>
+                <ul id="custom-fields">
+                </ul>
+
+                <a class="btn btn-primary" id="submit-form-button">Submit form</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Theme Customizer -->
+<div th:replace="fragments/theme-customizer :: theme-customizer"></div>
+
+<!-- Add field -->
+<script th:src="@{/assets/js/custom/add-field.js}"></script>
+
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/plugins/simplebar/js/simplebar.min.js}"></script>
+<script th:src="@{/assets/plugins/metismenu/js/metisMenu.min.js}"></script>
+<script th:src="@{/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/js/app.js}"></script>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+
+</html>

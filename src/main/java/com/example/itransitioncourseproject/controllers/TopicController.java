@@ -18,6 +18,9 @@ public class TopicController {
 
     private final TopicService topicService;
 
+    /**
+     * PUBLIC
+     */
     @GetMapping
     public ResponseEntity<List<TopicProjection>> getTopics() {
         List<TopicProjection> topics = topicService.getTopics();

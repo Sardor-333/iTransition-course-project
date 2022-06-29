@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-06-28T16:55:56+0500",
+    date = "2022-06-29T16:13:37+0500",
     comments = "version: 1.5.1.Final, compiler: javac, environment: Java 17.0.1 (Oracle Corporation)"
 )
 @Component
@@ -25,7 +25,6 @@ public class CollectionMapperImpl extends CollectionMapper {
         collection.setDescription( src.getDescription() );
 
         collection.setTopic( getTopic(src.getTopicId()) );
-        collection.setFields( getFields(src.getFieldDtoList()) );
 
         return collection;
     }

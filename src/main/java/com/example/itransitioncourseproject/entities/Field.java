@@ -27,6 +27,6 @@ public class Field extends AbsEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     Collection collection;
 
-    @OneToMany(mappedBy = "field")
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL)
     List<Value> values;
 }

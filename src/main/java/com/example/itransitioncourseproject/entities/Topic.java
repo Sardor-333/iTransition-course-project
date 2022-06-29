@@ -4,10 +4,7 @@ import com.example.itransitioncourseproject.entities.abs.AbsEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Getter
@@ -22,6 +19,6 @@ public class Topic extends AbsEntity {
     @Column(nullable = false, unique = true)
     String name;
 
-    @OneToMany(mappedBy = "topic")
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL)
     List<Collection> collections;
 }

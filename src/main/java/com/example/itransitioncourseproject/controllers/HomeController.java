@@ -18,6 +18,9 @@ public class HomeController {
     private final ItemService itemService;
     private final TagService tagService;
 
+    /**
+     * PUBLIC
+     */
     @GetMapping(path = {"/", "home"})
     public String home(Model model) {
         model.addAttribute("collections", collectionService.getTop5LargestCollections());

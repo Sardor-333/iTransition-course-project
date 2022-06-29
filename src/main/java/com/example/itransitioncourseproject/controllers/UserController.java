@@ -26,6 +26,9 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * SUPER ADMIN || ADMIN
+     */
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     @GetMapping
     public ModelAndView getUsers(@RequestParam(name = "page", required = false, defaultValue = PageSizeUtils.DEFAULT_PAGE) Integer page,
@@ -35,6 +38,9 @@ public class UserController {
         return new ModelAndView("users", model);
     }
 
+    /**
+     * SUPER ADMIN || ADMIN
+     */
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     @PostMapping("/profile/{userId}/enableOrDisable")
     public RedirectView enableOrDisableUser(@PathVariable Long userId,
@@ -46,6 +52,9 @@ public class UserController {
         return new RedirectView(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/users");
     }
 
+    /**
+     * AUTHENTICATED
+     */
     @GetMapping("/profile")
     public ModelAndView getProfileInfo(@AuthenticationPrincipal User currentUser, ModelMap model) {
         UserProjection user = userService.getUser(currentUser);
@@ -53,6 +62,9 @@ public class UserController {
         return new ModelAndView("profile", model);
     }
 
+    /**
+     * AUTHENTICATED
+     */
     @PostMapping("/profile")
     public RedirectView editProfile(@ModelAttribute ProfileDto profileDto,
                                     RedirectAttributes redirectAttrs,
@@ -62,6 +74,9 @@ public class UserController {
         return new RedirectView(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/users/profile");
     }
 
+    /**
+     * SUPER ADMIN || ADMIN
+     */
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     @PostMapping("/{userId}/changeRole")
     public RedirectView changeRole(@PathVariable Long userId, RedirectAttributes redirectAttrs) {

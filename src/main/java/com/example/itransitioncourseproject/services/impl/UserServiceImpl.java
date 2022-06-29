@@ -14,6 +14,7 @@ import com.example.itransitioncourseproject.repositories.RoleRepo;
 import com.example.itransitioncourseproject.repositories.UserRepo;
 import com.example.itransitioncourseproject.services.MultipartService;
 import com.example.itransitioncourseproject.services.UserService;
+import com.example.itransitioncourseproject.utils.AuthUtils;
 import com.example.itransitioncourseproject.utils.PageSizeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
         if (optional.isPresent()) {
             User user = optional.get();
 
-            if (hasRoleSuperAdmin(user))
+            if (AuthUtils.hasRole(user, UserRole.ROLE_SUPER_ADMIN))
                 return new ApiResponse(false, messageSource.getMessage("error.superAdminCannotBeEdited", null, Locale.getDefault()));
 
             enableOrDisable(user, currentUser, request);
@@ -74,7 +75,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(id);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (hasRoleSuperAdmin(user)) {
+            if (AuthUtils.hasRole(user, UserRole.ROLE_SUPER_ADMIN)) {
                 return null; // todo : super admin cannot be deleted
             }
         }
@@ -108,7 +109,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (hasRoleSuperAdmin(user))
+            if (AuthUtils.hasRole(user, UserRole.ROLE_SUPER_ADMIN))
                 return new ApiResponse(false, messageSource.getMessage("error.superAdminCannotBeEdited", null, Locale.getDefault()));
 
             if (user.getRole().getRoleName() == UserRole.ROLE_ADMIN)
@@ -128,12 +129,5 @@ public class UserServiceImpl implements UserService {
             SecurityContextHolder.clearContext();
             request.getSession(false).invalidate();
         }
-    }
-
-    private boolean hasRoleSuperAdmin(User user) {
-        return user
-                .getAuthorities()
-                .stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(UserRole.ROLE_SUPER_ADMIN.toString()));
     }
 }

@@ -29,7 +29,7 @@ public class Collection extends AbsEntity {
     @JoinColumn(nullable = false)
     User user;
 
-    @OneToMany(mappedBy = "collection")
+    @OneToMany(mappedBy = "collection", cascade = CascadeType.ALL)
     List<Item> items;
 
     @OneToMany(mappedBy = "collection", cascade = CascadeType.ALL)

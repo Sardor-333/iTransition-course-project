@@ -18,4 +18,6 @@ public interface CollectionService {
     Paged<CollectionProjection> getMyCollections(Integer page, Integer size, User currentUser);
 
     ApiResponse createCollection(CollectionDto collectionDto, MultipartFile photo, User currentUser);
+
+    ApiResponse deleteCollection(Long collectionId, User currentUser);
 }

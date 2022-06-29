@@ -23,13 +23,13 @@ public class Item extends AbsEntity {
     @JoinColumn(name = "collection_id", nullable = false, referencedColumnName = "id")
     Collection collection;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     List<Value> values;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     List<Like> likes;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     List<Comment> comments;
 
     @ManyToMany

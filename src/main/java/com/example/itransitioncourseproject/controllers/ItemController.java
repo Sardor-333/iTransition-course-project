@@ -17,18 +17,27 @@ public class ItemController {
 
     private final ItemService itemService;
 
+    /**
+     * PUBLIC
+     */
     @GetMapping
     public ModelAndView getItems(ModelMap model) {
         model.addAttribute("items", itemService.getItems());
         return new ModelAndView("items", model);
     }
 
+    /**
+     * PUBLIC
+     */
     @GetMapping("/collection/{collectionId}")
     public ModelAndView getItemsByCollection(@PathVariable Long collectionId, ModelMap model) {
         model.addAttribute("items", itemService.getItemsByCollectionId(collectionId));
         return new ModelAndView("items", model);
     }
 
+    /**
+     * PUBLIC
+     */
     @GetMapping("/tag/{tagId}")
     public ModelAndView getItemsByTag(@PathVariable Long tagId, ModelMap model) {
         model.addAttribute("items", itemService.getItemsByTagId(tagId));

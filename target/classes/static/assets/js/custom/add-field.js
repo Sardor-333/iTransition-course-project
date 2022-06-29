@@ -121,7 +121,7 @@ submitFormButton.addEventListener('click', function () {
                     responseBlock.appendChild(alert);
                     setTimeout(function () {
                         alert.remove();
-                    }, 2000)
+                    }, 5000)
                 })
         });
     }

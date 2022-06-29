@@ -9,7 +9,7 @@ import com.example.itransitioncourseproject.mappers.CollectionMapper;
 import com.example.itransitioncourseproject.mappers.FieldMapper;
 import com.example.itransitioncourseproject.pagination.Paged;
 import com.example.itransitioncourseproject.pagination.Paging;
-import com.example.itransitioncourseproject.payloads.request.CollectionDto;
+import com.example.itransitioncourseproject.payloads.request.collection.CollectionCreateDto;
 import com.example.itransitioncourseproject.payloads.request.FieldDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
 import com.example.itransitioncourseproject.projections.CollectionProjection;
@@ -61,12 +61,12 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public ApiResponse createCollection(CollectionDto collectionDto, MultipartFile photo, User currentUser) {
-        if (collectionRepo.existsByNameAndUserId(collectionDto.getName(), currentUser.getId())) {
-            return new ApiResponse(false, messageSource.getMessage("error.userAlreadyHasCollectionWithName", new Object[]{collectionDto.getName()}, Locale.getDefault()));
+    public ApiResponse createCollection(CollectionCreateDto collectionCreateDto, MultipartFile photo, User currentUser) {
+        if (collectionRepo.existsByNameAndUserId(collectionCreateDto.getName(), currentUser.getId())) {
+            return new ApiResponse(false, messageSource.getMessage("error.userAlreadyHasCollectionWithName", new Object[]{collectionCreateDto.getName()}, Locale.getDefault()));
         }
 
-        Collection collection = collectionMapper.mapFromCreateDtoToEntity(collectionDto);
+        Collection collection = collectionMapper.mapFromCreateDtoToEntity(collectionCreateDto);
         collection.setUser(currentUser);
 
         // Save collection img
@@ -79,7 +79,7 @@ public class CollectionServiceImpl implements CollectionService {
         collection=collectionRepo.save(collection);
 
         // Save collection fields separately
-        saveFields(collectionDto.getFieldDtoList(), collection);
+        saveFields(collectionCreateDto.getFieldDtoList(), collection);
         return new ApiResponse(true, messageSource.getMessage("ok.collectionCreated", null, Locale.getDefault()));
     }
 

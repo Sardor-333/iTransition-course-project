@@ -2,7 +2,7 @@ package com.example.itransitioncourseproject.mappers;
 
 import com.example.itransitioncourseproject.entities.Collection;
 import com.example.itransitioncourseproject.entities.Topic;
-import com.example.itransitioncourseproject.payloads.request.CollectionDto;
+import com.example.itransitioncourseproject.payloads.request.collection.CollectionCreateDto;
 import com.example.itransitioncourseproject.repositories.TopicRepo;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -20,7 +20,7 @@ public abstract class CollectionMapper {
     private FieldMapper fieldMapper;
 
     @Mapping(target = "topic", expression = "java(getTopic(src.getTopicId()))")
-    public abstract Collection mapFromCreateDtoToEntity(CollectionDto src);
+    public abstract Collection mapFromCreateDtoToEntity(CollectionCreateDto src);
 
     @Named("getTopic")
     public Topic getTopic(Long topicId) {

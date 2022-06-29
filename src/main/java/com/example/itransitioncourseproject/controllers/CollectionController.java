@@ -2,7 +2,7 @@ package com.example.itransitioncourseproject.controllers;
 
 import com.example.itransitioncourseproject.entities.User;
 import com.example.itransitioncourseproject.pagination.Paged;
-import com.example.itransitioncourseproject.payloads.request.CollectionDto;
+import com.example.itransitioncourseproject.payloads.request.collection.CollectionCreateDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
 import com.example.itransitioncourseproject.projections.CollectionProjection;
 import com.example.itransitioncourseproject.services.CollectionService;
@@ -65,16 +65,24 @@ public class CollectionController {
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
     public ResponseEntity<ApiResponse> createCollection(@RequestPart(name = "photo", required = false) MultipartFile photo,
-                                                        @RequestPart(name = "collection") CollectionDto collectionDto,
+                                                        @RequestPart(name = "collection") CollectionCreateDto collectionCreateDto,
                                                         @AuthenticationPrincipal User currentUser) {
-        ApiResponse response = collectionService.createCollection(collectionDto, photo, currentUser);
+        ApiResponse response = collectionService.createCollection(collectionCreateDto, photo, currentUser);
         return ResponseEntity.status(response.isSuccess() ? 200 : 409).body(response);
     }
 
+    /**
+     * SUPER_ADMIN or ADMIN or OWNER OF THE COLLECTION
+     */
     @DeleteMapping("/{collectionId}")
     public RedirectView deleteCollection(@PathVariable Long collectionId, @AuthenticationPrincipal User user, RedirectAttributes redirectAttributes) {
         ApiResponse apiResponse = collectionService.deleteCollection(collectionId, user);
         redirectAttributes.addFlashAttribute("response", apiResponse);
         return new RedirectView(BaseUrl.API_PREFIX+BaseUrl.API_VERSION+"/collections/my");
+    }
+
+    @GetMapping("/edit/{collectionId}")
+    public String getCollectionEditPage(@PathVariable Long collectionId) {
+        return null;
     }
 }

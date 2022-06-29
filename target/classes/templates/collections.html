@@ -21,6 +21,7 @@
                 <div class="card-body">
                     <div class="card-title" th:text="'Author: ' + ${collection.author.firstName} + ' ' + ${collection.author.lastName}"></div>
                     <div class="card-title" th:text="#{menu.items} + ${collection.itemsCount}"></div>
+                    <div class="card-title" th:text="'Topic: ' + ${collection.topic.name}"></div>
                 </div>
                 <a th:href="@{'/api/v1/items/collection/' + ${collection.id}}" class="btn btn-primary">View items</a>
             </div>

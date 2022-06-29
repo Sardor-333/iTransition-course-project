@@ -16,4 +16,7 @@ public interface CollectionProjection {
 
     @Value("#{@userRepo.getUserByCollectionId(target.id)}")
     UserProjection getAuthor();
+
+    @Value("#{@topicRepo.getTopicByCollectionId(target.id)}")
+    TopicProjection getTopic();
 }

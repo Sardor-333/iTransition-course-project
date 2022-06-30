@@ -127,7 +127,7 @@ submitFormButton.addEventListener('click', function () {
     }
 });
 
-// GET TOPICS
+// LOAD TOPICS
 window.onload = () => {
     loadTopics();
 }

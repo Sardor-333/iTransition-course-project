@@ -3,6 +3,7 @@ package com.example.itransitioncourseproject.controllers;
 import com.example.itransitioncourseproject.entities.User;
 import com.example.itransitioncourseproject.pagination.Paged;
 import com.example.itransitioncourseproject.payloads.request.collection.CollectionCreateDto;
+import com.example.itransitioncourseproject.payloads.request.collection.CollectionEditDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
 import com.example.itransitioncourseproject.projections.CollectionProjection;
 import com.example.itransitioncourseproject.services.CollectionService;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,11 +80,23 @@ public class CollectionController {
     public RedirectView deleteCollection(@PathVariable Long collectionId, @AuthenticationPrincipal User user, RedirectAttributes redirectAttributes) {
         ApiResponse apiResponse = collectionService.deleteCollection(collectionId, user);
         redirectAttributes.addFlashAttribute("response", apiResponse);
-        return new RedirectView(BaseUrl.API_PREFIX+BaseUrl.API_VERSION+"/collections/my");
+        return new RedirectView(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/collections/my");
     }
 
     @GetMapping("/edit/{collectionId}")
-    public String getCollectionEditPage(@PathVariable Long collectionId) {
-        return null;
+    public String getCollectionEditPage(@PathVariable Long collectionId, Model model) {
+        CollectionProjection collection = collectionService.getCollectionById(collectionId);
+        model.addAttribute("collection", collection);
+        return "edit-collection";
+    }
+
+    @PostMapping(value = "/edit/{collectionId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody
+    public ResponseEntity<ApiResponse> editCollection(@PathVariable Long collectionId,
+                                 @RequestPart(name = "collection") CollectionEditDto collectionEditDto,
+                                 @RequestPart(name = "img", required = false) MultipartFile img,
+                                 User currentUser) {
+        ApiResponse response = collectionService.editCollection(collectionId, collectionEditDto, img, currentUser);
+        return ResponseEntity.status(response.isSuccess() ? 200 : 409).body(response);
     }
 }

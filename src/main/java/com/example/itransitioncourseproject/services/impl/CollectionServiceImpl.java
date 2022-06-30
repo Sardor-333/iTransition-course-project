@@ -9,10 +9,12 @@ import com.example.itransitioncourseproject.mappers.CollectionMapper;
 import com.example.itransitioncourseproject.mappers.FieldMapper;
 import com.example.itransitioncourseproject.pagination.Paged;
 import com.example.itransitioncourseproject.pagination.Paging;
-import com.example.itransitioncourseproject.payloads.request.collection.CollectionCreateDto;
 import com.example.itransitioncourseproject.payloads.request.FieldDto;
+import com.example.itransitioncourseproject.payloads.request.collection.CollectionCreateDto;
+import com.example.itransitioncourseproject.payloads.request.collection.CollectionEditDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
 import com.example.itransitioncourseproject.projections.CollectionProjection;
+import com.example.itransitioncourseproject.repositories.CloudinaryResourceRepo;
 import com.example.itransitioncourseproject.repositories.CollectionRepo;
 import com.example.itransitioncourseproject.repositories.FieldRepo;
 import com.example.itransitioncourseproject.services.CollectionService;
@@ -36,11 +38,16 @@ import java.util.Optional;
 public class CollectionServiceImpl implements CollectionService {
 
     private final CollectionRepo collectionRepo;
-    private final ResourceBundleMessageSource messageSource;
-    private final CollectionMapper collectionMapper;
-    private final MultipartService multipartService;
     private final FieldRepo fieldRepo;
+
+    private final CollectionMapper collectionMapper;
     private final FieldMapper fieldMapper;
+
+    private final MultipartService multipartService;
+
+    private final ResourceBundleMessageSource messageSource;
+
+    private final CloudinaryResourceRepo cloudinaryResourceRepo;
 
     @Override
     public List<CollectionProjection> getTop5LargestCollections() {
@@ -61,38 +68,22 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public ApiResponse createCollection(CollectionCreateDto collectionCreateDto, MultipartFile photo, User currentUser) {
-        if (collectionRepo.existsByNameAndUserId(collectionCreateDto.getName(), currentUser.getId())) {
-            return new ApiResponse(false, messageSource.getMessage("error.userAlreadyHasCollectionWithName", new Object[]{collectionCreateDto.getName()}, Locale.getDefault()));
-        }
-
-        Collection collection = collectionMapper.mapFromCreateDtoToEntity(collectionCreateDto);
-        collection.setUser(currentUser);
-
-        // Save collection img
-        try {
-            CloudinaryResource fromMultipart = multipartService.generateCloudinaryResourceFromMultipart(photo);
-            collection.setImg(fromMultipart);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        collection=collectionRepo.save(collection);
-
-        // Save collection fields separately
-        saveFields(collectionCreateDto.getFieldDtoList(), collection);
-        return new ApiResponse(true, messageSource.getMessage("ok.collectionCreated", null, Locale.getDefault()));
+    public CollectionProjection getCollectionById(Long collectionId) {
+        return collectionRepo.getCollectionById(collectionId);
     }
 
     private void saveFields(List<FieldDto> fieldDtoList, Collection collection) {
         if (fieldDtoList == null || fieldDtoList.isEmpty()) return;
 
-        for (FieldDto fieldDto : fieldDtoList) {
-            if (!fieldRepo.existsByNameAndCollectionId(fieldDto.getName(), collection.getId())) {
-                Field field = fieldMapper.mapFromCreateDtoToEntity(fieldDto);
-                field.setCollection(collection);
-                fieldRepo.save(field);
-            }
-        }
+        fieldDtoList
+                .stream()
+                .filter(fieldDto -> !fieldDto.getName().equals("name")
+                        && !fieldRepo.existsByNameAndCollectionId(fieldDto.getName(), collection.getId()))
+                .forEach(fieldDto -> {
+                    Field field = fieldMapper.mapFromCreateDtoToEntity(fieldDto);
+                    field.setCollection(collection);
+                    fieldRepo.save(field);
+                });
     }
 
     @Override
@@ -108,5 +99,56 @@ public class CollectionServiceImpl implements CollectionService {
             return new ApiResponse(true, messageSource.getMessage("ok.collectionDeleted", null, Locale.getDefault()));
         }
         return new ApiResponse(false, messageSource.getMessage("error.objectNotFound", new Object[]{"Collection", collectionId}, Locale.getDefault()));
+    }
+
+    @Override
+    public ApiResponse createCollection(CollectionCreateDto collectionCreateDto, MultipartFile photo, User currentUser) {
+        if (collectionRepo.existsByNameAndUserId(collectionCreateDto.getName(), currentUser.getId())) {
+            return new ApiResponse(false, messageSource.getMessage("error.userAlreadyHasCollectionWithName", new Object[]{collectionCreateDto.getName()}, Locale.getDefault()));
+        }
+
+        Collection collection = collectionMapper.mapFromCreateDtoToEntity(collectionCreateDto);
+        collection.setUser(currentUser);
+
+        // Save collection img
+        try {
+            CloudinaryResource fromMultipart = multipartService.generateCloudinaryResourceFromMultipart(photo);
+            collection.setImg(fromMultipart);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        collection = collectionRepo.save(collection);
+
+        // Save collection fields separately
+        saveFields(collectionCreateDto.getFieldDtoList(), collection);
+        return new ApiResponse(true, messageSource.getMessage("ok.collectionCreated", null, Locale.getDefault()));
+    }
+
+    @Override
+    public ApiResponse editCollection(Long collectionId, CollectionEditDto collectionEditDto, MultipartFile img, User currentUser) {
+        if (collectionRepo.existsByNameAndUserId(collectionEditDto.getName(), currentUser.getId())) {
+            return new ApiResponse(false, messageSource.getMessage("error.userAlreadyHasCollectionWithName", new Object[]{collectionEditDto.getName()}, Locale.getDefault()));
+        }
+
+        Collection collection = collectionRepo.findById(collectionId).orElse(null);
+        if (collection == null) {
+            return new ApiResponse(false, messageSource.getMessage("error.objectNotFound", new Object[]{"Collection", collectionId}, Locale.getDefault()));
+        }
+
+        collectionMapper.mapFromEditDtoToEntity(collectionEditDto, collection);
+
+        if (multipartService.isValidMultipart(img)) {
+            if (collection.getImg() != null) {
+                cloudinaryResourceRepo.delete(collection.getImg());
+            }
+            try {
+                CloudinaryResource fromMultipart = multipartService.generateCloudinaryResourceFromMultipart(img);
+                collection.setImg(fromMultipart);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        collectionRepo.save(collection);
+        return new ApiResponse(true, messageSource.getMessage("ok.collectionEdited", null, Locale.getDefault()));
     }
 }

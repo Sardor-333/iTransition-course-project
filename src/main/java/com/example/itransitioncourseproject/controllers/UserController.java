@@ -84,4 +84,17 @@ public class UserController {
         redirectAttrs.addFlashAttribute("response", apiResponse);
         return new RedirectView(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/users");
     }
+
+    // Todo: delete user
+
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        ApiResponse apiResponse = userService.deleteUser(id);
+        redirectAttributes.addFlashAttribute("response", apiResponse);
+        return "redirect:/api/v1/users";
+    }
+
+    // Todo: edit user profile for admin
+    // Todo: get profile info for admin
 }

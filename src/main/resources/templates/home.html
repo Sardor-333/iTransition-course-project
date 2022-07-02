@@ -1,8 +1,10 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head th:replace="fragments/head :: head"></head>
 
 <body>
+<!--wrapper-->
 <div class="wrapper">
 
     <div th:replace="fragments/sidebar :: sidebar"></div>
@@ -13,56 +15,131 @@
         <div class="page-content">
 
             <h1 th:text="#{menu.latestItems}"></h1>
-
-            <div class="card" th:each="item : ${items}" style="width: 18rem; display: inline-flex">
-                <div class="card-body">
-                    <div class="card-title" th:text="${item.name}"></div>
+            <div class="col" th:each="item: ${items}">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title cursor-pointer" th:text="${item.name}"></h6>
+                        <div class="clearfix" style="justify-items: center">
+                            <div class="mb-0 float-start text-secondary">
+                                <strong th:text="${item.likesCount}"></strong>
+                                Likes
+                            </div>
+                            <br>
+                            <div class="mb-0 float-start text-secondary">
+                                <strong th:text="${item.commentsCount}"></strong>
+                                Comments
+                            </div>
+                            <br>
+                            <div class="mb-0 float-end fw-bold">
+                                <span
+                                        class="me-2 text-secondary">
+                                Collection:
+                                </span>
+                                <span th:text="${item.collection.name}">
+                                </span>
+                            </div>
+                            <br>
+                            <div class="mb-0 float-end fw-bold">
+                                <span class="me-2 text-secondary">
+                                    Author:
+                                </span>
+                                <span th:text="${item.collection.author.firstName + ' ' + item.collection.author.lastName}">
+                                </span>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="d-flex align-items-center mt-3 fs-6">
+                            <div class="cursor-pointer">
+                                <i class='bx bxs-star text-warning'></i>
+                                <i class='bx bxs-star text-warning'></i>
+                                <i class='bx bxs-star text-warning'></i>
+                                <i class='bx bxs-star text-warning'></i>
+                                <i class='bx bxs-star text-secondary'></i>
+                            </div>
+                            <p class="mb-0 ms-auto">4.2(182)</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="card-title" th:text="'Collection: ' + ${item.collection.name}"></div>
-                    <div class="card-title" th:text="'Author: ' + ${item.collection.author.firstName} + ' ' + ${item.collection.author.lastName}"></div>
-                    <div class="card-title" th:text="'Likes: ' + ${item.likesCount}"></div>
-                    <div class="card-title" th:text="'Comments: ' + ${item.commentsCount}"></div>
-                </div>
-                <a th:href="@{'/api/v1/items/' + ${item.id}}" class="btn btn-primary">Detail</a>
             </div>
+
 
             <h1 th:text="#{menu.top5BiggestCollections}"></h1>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 product-grid">
+                <div class="col" th:each="col: ${collections}">
+                    <div class="card">
+                        <img th:src="${col.imgUrl}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title cursor-pointer" th:text="${col.name}"></h6>
+                            <div class="clearfix">
+                                <p class="mb-0 float-start text-secondary"><strong th:text="${col.itemsCount}"></strong>
+                                    Items</p>
+                                <p class="mb-0 float-end fw-bold"><span
+                                        class="me-2 text-secondary">Topic: </span><span
+                                        th:text="${col.topic.name}"></span>
+                                </p>
+                            </div>
+                            <div class="d-flex align-items-center mt-3 fs-6">
+                                <div class="cursor-pointer">
+                                    <i class='bx bxs-star text-warning'></i>
+                                    <i class='bx bxs-star text-warning'></i>
+                                    <i class='bx bxs-star text-warning'></i>
+                                    <i class='bx bxs-star text-warning'></i>
+                                    <i class='bx bxs-star text-secondary'></i>
+                                </div>
+                                <p class="mb-0 ms-auto">4.2(182)</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <a th:href="@{'/api/v1/collections/' + ${col.id}}"
+                                   class="btn btn-primary btn-lg btn-block">
+                                    <i class='bx bx-comment mr-1'></i>
+                                    View
+                                </a>
 
-            <div class="card" th:each="collection : ${collections}" style="width: 18rem; display: inline-flex">
-                <img class="card-img-top" th:src="${collection.imgUrl}" alt="Card image cap">
-                <div class="card-body">
-                    <div class="card-title" th:text="${collection.name}"></div>
-                    <div class="card-text" th:text="${collection.description}"></div>
+                                <div class="col">
+                                    <a th:href="@{'/api/v1/items/collection/' + ${col.id}}"
+                                       class="btn btn-primary btn-lg btn-block">
+                                        <i class='bx bx-comment mr-1'></i>
+                                        Items
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a th:href="@{'/api/v1/collections/edit/' + ${col.id}}"
+                                       class="btn btn-warning btn-lg btn-block">
+                                        <i class='bx bx-comment mr-1'></i>
+                                        Edit
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a th:href="@{'/api/v1/collections/' + ${col.id}}"
+                                       class="btn btn-danger btn-lg btn-block">
+                                        <i class='bx bx-comment mr-1'></i>
+                                        Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="card-title" th:text="'Author: ' + ${collection.author.firstName} + ' ' + ${collection.author.lastName}"></div>
-                    <div class="card-title" th:text="#{menu.items} + ${collection.itemsCount}"></div>
-                    <div class="card-title" th:text="'Topic: ' + ${collection.topic.name}"></div>
-                </div>
-                <a th:href="@{'/api/v1/items/collection/' + ${collection.id}}" class="btn btn-primary">View items</a>
             </div>
-
-            <h1 th:text="#{menu.tagCloud}"></h1>
-            <a style="margin-right: 10px;" th:href="@{'/api/v1/items/tag/'+${tag.id}}" class="btn btn-primary btn-lg" th:each="tag: ${tags}" th:text="${tag.name}"></a>
         </div>
     </div>
 
-</div>
+    <!-- Theme Customizer -->
+    <div th:replace="fragments/theme-customizer :: theme-customizer"></div>
 
-<!-- Theme Customizer -->
-<div th:replace="fragments/theme-customizer :: theme-customizer"></div>
+    <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.min.js}"></script>
+    <script th:src="@{/assets/plugins/simplebar/js/simplebar.min.js}"></script>
+    <script th:src="@{/assets/plugins/metismenu/js/metisMenu.min.js}"></script>
+    <script th:src="@{/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js}"></script>
+    <script th:src="@{/assets/js/app.js}"></script>
 
-<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/assets/js/jquery.min.js}"></script>
-<script th:src="@{/assets/plugins/simplebar/js/simplebar.min.js}"></script>
-<script th:src="@{/assets/plugins/metismenu/js/metisMenu.min.js}"></script>
-<script th:src="@{/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js}"></script>
-<script th:src="@{/assets/js/app.js}"></script>
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
-<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </body>
 
 </html>

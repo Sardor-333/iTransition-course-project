@@ -58,10 +58,10 @@ public class User extends AbsEntity implements UserDetails {
     @OneToMany(mappedBy = "user")
     List<com.example.itransitioncourseproject.entities.Collection> collections;
 
-    @OneToMany(mappedBy = "likedBy")
+    @OneToMany(mappedBy = "likedBy", cascade = CascadeType.ALL)
     List<Like> likes;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Comment> comments;
 
     @Override

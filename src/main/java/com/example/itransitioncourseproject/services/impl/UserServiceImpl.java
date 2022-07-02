@@ -72,14 +72,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse deleteUser(Long id) {
-        Optional<User> optionalUser = userRepo.findById(id);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (AuthUtils.hasRole(user, UserRole.ROLE_SUPER_ADMIN)) {
-                return null; // todo : super admin cannot be deleted
-            }
+        Optional<User> optional = userRepo.findById(id);
+        if (optional.isPresent()) {
+            User user = optional.get();
+            if (AuthUtils.hasRole(user, UserRole.ROLE_SUPER_ADMIN))
+                return new ApiResponse(false, messageSource.getMessage("error.superAdminCannotBeEdited", null, Locale.getDefault()));
+
+            userRepo.delete(user);
+            return new ApiResponse(true, messageSource.getMessage("ok.userDeleted", null, Locale.getDefault()));
         }
-        return null;
+        return new ApiResponse(false, messageSource.getMessage("error.userNotFound", new Object[]{id}, Locale.getDefault()));
     }
 
     @Override

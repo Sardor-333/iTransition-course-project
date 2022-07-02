@@ -30,7 +30,8 @@ public interface UserRepo extends JpaRepository<User, Long> {
                     "       to_char(u.logged_at, 'yyyy-MM-dd HH24:MI')  as loggedAt,\n" +
                     "       cr.secure_url                                       as imgUrl\n" +
                     "from users u\n" +
-                    "         left join cloudinary_resources cr on cr.id = u.photo_id"
+                    "         left join cloudinary_resources cr on cr.id = u.photo_id " +
+                    "order by u.logged_at"
     )
     Page<UserProjection> getUsers(Pageable pageable);
 

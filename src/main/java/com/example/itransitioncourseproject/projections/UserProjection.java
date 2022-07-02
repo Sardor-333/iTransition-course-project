@@ -6,11 +6,7 @@ public interface UserProjection {
 
     Long getId();
 
-    String getCreatedAt();
-
-    String getUpdatedAt();
-
-    String getLoggedAt();
+    String getImgUrl();
 
     String getFirstName();
 
@@ -18,10 +14,14 @@ public interface UserProjection {
 
     String getUsername();
 
-    Boolean getEnabled();
-
-    String getImgUrl();
+    String getLoggedAt();
 
     @Value("#{@roleRepo.getRoleByUserId(target.id)}")
     RoleProjection getRole();
+
+    String getCreatedAt();
+
+    String getUpdatedAt();
+
+    Boolean getEnabled();
 }

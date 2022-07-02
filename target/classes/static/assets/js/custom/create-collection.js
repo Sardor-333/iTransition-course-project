@@ -8,73 +8,89 @@ addFieldButton.addEventListener('click', function (e) {
 });
 
 function addCustomField(customFields) {
-    // CREATE ROW
-    const row = document.createElement('div');
-    row.classList.add('row', 'custom-list__item');
-    customFields.appendChild(row);
-    // -----------------------------------------------------
+
+    // Create row
+    let row_g_3 = document.createElement('div');
+    row_g_3.classList.add('row', 'g-3');
+    customFields.appendChild(row_g_3);
 
 
-    // -----------------------------------------------------
-    // FIELD NAME
-    const col1 = document.createElement('div');
-    col1.classList.add('col');
-    row.appendChild(col1);
+    // Create column ([ Field Name ])
+    let colFieldName = document.createElement('div');
+    colFieldName.classList.add('col-md-6');
+    row_g_3.appendChild(colFieldName);
 
-    const fieldName = document.createElement('input');
-    fieldName.classList.add('form-control');
-    fieldName.type = "text";
-    fieldName.placeholder = "Enter field name";
-    fieldName.required = true;
-    col1.appendChild(fieldName);
-    // -----------------------------------------------------
+    let labelFieldName = document.createElement('label');
+    labelFieldName.classList.add('form-label');
+    labelFieldName.innerHTML = 'Field Name';
+    colFieldName.appendChild(labelFieldName);
+
+    let inputFieldName = document.createElement('input');
+    inputFieldName.type = "text";
+    inputFieldName.classList.add('form-control');
+    inputFieldName.placeholder = "Field Name";
+    colFieldName.appendChild(inputFieldName);
 
 
-    // -----------------------------------------------------
-    // CREATE FIELD DATA TYPE
-    const col2 = document.createElement('div');
-    col2.classList.add('col');
-    row.appendChild(col2);
+    // Create column ([ Field Type ])
+    let colFieldType = document.createElement('div');
+    colFieldType.classList.add('col-md-6');
+    row_g_3.appendChild(colFieldType);
 
-    const fieldTypes = document.createElement('select');
-    fieldTypes.classList.add('form-select');
-    col2.appendChild(fieldTypes);
+    let labelFieldType = document.createElement('label');
+    labelFieldType.classList.add('form-label');
+    labelFieldType.innerHTML = "Field Type";
+    colFieldType.appendChild(labelFieldType);
 
-    fieldTypes.add(new Option("Text", "text"));
-    fieldTypes.add(new Option("Long text", "textarea"));
-    fieldTypes.add(new Option("Number", "number"));
-    fieldTypes.add(new Option("Date", "date"));
-    fieldTypes.add(new Option("Checkbox", "checkbox"));
-    // -----------------------------------------------------
+    let selectFieldType = document.createElement('select');
+    selectFieldType.classList.add('form-select');
 
-    // -----------------------------------------------------
-    // BUTTON DELETE FIELD
-    const col3 = document.createElement('div');
-    col3.classList.add('col');
-    row.appendChild(col3);
+    selectFieldType.add(new Option('Text', 'text'));
+    selectFieldType.add(new Option('Long text', 'textarea'));
+    selectFieldType.add(new Option('Number', 'number'));
+    selectFieldType.add(new Option('Date', 'date'));
+    selectFieldType.add(new Option('Checkbox', 'checkbox'));
+    selectFieldType.add(new Option('File', 'file'));
 
-    const deleteButton = document.createElement('a');
-    deleteButton.classList.add('btn', 'btn-danger');
-    deleteButton.text = "Delete";
-    col3.appendChild(deleteButton);
+    colFieldType.appendChild(selectFieldType);
 
-    deleteButton.addEventListener('click', function () {
-        row.remove();
-        console.log('=== BTN REMOVED ===');
-    });
-    // -----------------------------------------------------
+    let colDelField = document.createElement('div');
+    colDelField.classList.add('col-12');
+    row_g_3.appendChild(colDelField);
+
+    let inner = document.createElement('div');
+    inner.classList.add('d-grid');
+    colDelField.appendChild(inner);
+
+    let btnDelete = document.createElement('button');
+    btnDelete.type = "button";
+    btnDelete.classList.add('btn', 'btn-danger');
+    btnDelete.innerHTML = "Delete";
+    inner.appendChild(btnDelete);
+
+    btnDelete.addEventListener('click', function () {
+        row_g_3.remove();
+    })
 }
+
+
+// ------------------------------------------------------------ //
+
 
 // SUBMIT FORM
 const submitFormButton = document.getElementById('submit-form-button');
-
 submitFormButton.addEventListener('click', function () {
-    const customFields = document.getElementsByClassName('custom-list__item');
+
     const fieldDtoList = [];
 
-    for (let i = 0; i < customFields.length; i++) {
-        let fieldName = customFields[i].childNodes[0].childNodes[0].value;
-        let fieldType = customFields[i].childNodes[1].childNodes[0].value;
+    const customFieldsById = document.getElementById('custom-fields');
+    const rows = customFieldsById.getElementsByClassName('row');
+    for (let i = 0; i < rows.length; i++) {
+        let fieldName = rows[i].childNodes[0].childNodes[1].value;
+        let fieldType = rows[i].childNodes[1].childNodes[1].value;
+
+        console.log('Field Name: ' + fieldName);
+        console.log('Field Type: ' + fieldType);
 
         if (fieldName !== null && fieldType !== null) {
             fieldDtoList.push({
@@ -86,7 +102,7 @@ submitFormButton.addEventListener('click', function () {
 
     const name = document.getElementById('collection-name').value;
     const description = document.getElementById('collection-description').value;
-    const topicId = document.getElementById('topic-id').value;
+    const topicId = document.getElementById('select-topic').value;
 
     const body = JSON.stringify({
         'name': name,
@@ -102,7 +118,7 @@ submitFormButton.addEventListener('click', function () {
             type: "application/json"
         }));
 
-    const collectionPhoto = document.getElementById('collection-photo').files[0];
+    const collectionPhoto = document.getElementById('collection-img').files[0];
     formData.append('photo', collectionPhoto);
 
     if (fieldDtoList.length > 0) {
@@ -126,6 +142,8 @@ submitFormButton.addEventListener('click', function () {
         });
     }
 });
+// ------------------------------------------------------------ //
+
 
 // LOAD TOPICS
 window.onload = () => {
@@ -138,7 +156,7 @@ function loadTopics() {
     }).then(response => {
         response.json()
             .then(data => {
-                const select = document.getElementById('topic-id');
+                const select = document.getElementById('select-topic');
 
                 for (let i = 0; i < data.length; i++) {
                     const currTopic = data[i];

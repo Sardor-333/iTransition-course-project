@@ -12,46 +12,123 @@
     <div class="page-wrapper">
         <div class="page-content">
 
-            <h1>Create new collection</h1>
+            <div class="card">
+                <div class="card-body p-4">
+                    <h5 class="card-title">Add New Collection</h5>
+                    <hr/>
+                    <div class="form-body mt-4">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="border border-3 p-4 rounded">
 
-            <div id="response"></div>
+                                    <!-- collection name -->
+                                    <div class="mb-3">
+                                        <label for="collection-name" class="form-label">Collection Name</label>
+                                        <input type="text" class="form-control" id="collection-name"
+                                               placeholder="Enter collection name">
+                                    </div>
 
-            <form id="create-collection-form" th:action="@{/api/v1/collections/create}" method="post" enctype="multipart/form-data">
-                <div class="row">
-                    <!-- Collection name -->
-                    <div class="col">
-                        <label for="collection-name">Collection nam</label>
-                        <input id="collection-name" name="name" type="text" class="form-control">
-                    </div>
+                                    <!-- collection description -->
+                                    <div class="mb-3">
+                                        <label for="collection-description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="collection-description" rows="3"></textarea>
+                                    </div>
 
-                    <!-- Collection photo -->
-                    <div class="col">
-                        <label for="collection-photo">Collection description</label>
-                        <input name="collection-photo" id="collection-photo" type="file" class="form-control">
+                                    <!-- collection img -->
+                                    <div class="mb-3">
+                                        <label for="collection-img" class="form-label">Collection img</label>
+                                        <input id="collection-img"
+                                               name="collection-img"
+                                               class="form-control form-control-lg"
+                                               type="file"
+                                               accept="image/*"
+                                               onchange="checkFile(this)"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div class="border border-3 p-4 rounded">
+
+                                    <div class="row g-3">
+                                        <!-- Select topic -->
+                                        <div class="col-12">
+                                            <label for="select-topic" class="form-label">Topic</label>
+                                            <select class="form-select" id="select-topic">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <!-- Add New Field Btn -->
+                                        <div class="col">
+                                            <a class="btn btn-primary" id="add-field">
+                                                <i class="fadeIn animated bx bx-plus"></i>
+                                                Add New Field
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div id="custom-fields">
+                                    <!-- Will be appended by JS -->
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <!-- Save collection btn -->
+                                        <div class="col-12">
+                                            <div class="d-grid">
+                                                <button id="submit-form-button" type="button" class="btn btn-primary">Save Collection</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
+            </div>
 
-                    <!-- Description -->
-                    <div class="col">
-                            <label for="collection-description">Collection description</label>
-                            <textarea name="description" class="form-control" id="collection-description" rows="3"></textarea>
-                    </div>
+            <!--            <h1>Create new collection</h1>-->
+            <!--            <div id="response"></div>-->
+            <!--            <form id="create-collection-form" th:action="@{/api/v1/collections/create}" method="post"-->
+            <!--                  enctype="multipart/form-data">-->
+            <!--                <div class="row">-->
+            <!--                    &lt;!&ndash; Collection name &ndash;&gt;-->
+            <!--                    <div class="col">-->
+            <!--                        <label for="collection-name">Collection nam</label>-->
+            <!--                        <input id="collection-name" name="name" type="text" class="form-control">-->
+            <!--                    </div>-->
 
-                    <!-- Topics -->
-                    <div class="col">
-                        <label for="topic-id">Topic</label>
-                            <select id="topic-id" class="form-control">
-                            </select>
-                    </div>
-                </div>
+            <!--                    &lt;!&ndash; Collection photo &ndash;&gt;-->
+            <!--                    <div class="col">-->
+            <!--                        <label for="collection-photo">Collection description</label>-->
+            <!--                        <input name="collection-photo" id="collection-photo" type="file" class="form-control">-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--                <div class="row">-->
 
-                <a class="btn btn-primary" id="add-field">Add field</a>
-                <ul id="custom-fields">
-                </ul>
+            <!--                    &lt;!&ndash; Description &ndash;&gt;-->
+            <!--                    <div class="col">-->
+            <!--                        <label for="collection-description">Collection description</label>-->
+            <!--                        <textarea name="description" class="form-control" id="collection-description"-->
+            <!--                                  rows="3"></textarea>-->
+            <!--                    </div>-->
 
-                <a class="btn btn-primary" id="submit-form-button">Submit form</a>
-            </form>
+            <!--                    &lt;!&ndash; Topics &ndash;&gt;-->
+            <!--                    <div class="col">-->
+            <!--                        <label for="topic-id">Topic</label>-->
+            <!--                        <select id="topic-id" class="form-control">-->
+            <!--                        </select>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+
+            <!--                <a class="btn btn-primary" id="add-field">Add field</a>-->
+            <!--                <ul id="custom-fields">-->
+            <!--                </ul>-->
+
+            <!--                <a class="btn btn-primary" id="submit-form-button">Submit form</a>-->
+            <!--            </form>-->
         </div>
     </div>
 </div>

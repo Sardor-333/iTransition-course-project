@@ -12,46 +12,155 @@
     <div class="page-wrapper">
         <div class="page-content">
 
-            <h1>Create new collection</h1>
+            <div class="card">
+                <div class="card-body p-4">
+                    <h5 class="card-title">Add New Collection</h5>
+                    <hr/>
+                    <div class="form-body mt-4">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="border border-3 p-4 rounded">
 
-            <div id="response"></div>
+                                    <!-- collection name -->
+                                    <div class="mb-3">
+                                        <label for="collection-name" class="form-label">Collection Name</label>
+                                        <input type="text" class="form-control" id="collection-name"
+                                               placeholder="Enter collection name">
+                                    </div>
 
-            <form id="create-collection-form" th:action="@{/api/v1/collections/create}" method="post" enctype="multipart/form-data">
-                <div class="row">
-                    <!-- Collection name -->
-                    <div class="col">
-                        <label for="collection-name">Collection nam</label>
-                        <input id="collection-name" name="name" type="text" class="form-control">
-                    </div>
+                                    <!-- collection description -->
+                                    <div class="mb-3">
+                                        <label for="collection-description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="collection-description" rows="3"></textarea>
+                                    </div>
 
-                    <!-- Collection photo -->
-                    <div class="col">
-                        <label for="collection-photo">Collection description</label>
-                        <input name="collection-photo" id="collection-photo" type="file" class="form-control">
+                                    <!-- collection img -->
+                                    <div class="mb-3">
+                                        <label for="collection-img" class="form-label">Collection img</label>
+                                        <input id="collection-img"
+                                               name="collection-img"
+                                               class="form-control form-control-lg"
+                                               type="file"
+                                               accept="image/*"
+                                               onchange="checkFile(this)"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div class="border border-3 p-4 rounded">
+
+                                    <div class="row g-3">
+                                        <!-- Select topic -->
+                                        <div class="col-12">
+                                            <label for="select-topic" class="form-label">Topic</label>
+                                            <select class="form-select" id="select-topic">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <!-- Add New Field Btn -->
+                                        <div class="col">
+                                            <a class="btn btn-primary" id="add-field">
+                                                <i class="fadeIn animated bx bx-plus"></i>
+                                                Add New Field
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div id="custom-fields">
+                                    <!-- Will be appended by JS -->
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <!-- Save collection btn -->
+                                        <div class="col-12">
+                                            <div class="d-grid">
+                                                <button id="submit-form-button" type="button" class="btn btn-primary">Save Collection</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
+            </div>
 
-                    <!-- Description -->
-                    <div class="col">
-                            <label for="collection-description">Collection description</label>
-                            <textarea name="description" class="form-control" id="collection-description" rows="3"></textarea>
+            <div class="row">
+                <div class="col col-lg-9 mx-auto">
+                    <div class="card bg-transparent shadow-none">
+                        <div class="card-body">
+
+<!--                            todo: Implement file check-->
+                            <!-- Success toast -->
+                            <div id="success-toast" class="alert border-0 border-start border-5 border-success alert-dismissible fade show py-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="font-35 text-success">
+                                        <i class='bx bxs-check-circle'></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 id="success-toast-title" class="mb-0 text-success">Success Alerts</h6>
+                                        <div id="success-toast-body">A simple success alert—check it out!</div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+
+                            <!-- Danger toast -->
+                            <div id="danger-toast" class="alert border-0 border-start border-5 border-danger alert-dismissible fade show py-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="font-35 text-danger"><i class='bx bxs-message-square-x'></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 id="danger-toast-title" class="mb-0 text-danger">Danger Alerts</h6>
+                                        <div id="danger-toast-body">A simple danger alert—check it out!</div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+
+                        </div>
                     </div>
-
-                    <!-- Topics -->
-                    <div class="col">
-                        <label for="topic-id">Topic</label>
-                            <select id="topic-id" class="form-control">
-                            </select>
+                    <div class="card bg-transparent shadow-none">
+                        <div class="card-body">
+                            <h5 class="card-title">Border Examples Without Icons</h5>
+                            <hr/>
+                            <div class="alert border-0 border-start border-5 border-primary alert-dismissible fade show">
+                                <div>A simple primary alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert border-0 border-start border-5 border-secondary alert-dismissible fade show">
+                                <div class="">A simple secondary alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert border-0 border-start border-5 border-success alert-dismissible fade show">
+                                <div>A simple success alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert  border-0 border-start border-5 border-danger alert-dismissible fade show">
+                                <div>A simple danger alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show">
+                                <div>A simple danger alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert border-0 border-start border-5 border-info alert-dismissible fade show">
+                                <div>A simple info alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert border-0 border-start border-5 border-dark alert-dismissible fade show">
+                                <div>A simple dark alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <a class="btn btn-primary" id="add-field">Add field</a>
-                <ul id="custom-fields">
-                </ul>
-
-                <a class="btn btn-primary" id="submit-form-button">Submit form</a>
-            </form>
         </div>
     </div>
 </div>

@@ -89,46 +89,74 @@
                                 <p class="mb-0 ms-auto">4.2(182)</p>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col">
-                                <a th:href="@{'/api/v1/collections/' + ${col.id}}"
-                                   class="btn btn-primary btn-lg btn-block">
-                                    <i class='bx bx-comment mr-1'></i>
-                                    View
-                                </a>
-
-                                <div class="col">
-                                    <a th:href="@{'/api/v1/items/collection/' + ${col.id}}"
-                                       class="btn btn-primary btn-lg btn-block">
-                                        <i class='bx bx-comment mr-1'></i>
-                                        Items
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a th:href="@{'/api/v1/collections/edit/' + ${col.id}}"
-                                       class="btn btn-warning btn-lg btn-block">
-                                        <i class='bx bx-comment mr-1'></i>
-                                        Edit
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a th:href="@{'/api/v1/collections/' + ${col.id}}"
-                                       class="btn btn-danger btn-lg btn-block">
-                                        <i class='bx bx-comment mr-1'></i>
-                                        Delete
+                                <div class="list-group list-group-flush">
+                                    <a class="list-group-item active d-flex align-items-center"
+                                       th:href="@{'/api/v1/collections/' + ${col.id}}"
+                                    >
+                                        <i class="bx bx-cog me-3 font-20"></i>
+                                        <span>
+											Details
+										</span>
                                     </a>
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="list-group list-group-flush">
+                                    <a class="list-group-item active d-flex align-items-center"
+                                       th:href="@{'/api/v1/items/collection/' + ${col.id}}"
+                                    >
+                                        <i class="bx bx-cog me-3 font-20"></i>
+                                        <span>
+											Items
+										</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="list-group list-group-flush">
+                                    <a class="list-group-item active d-flex align-items-center"
+                                       th:href="@{'/api/v1/collections/edit/' + ${col.id}}"
+                                       sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
+                                    >
+                                        <i class="bx bx-cog me-3 font-20"></i>
+                                        <span>
+											Edit
+										</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="list-group list-group-flush">
+                                    <a class="list-group-item active d-flex align-items-center"
+                                       sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
+                                       th:onclick="'deleteCollection(\'' + ${col.id} + '\');'"
+                                    >
+                                        <i class="bx bx-cog me-3 font-20"></i>
+                                        <span>
+											Delete
+										</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Theme Customizer -->
     <div th:replace="fragments/theme-customizer :: theme-customizer"></div>
 
+    <script th:src="@{/assets/js/custom/delete-collection.js}"></script>
     <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/assets/js/jquery.min.js}"></script>
     <script th:src="@{/assets/plugins/simplebar/js/simplebar.min.js}"></script>

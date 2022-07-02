@@ -11,22 +11,96 @@
 
     <div class="page-wrapper">
         <div class="page-content">
-            <!--     Content       -->
-            <div class="card" th:each="collection : ${collections.page}" style="width: 18rem; display: inline-flex">
-                <img class="card-img-top" th:src="${collection.imgUrl}" alt="Card image cap">
-                <div class="card-body">
-                    <div class="card-title" th:text="${collection.name}"></div>
-                    <div class="card-text" th:text="${collection.description}"></div>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 product-grid">
+                <div class="col" th:each="col: ${collections.page}">
+                    <div class="card">
+                        <img th:src="${col.imgUrl}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title cursor-pointer" th:text="${col.name}"></h6>
+                            <div class="clearfix">
+                                <p class="mb-0 float-start text-secondary"><strong th:text="${col.itemsCount}"></strong>
+                                    Items</p>
+                                <p class="mb-0 float-end fw-bold"><span
+                                        class="me-2 text-secondary">Topic: </span><span
+                                        th:text="${col.topic.name}"></span>
+                                </p>
+                            </div>
+                            <div class="d-flex align-items-center mt-3 fs-6">
+                                <div class="cursor-pointer">
+                                    <i class='bx bxs-star text-warning'></i>
+                                    <i class='bx bxs-star text-warning'></i>
+                                    <i class='bx bxs-star text-warning'></i>
+                                    <i class='bx bxs-star text-warning'></i>
+                                    <i class='bx bxs-star text-secondary'></i>
+                                </div>
+                                <p class="mb-0 ms-auto">4.2(182)</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="list-group list-group-flush">
+                                    <a class="list-group-item active d-flex align-items-center"
+                                       th:href="@{'/api/v1/collections/' + ${col.id}}"
+                                    >
+                                        <i class="bx bx-cog me-3 font-20"></i>
+                                        <span>
+											Details
+										</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="list-group list-group-flush">
+                                    <a class="list-group-item active d-flex align-items-center"
+                                       th:href="@{'/api/v1/items/collection/' + ${col.id}}"
+                                    >
+                                        <i class="bx bx-cog me-3 font-20"></i>
+                                        <span>
+											Items
+										</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="list-group list-group-flush">
+                                    <a class="list-group-item active d-flex align-items-center"
+                                       th:href="@{'/api/v1/collections/edit/' + ${col.id}}"
+                                       sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
+                                    >
+                                        <i class="bx bx-cog me-3 font-20"></i>
+                                        <span>
+											Edit
+										</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="list-group list-group-flush">
+                                    <a class="list-group-item active d-flex align-items-center"
+                                       sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
+                                       th:onclick="'deleteCollection(\'' + ${col.id} + '\');'"
+                                    >
+                                        <i class="bx bx-cog me-3 font-20"></i>
+                                        <span>
+											Delete
+										</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="card-title" th:text="'Author: ' + ${collection.author.firstName} + ' ' + ${collection.author.lastName}"></div>
-                    <div class="card-title" th:text="#{menu.items} + ${collection.itemsCount}"></div>
-                    <div class="card-title" th:text="'Topic: ' + ${collection.topic.name}"></div>
-                </div>
-                <a th:href="@{'/api/v1/items/collection/' + ${collection.id}}" class="btn btn-primary">View items</a>
             </div>
 
-            <!--     Pagination       -->
             <nav aria-label="Page navigation" class="paging">
                 <ul class="pagination" th:if="${collections.page.getTotalPages() > 1}">
                     <li class="page-item" th:classappend="${!collections.paging.isPrevEnabled()? 'disabled' : ''}">
@@ -50,6 +124,7 @@
                     </li>
                 </ul>
             </nav>
+
         </div>
     </div>
 

@@ -147,10 +147,10 @@ submitFormButton.addEventListener('click', function () {
 
 // LOAD TOPICS
 window.onload = () => {
-    loadTopics();
+    getTopics();
 }
 
-function loadTopics() {
+function getTopics() {
     fetch('/api/v1/topics', {
         method: 'get'
     }).then(response => {

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/head :: head"></head>
 
 <body>
@@ -11,8 +11,17 @@
 
     <div class="page-wrapper">
         <div class="page-content">
-            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
 
+            <div sec:authorize="isAuthenticated()">
+                <div th:if="${#authentication.getPrincipal().getId() == collection.author.id}">
+                    <button class="btn btn-primary">
+                        Add New Item
+                    </button>
+                </div>
+                <div sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"></div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
                 <div class="col" th:each="item: ${items}">
                     <div class="card radius-10">
                         <div class="card-body">
@@ -31,8 +40,8 @@
                         </div>
                     </div>
                 </div>
-
             </div>
+
         </div>
     </div>
 

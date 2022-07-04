@@ -89,46 +89,78 @@
                 </div>
             </div>
 
-            <!--            <h1>Create new collection</h1>-->
-            <!--            <div id="response"></div>-->
-            <!--            <form id="create-collection-form" th:action="@{/api/v1/collections/create}" method="post"-->
-            <!--                  enctype="multipart/form-data">-->
-            <!--                <div class="row">-->
-            <!--                    &lt;!&ndash; Collection name &ndash;&gt;-->
-            <!--                    <div class="col">-->
-            <!--                        <label for="collection-name">Collection nam</label>-->
-            <!--                        <input id="collection-name" name="name" type="text" class="form-control">-->
-            <!--                    </div>-->
+            <div class="row">
+                <div class="col col-lg-9 mx-auto">
+                    <div class="card bg-transparent shadow-none">
+                        <div class="card-body">
 
-            <!--                    &lt;!&ndash; Collection photo &ndash;&gt;-->
-            <!--                    <div class="col">-->
-            <!--                        <label for="collection-photo">Collection description</label>-->
-            <!--                        <input name="collection-photo" id="collection-photo" type="file" class="form-control">-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--                <div class="row">-->
+<!--                            todo: Implement file check-->
+                            <!-- Success toast -->
+                            <div id="success-toast" class="alert border-0 border-start border-5 border-success alert-dismissible fade show py-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="font-35 text-success">
+                                        <i class='bx bxs-check-circle'></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 id="success-toast-title" class="mb-0 text-success">Success Alerts</h6>
+                                        <div id="success-toast-body">A simple success alert—check it out!</div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
 
-            <!--                    &lt;!&ndash; Description &ndash;&gt;-->
-            <!--                    <div class="col">-->
-            <!--                        <label for="collection-description">Collection description</label>-->
-            <!--                        <textarea name="description" class="form-control" id="collection-description"-->
-            <!--                                  rows="3"></textarea>-->
-            <!--                    </div>-->
+                            <!-- Danger toast -->
+                            <div id="danger-toast" class="alert border-0 border-start border-5 border-danger alert-dismissible fade show py-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="font-35 text-danger"><i class='bx bxs-message-square-x'></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 id="danger-toast-title" class="mb-0 text-danger">Danger Alerts</h6>
+                                        <div id="danger-toast-body">A simple danger alert—check it out!</div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
 
-            <!--                    &lt;!&ndash; Topics &ndash;&gt;-->
-            <!--                    <div class="col">-->
-            <!--                        <label for="topic-id">Topic</label>-->
-            <!--                        <select id="topic-id" class="form-control">-->
-            <!--                        </select>-->
-            <!--                    </div>-->
-            <!--                </div>-->
+                        </div>
+                    </div>
+                    <div class="card bg-transparent shadow-none">
+                        <div class="card-body">
+                            <h5 class="card-title">Border Examples Without Icons</h5>
+                            <hr/>
+                            <div class="alert border-0 border-start border-5 border-primary alert-dismissible fade show">
+                                <div>A simple primary alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert border-0 border-start border-5 border-secondary alert-dismissible fade show">
+                                <div class="">A simple secondary alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert border-0 border-start border-5 border-success alert-dismissible fade show">
+                                <div>A simple success alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert  border-0 border-start border-5 border-danger alert-dismissible fade show">
+                                <div>A simple danger alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show">
+                                <div>A simple danger alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert border-0 border-start border-5 border-info alert-dismissible fade show">
+                                <div>A simple info alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert border-0 border-start border-5 border-dark alert-dismissible fade show">
+                                <div>A simple dark alert—check it out!</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <!--                <a class="btn btn-primary" id="add-field">Add field</a>-->
-            <!--                <ul id="custom-fields">-->
-            <!--                </ul>-->
-
-            <!--                <a class="btn btn-primary" id="submit-form-button">Submit form</a>-->
-            <!--            </form>-->
         </div>
     </div>
 </div>

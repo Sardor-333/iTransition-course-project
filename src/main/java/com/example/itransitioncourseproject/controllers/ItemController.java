@@ -1,5 +1,7 @@
 package com.example.itransitioncourseproject.controllers;
 
+import com.example.itransitioncourseproject.projections.CollectionProjection;
+import com.example.itransitioncourseproject.services.CollectionService;
 import com.example.itransitioncourseproject.services.ItemService;
 import com.example.itransitioncourseproject.utils.BaseUrl;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,8 @@ public class ItemController {
 
     private final ItemService itemService;
 
+    private final CollectionService collectionService;
+
     /**
      * PUBLIC
      */
@@ -31,8 +35,11 @@ public class ItemController {
      */
     @GetMapping("/collection/{collectionId}")
     public ModelAndView getItemsByCollection(@PathVariable Long collectionId, ModelMap model) {
+        CollectionProjection collection = collectionService.getCollectionById(collectionId);
+        model.addAttribute("collection", collection);
+
         model.addAttribute("items", itemService.getItemsByCollectionId(collectionId));
-        return new ModelAndView("items", model);
+        return new ModelAndView("collection-items", model);
     }
 
     /**
@@ -43,4 +50,6 @@ public class ItemController {
         model.addAttribute("items", itemService.getItemsByTagId(tagId));
         return new ModelAndView("items", model);
     }
+
+
 }

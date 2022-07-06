@@ -4,7 +4,6 @@ import com.example.itransitioncourseproject.entities.Collection;
 import com.example.itransitioncourseproject.entities.Item;
 import com.example.itransitioncourseproject.entities.User;
 import com.example.itransitioncourseproject.entities.Value;
-import com.example.itransitioncourseproject.enums.UserRole;
 import com.example.itransitioncourseproject.mappers.ItemMapper;
 import com.example.itransitioncourseproject.mappers.ValueMapper;
 import com.example.itransitioncourseproject.payloads.request.ValueCreateDto;
@@ -44,6 +43,8 @@ public class ItemServiceImpl implements ItemService {
 
     private final ValueRepo valueRepo;
 
+    private final AuthUtils authUtils;
+
     @Override
     public List<ItemProjection> get5LatestAddedItems() {
         return itemRepo.get5LatestAddedItems();
@@ -67,35 +68,31 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<FieldProjection> getCollectionFields(Long collectionId) {
         Optional<Collection> optional = collectionRepo.findById(collectionId);
-        if (optional.isPresent()) {
+        if (optional.isPresent())
             return fieldRepo.getCollectionFields(collectionId);
-        }
         return null;
     }
 
     @Override
     public ApiResponse createItem(Long collectionId, ItemCreateDto itemCreateDto, User currentUser) {
-        // todo : Get rid of duplicate code
         Collection collection = collectionRepo.findById(collectionId).orElse(null);
-
-        if (collection == null) {
-            return new ApiResponse(false, messageSource.getMessage("error.objectNotFound", new Object[]{"Collection", collectionId}, Locale.getDefault()));
-        }
-
-        if (AuthUtils.hasRole(currentUser, UserRole.ROLE_USER) && !collection.getUser().getId().equals(currentUser.getId())) {
+        boolean userHasAccessToCollection = authUtils.userHasAccessToCollection(collection, currentUser);
+        if (!userHasAccessToCollection)
             return new ApiResponse(false, messageSource.getMessage("error.accessDenied", null, Locale.getDefault()));
-        }
 
-        Item item = itemRepo.save(itemMapper.mapFromCreateDtoToEntity(itemCreateDto, collection));
-        saveValues(itemCreateDto.getValueCreateDtoList(), item);
+        Item item = itemMapper.mapFromCreateDtoToEntity(itemCreateDto);
+        item.setCollection(collection);
+        itemRepo.save(item);
+        saveValuesOnCreate(itemCreateDto.getValueCreateDtoList(), item);
 
         return new ApiResponse(true, null);
     }
 
-    private void saveValues(List<ValueCreateDto> valueCreateDtoList, Item item) {
+    private void saveValuesOnCreate(List<ValueCreateDto> valueCreateDtoList, Item item) {
         valueCreateDtoList
                 .forEach(valueCreateDto -> {
-                    Value value = valueMapper.mapFromCreateDtoToEntity(valueCreateDto, item);
+                    Value value = valueMapper.mapFromCreateDtoToEntity(valueCreateDto, item.getCollection().getId());
+                    value.setItem(item);
                     valueRepo.save(value);
                 });
     }

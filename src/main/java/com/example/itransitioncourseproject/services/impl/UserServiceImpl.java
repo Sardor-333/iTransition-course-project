@@ -34,11 +34,18 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
+
     private final UserRepo userRepo;
+
     private final ResourceBundleMessageSource messageSource;
+
     private final MultipartService multipartService;
+
     private final CloudinaryResourceRepo cloudinaryResourceRepo;
+
     private final RoleRepo roleRepo;
+
+    private final AuthUtils authUtils;
 
     @Override
     public Paged<UserProjection> getUsers(Integer page, Integer size) {
@@ -53,7 +60,7 @@ public class UserServiceImpl implements UserService {
         if (optional.isPresent()) {
             User user = optional.get();
 
-            if (AuthUtils.hasRole(user, UserRole.ROLE_SUPER_ADMIN))
+            if (authUtils.hasRole(user, UserRole.ROLE_SUPER_ADMIN))
                 return new ApiResponse(false, messageSource.getMessage("error.superAdminCannotBeEdited", null, Locale.getDefault()));
 
             enableOrDisable(user, currentUser, request);
@@ -75,7 +82,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optional = userRepo.findById(id);
         if (optional.isPresent()) {
             User user = optional.get();
-            if (AuthUtils.hasRole(user, UserRole.ROLE_SUPER_ADMIN))
+            if (authUtils.hasRole(user, UserRole.ROLE_SUPER_ADMIN))
                 return new ApiResponse(false, messageSource.getMessage("error.superAdminCannotBeEdited", null, Locale.getDefault()));
 
             userRepo.delete(user);
@@ -111,7 +118,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepo.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (AuthUtils.hasRole(user, UserRole.ROLE_SUPER_ADMIN))
+            if (authUtils.hasRole(user, UserRole.ROLE_SUPER_ADMIN))
                 return new ApiResponse(false, messageSource.getMessage("error.superAdminCannotBeEdited", null, Locale.getDefault()));
 
             if (user.getRole().getRoleName() == UserRole.ROLE_ADMIN)

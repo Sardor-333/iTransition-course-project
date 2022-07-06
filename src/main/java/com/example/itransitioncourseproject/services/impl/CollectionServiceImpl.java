@@ -38,9 +38,11 @@ import java.util.Optional;
 public class CollectionServiceImpl implements CollectionService {
 
     private final CollectionRepo collectionRepo;
+
     private final FieldRepo fieldRepo;
 
     private final CollectionMapper collectionMapper;
+
     private final FieldMapper fieldMapper;
 
     private final MultipartService multipartService;
@@ -48,6 +50,8 @@ public class CollectionServiceImpl implements CollectionService {
     private final ResourceBundleMessageSource messageSource;
 
     private final CloudinaryResourceRepo cloudinaryResourceRepo;
+
+    private final AuthUtils authUtils;
 
     @Override
     public List<CollectionProjection> getTop5LargestCollections() {
@@ -63,6 +67,7 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public Paged<CollectionProjection> getMyCollections(Integer page, Integer size, User currentUser) {
+        PageSizeUtils.validatePageAndSize(page, size);
         Page<CollectionProjection> collectionsPage = collectionRepo.getMyCollections(currentUser.getId(), PageRequest.of(page - 1, size));
         return new Paged<>(collectionsPage, Paging.of(collectionsPage.getTotalPages(), page, size));
     }
@@ -74,60 +79,32 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public ApiResponse createCollection(CollectionCreateDto collectionCreateDto, MultipartFile photo, User currentUser) {
-        if (collectionRepo.existsByNameAndUserId(collectionCreateDto.getName(), currentUser.getId())) {
+        if (collectionRepo.existsByNameAndUserId(collectionCreateDto.getName(), currentUser.getId()))
             return new ApiResponse(false, messageSource.getMessage("error.userAlreadyHasCollectionWithName", new Object[]{collectionCreateDto.getName()}, Locale.getDefault()));
-        }
 
         Collection collection = collectionMapper.mapFromCreateDtoToEntity(collectionCreateDto);
         collection.setUser(currentUser);
-
-        // Save collection img
-        try {
-            CloudinaryResource fromMultipart = multipartService.generateCloudinaryResourceFromMultipart(photo);
-            collection.setImg(fromMultipart);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        collection.setImg(saveImgOnCreate(photo));
         collection = collectionRepo.save(collection);
+        saveFieldsOnCreate(collectionCreateDto.getFieldDtoList(), collection);
 
-        // Save collection fields separately
-        saveFields(collectionCreateDto.getFieldDtoList(), collection);
         return new ApiResponse(true, messageSource.getMessage("ok.collectionCreated", null, Locale.getDefault()));
     }
 
     @Override
     public ApiResponse editCollection(Long collectionId, CollectionEditDto collectionEditDto, MultipartFile img, User currentUser) {
-        // User cannot have a collection with the same name
-        if (collectionRepo.existsByNameAndUserId(collectionEditDto.getName(), currentUser.getId())) {
+        if (collectionRepo.existsByNameAndUserId(collectionEditDto.getName(), currentUser.getId()))
             return new ApiResponse(false, messageSource.getMessage("error.userAlreadyHasCollectionWithName", new Object[]{collectionEditDto.getName()}, Locale.getDefault()));
-        }
 
-        // If Collection not found
         Collection collection = collectionRepo.findById(collectionId).orElse(null);
-        if (collection == null) {
-            return new ApiResponse(false, messageSource.getMessage("error.objectNotFound", new Object[]{"Collection", collectionId}, Locale.getDefault()));
-        }
-
-        // IF CURRENT USER IS NOT THE OWNER OF THE COLL., SUPER ADMIN OR ADMIN THEN DOES NOT HAVE ACCESS
-        if (AuthUtils.hasRole(currentUser, UserRole.ROLE_USER) && !collection.getUser().getId().equals(currentUser.getId())) {
+        boolean userHasAccessToCollection = authUtils.userHasAccessToCollection(collection, currentUser);
+        if (!userHasAccessToCollection)
             return new ApiResponse(false, messageSource.getMessage("error.accessDenied", null, Locale.getDefault()));
-        }
 
         collectionMapper.mapFromEditDtoToEntity(collectionEditDto, collection);
-
-        // If new img has come
-        if (multipartService.isValidMultipart(img)) {
-            if (collection.getImg() != null) {
-                cloudinaryResourceRepo.delete(collection.getImg());
-            }
-            try {
-                CloudinaryResource fromMultipart = multipartService.generateCloudinaryResourceFromMultipart(img);
-                collection.setImg(fromMultipart);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        collection.setImg(saveImgOnEdit(collection, img));
         collectionRepo.save(collection);
+
         return new ApiResponse(true, messageSource.getMessage("ok.collectionEdited", null, Locale.getDefault()));
     }
 
@@ -137,10 +114,8 @@ public class CollectionServiceImpl implements CollectionService {
         if (collectionOptional.isPresent()) {
             Collection collection = collectionOptional.get();
 
-            // If current user is not the owner (of the coll.), super admin or admin, then does not have access
-            if (AuthUtils.hasRole(currentUser, UserRole.ROLE_USER) && !collection.getUser().getId().equals(currentUser.getId())) {
+            if (authUtils.hasRole(currentUser, UserRole.ROLE_USER) && !collection.getUser().getId().equals(currentUser.getId()))
                 return new ApiResponse(false, messageSource.getMessage("error.accessDenied", null, Locale.getDefault()));
-            }
 
             collectionRepo.delete(collection);
             return new ApiResponse(true, messageSource.getMessage("ok.collectionDeleted", null, Locale.getDefault()));
@@ -148,8 +123,9 @@ public class CollectionServiceImpl implements CollectionService {
         return new ApiResponse(false, messageSource.getMessage("error.objectNotFound", new Object[]{"Collection", collectionId}, Locale.getDefault()));
     }
 
-    private void saveFields(List<FieldDto> fieldDtoList, Collection collection) {
-        if (fieldDtoList == null || fieldDtoList.isEmpty()) return;
+    private void saveFieldsOnCreate(List<FieldDto> fieldDtoList, Collection collection) {
+        if (fieldDtoList == null || fieldDtoList.isEmpty())
+            return;
 
         fieldDtoList
                 .stream()
@@ -160,5 +136,31 @@ public class CollectionServiceImpl implements CollectionService {
                     field.setCollection(collection);
                     fieldRepo.save(field);
                 });
+    }
+
+    private CloudinaryResource saveImgOnCreate(MultipartFile img) {
+        try {
+            if (multipartService.isValidMultipart(img)) {
+                CloudinaryResource cloudinaryResource = multipartService.generateCloudinaryResourceFromMultipart(img);
+                return cloudinaryResourceRepo.save(cloudinaryResource);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private CloudinaryResource saveImgOnEdit(Collection collection, MultipartFile img) {
+        try {
+            if (multipartService.isValidMultipart(img)) {
+                if (collection.getImg() != null) {
+                    cloudinaryResourceRepo.delete(collection.getImg());
+                }
+                return cloudinaryResourceRepo.save(multipartService.generateCloudinaryResourceFromMultipart(img));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -22,8 +22,7 @@ public abstract class ItemMapper {
 
     @Mapping(expression = "java(src.getName())", target = "name")
     @Mapping(expression = "java(getItemTags(src.getTagIdList()))", target = "tags")
-    @Mapping(expression = "java(collection)", target = "collection")
-    public abstract Item mapFromCreateDtoToEntity(ItemCreateDto src, Collection collection);
+    public abstract Item mapFromCreateDtoToEntity(ItemCreateDto src);
 
     @Named("getItemTags")
     protected List<Tag> getItemTags(List<Long> tagIdList) {

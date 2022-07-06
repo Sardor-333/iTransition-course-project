@@ -1,7 +1,6 @@
 package com.example.itransitioncourseproject.mappers;
 
 import com.example.itransitioncourseproject.entities.Field;
-import com.example.itransitioncourseproject.entities.Item;
 import com.example.itransitioncourseproject.entities.Value;
 import com.example.itransitioncourseproject.enums.FieldType;
 import com.example.itransitioncourseproject.exceptions.ObjectNotFoundException;
@@ -26,15 +25,14 @@ public abstract class ValueMapper {
     @Autowired
     private DateTimeValidator dateTimeValidator;
 
-    @Mapping(expression = "java(item)", target = "item")
-    @Mapping(expression = "java(getField(src.getFieldName(), item))", target = "field")
-    @Mapping(expression = "java(getTargetValue(getField(src.getFieldName(), item), src.getFieldValue()))", target = "targetValue")
-    public abstract Value mapFromCreateDtoToEntity(ValueCreateDto src, Item item);
+    @Mapping(expression = "java(getField(src.getFieldName(), collectionId))", target = "field")
+    @Mapping(expression = "java(getTargetValue(getField(src.getFieldName(), collectionId), src.getFieldValue()))", target = "targetValue")
+    public abstract Value mapFromCreateDtoToEntity(ValueCreateDto src, Long collectionId);
 
     @Named("getField")
-    protected Field getField(String fieldName, Item item) {
+    protected Field getField(String fieldName, Long collectionId) {
         return fieldRepo
-                .findByCollectionIdAndName(item.getCollection().getId(), fieldName)
+                .findByCollectionIdAndName(collectionId, fieldName)
                 .orElseThrow(() -> new ObjectNotFoundException("Collection does not have field with name: " + fieldName));
     }
 
@@ -72,7 +70,7 @@ public abstract class ValueMapper {
     }
 
     private boolean isNumeric(String strValue) {
-        return matchesPattern("[0-9]+.[0-9]+", strValue);
+        return matchesNumericPattern(strValue);
     }
 
     private boolean isBoolean(String source) {
@@ -85,8 +83,8 @@ public abstract class ValueMapper {
                 source.equalsIgnoreCase("off");
     }
 
-    private boolean matchesPattern(String sourcePattern, String targetValue) {
-        Pattern pattern = Pattern.compile(sourcePattern);
+    private boolean matchesNumericPattern(String targetValue) {
+        Pattern pattern = Pattern.compile("[0-9]+.[0-9]+");
         Matcher matcher = pattern.matcher(targetValue);
         return matcher.matches();
     }

@@ -8,9 +8,9 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ValueDto {
+public class ValueCreateDto {
 
-    Long fieldId;
+    String fieldName;
 
-    String targetValue;
+    String fieldValue;
 }

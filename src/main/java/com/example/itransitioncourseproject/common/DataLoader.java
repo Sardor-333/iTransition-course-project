@@ -21,7 +21,9 @@ public class DataLoader implements CommandLineRunner {
     private String sqlInitMode;
 
     private final RoleRepo roleRepo;
+
     private final PasswordEncoder passwordEncoder;
+
     private final UserRepo userRepo;
 
     @Override
@@ -42,13 +44,14 @@ public class DataLoader implements CommandLineRunner {
                 roleRepo.save(roleAdmin);
             }
 
+            // ROLE SUPER ADMIN
             Role roleSuperAdmin = roleRepo.findByRoleName(UserRole.ROLE_SUPER_ADMIN).orElse(null);
             if (roleSuperAdmin == null) {
                 roleSuperAdmin = new Role(UserRole.ROLE_SUPER_ADMIN);
                 roleRepo.save(roleSuperAdmin);
             }
 
-            // ADMIN
+            // SUPER ADMIN
             User admin = userRepo.findByUsername("sardor").orElse(null);
             if (admin == null) {
                 admin = new User(

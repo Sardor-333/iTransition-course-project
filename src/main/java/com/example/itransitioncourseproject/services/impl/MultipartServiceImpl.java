@@ -16,6 +16,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class MultipartServiceImpl implements MultipartService {
 
+    public static final String DIRECTORY_UPLOAD = "src/main/resources/uploads/";
+
     private final FileService fileService;
     private final CloudinaryService cloudinaryService;
 
@@ -28,7 +30,7 @@ public class MultipartServiceImpl implements MultipartService {
     @Override
     public CloudinaryResource generateCloudinaryResourceFromMultipart(MultipartFile multipartFile) throws IOException {
         if (this.isValidMultipart(multipartFile)) {
-            File saved = fileService.save(multipartFile, MultipartService.DIRECTORY_UPLOAD);
+            File saved = fileService.save(multipartFile, DIRECTORY_UPLOAD);
             CloudinaryResource cloudinaryResource = cloudinaryService.uploadFile(saved);
             boolean deleted = saved.delete();
             return cloudinaryResource;

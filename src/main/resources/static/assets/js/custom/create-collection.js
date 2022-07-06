@@ -125,21 +125,7 @@ submitFormButton.addEventListener('click', function () {
         fetch('/api/v1/collections/create', {
             method: 'post',
             body: formData
-        }).then(response => {
-            response.json()
-                .then(data => {
-                    console.log(JSON.stringify(data));
-                    const alert = document.createElement('p');
-                    alert.classList.add('alert', data.success ? "alert-success" : "alert-danger");
-                    alert.textContent = data.message;
-
-                    const responseBlock = document.getElementById('response');
-                    responseBlock.appendChild(alert);
-                    setTimeout(function () {
-                        alert.remove();
-                    }, 5000)
-                })
-        });
+        }).then(response => location.reload());
     }
 });
 // ------------------------------------------------------------ //

@@ -3,12 +3,12 @@ package com.example.itransitioncourseproject.mappers;
 import com.example.itransitioncourseproject.entities.Collection;
 import com.example.itransitioncourseproject.payloads.request.collection.CollectionCreateDto;
 import com.example.itransitioncourseproject.payloads.request.collection.CollectionEditDto;
-import javax.annotation.Generated;
+import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-04T14:22:39+0500",
+    date = "2022-07-06T15:48:43+0500",
     comments = "version: 1.5.1.Final, compiler: javac, environment: Java 17.0.1 (Oracle Corporation)"
 )
 @Component

@@ -19,6 +19,7 @@ public class Collection extends AbsEntity {
     @Column(nullable = false)
     String name;
 
+    @Column(columnDefinition = "TEXT")
     String description;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

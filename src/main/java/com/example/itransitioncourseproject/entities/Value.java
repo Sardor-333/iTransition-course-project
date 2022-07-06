@@ -23,6 +23,6 @@ public class Value extends AbsEntity {
     @JoinColumn(nullable = false)
     Field field;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     String targetValue;
 }

@@ -9,8 +9,6 @@ import java.nio.file.Path;
 
 public interface MultipartService {
 
-    String DIRECTORY_UPLOAD = "src/main/resources/uploads/";
-
     default void initFileOrDirectory(Path path) throws IOException {
         if (!Files.exists(path)) {
             Files.createDirectory(path);

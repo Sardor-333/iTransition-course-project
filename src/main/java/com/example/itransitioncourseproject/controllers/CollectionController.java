@@ -44,13 +44,13 @@ public class CollectionController {
      * AUTHENTICATED
      */
     @GetMapping("/my")
-    public ModelAndView getMyCollections(@RequestParam(name = "page", required = false, defaultValue = PageSizeUtils.DEFAULT_PAGE) Integer page,
-                                         @RequestParam(name = "size", required = false, defaultValue = PageSizeUtils.DEFAULT_SIZE) Integer size,
-                                         ModelMap model,
-                                         @AuthenticationPrincipal User user) {
+    public String getMyCollections(@RequestParam(name = "page", required = false, defaultValue = PageSizeUtils.DEFAULT_PAGE) Integer page,
+                                   @RequestParam(name = "size", required = false, defaultValue = PageSizeUtils.DEFAULT_SIZE) Integer size,
+                                   Model model,
+                                   @AuthenticationPrincipal User user) {
         Paged<CollectionProjection> myCollections = collectionService.getMyCollections(page, size, user);
         model.addAttribute("collections", myCollections);
-        return new ModelAndView("my-collections", model);
+        return "my-collections";
     }
 
     /**
@@ -65,22 +65,13 @@ public class CollectionController {
      * AUTHENTICATED
      */
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ResponseBody
-    public ResponseEntity<ApiResponse> createCollection(@RequestPart(name = "photo", required = false) MultipartFile photo,
-                                                        @RequestPart(name = "collection") CollectionCreateDto collectionCreateDto,
-                                                        @AuthenticationPrincipal User currentUser) {
-        ApiResponse response = collectionService.createCollection(collectionCreateDto, photo, currentUser);
-        return ResponseEntity.status(response.isSuccess() ? 200 : 409).body(response);
-    }
-
-    /**
-     * SUPER_ADMIN or ADMIN or OWNER OF THE COLLECTION
-     */
-    @DeleteMapping("/{collectionId}")
-    public RedirectView deleteCollection(@PathVariable Long collectionId, @AuthenticationPrincipal User user, RedirectAttributes redirectAttributes) {
-        ApiResponse apiResponse = collectionService.deleteCollection(collectionId, user);
+    public String createCollection(@RequestPart(name = "photo", required = false) MultipartFile photo,
+                                   @RequestPart(name = "collection") CollectionCreateDto collectionCreateDto,
+                                   @AuthenticationPrincipal User currentUser,
+                                   RedirectAttributes redirectAttributes) {
+        ApiResponse apiResponse = collectionService.createCollection(collectionCreateDto, photo, currentUser);
         redirectAttributes.addFlashAttribute("response", apiResponse);
-        return new RedirectView(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/collections/my");
+        return "redirect:/api/v1/collections/my";
     }
 
     @GetMapping("/edit/{collectionId}")
@@ -93,10 +84,20 @@ public class CollectionController {
     @PostMapping(value = "/edit/{collectionId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
     public ResponseEntity<ApiResponse> editCollection(@PathVariable Long collectionId,
-                                 @RequestPart(name = "collection") CollectionEditDto collectionEditDto,
-                                 @RequestPart(name = "img", required = false) MultipartFile img,
-                                 User currentUser) {
+                                                      @RequestPart(name = "collection") CollectionEditDto collectionEditDto,
+                                                      @RequestPart(name = "img", required = false) MultipartFile img,
+                                                      @AuthenticationPrincipal User currentUser) {
         ApiResponse response = collectionService.editCollection(collectionId, collectionEditDto, img, currentUser);
         return ResponseEntity.status(response.isSuccess() ? 200 : 409).body(response);
+    }
+
+    /**
+     * SUPER_ADMIN or ADMIN or OWNER OF THE COLLECTION
+     */
+    @DeleteMapping("/{collectionId}")
+    public RedirectView deleteCollection(@PathVariable Long collectionId, @AuthenticationPrincipal User user, RedirectAttributes redirectAttributes) {
+        ApiResponse apiResponse = collectionService.deleteCollection(collectionId, user);
+        redirectAttributes.addFlashAttribute("response", apiResponse);
+        return new RedirectView(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/collections/my");
     }
 }

@@ -72,35 +72,6 @@ public class CollectionServiceImpl implements CollectionService {
         return collectionRepo.getCollectionById(collectionId);
     }
 
-    private void saveFields(List<FieldDto> fieldDtoList, Collection collection) {
-        if (fieldDtoList == null || fieldDtoList.isEmpty()) return;
-
-        fieldDtoList
-                .stream()
-                .filter(fieldDto -> !fieldDto.getName().equals("name")
-                        && !fieldRepo.existsByNameAndCollectionId(fieldDto.getName(), collection.getId()))
-                .forEach(fieldDto -> {
-                    Field field = fieldMapper.mapFromCreateDtoToEntity(fieldDto);
-                    field.setCollection(collection);
-                    fieldRepo.save(field);
-                });
-    }
-
-    @Override
-    public ApiResponse deleteCollection(Long collectionId, User currentUser) {
-        Optional<Collection> collectionOptional = collectionRepo.findById(collectionId);
-        if (collectionOptional.isPresent()) {
-            Collection collection = collectionOptional.get();
-            if (AuthUtils.hasRole(currentUser, UserRole.ROLE_USER) && !collection.getUser().getId().equals(currentUser.getId())) {
-                return new ApiResponse(false, messageSource.getMessage("error.accessDenied", null, Locale.getDefault()));
-            }
-
-            collectionRepo.delete(collection);
-            return new ApiResponse(true, messageSource.getMessage("ok.collectionDeleted", null, Locale.getDefault()));
-        }
-        return new ApiResponse(false, messageSource.getMessage("error.objectNotFound", new Object[]{"Collection", collectionId}, Locale.getDefault()));
-    }
-
     @Override
     public ApiResponse createCollection(CollectionCreateDto collectionCreateDto, MultipartFile photo, User currentUser) {
         if (collectionRepo.existsByNameAndUserId(collectionCreateDto.getName(), currentUser.getId())) {
@@ -126,17 +97,25 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public ApiResponse editCollection(Long collectionId, CollectionEditDto collectionEditDto, MultipartFile img, User currentUser) {
+        // User cannot have a collection with the same name
         if (collectionRepo.existsByNameAndUserId(collectionEditDto.getName(), currentUser.getId())) {
             return new ApiResponse(false, messageSource.getMessage("error.userAlreadyHasCollectionWithName", new Object[]{collectionEditDto.getName()}, Locale.getDefault()));
         }
 
+        // If Collection not found
         Collection collection = collectionRepo.findById(collectionId).orElse(null);
         if (collection == null) {
             return new ApiResponse(false, messageSource.getMessage("error.objectNotFound", new Object[]{"Collection", collectionId}, Locale.getDefault()));
         }
 
+        // IF CURRENT USER IS NOT THE OWNER OF THE COLL., SUPER ADMIN OR ADMIN THEN DOES NOT HAVE ACCESS
+        if (AuthUtils.hasRole(currentUser, UserRole.ROLE_USER) && !collection.getUser().getId().equals(currentUser.getId())) {
+            return new ApiResponse(false, messageSource.getMessage("error.accessDenied", null, Locale.getDefault()));
+        }
+
         collectionMapper.mapFromEditDtoToEntity(collectionEditDto, collection);
 
+        // If new img has come
         if (multipartService.isValidMultipart(img)) {
             if (collection.getImg() != null) {
                 cloudinaryResourceRepo.delete(collection.getImg());
@@ -150,5 +129,36 @@ public class CollectionServiceImpl implements CollectionService {
         }
         collectionRepo.save(collection);
         return new ApiResponse(true, messageSource.getMessage("ok.collectionEdited", null, Locale.getDefault()));
+    }
+
+    @Override
+    public ApiResponse deleteCollection(Long collectionId, User currentUser) {
+        Optional<Collection> collectionOptional = collectionRepo.findById(collectionId);
+        if (collectionOptional.isPresent()) {
+            Collection collection = collectionOptional.get();
+
+            // If current user is not the owner (of the coll.), super admin or admin, then does not have access
+            if (AuthUtils.hasRole(currentUser, UserRole.ROLE_USER) && !collection.getUser().getId().equals(currentUser.getId())) {
+                return new ApiResponse(false, messageSource.getMessage("error.accessDenied", null, Locale.getDefault()));
+            }
+
+            collectionRepo.delete(collection);
+            return new ApiResponse(true, messageSource.getMessage("ok.collectionDeleted", null, Locale.getDefault()));
+        }
+        return new ApiResponse(false, messageSource.getMessage("error.objectNotFound", new Object[]{"Collection", collectionId}, Locale.getDefault()));
+    }
+
+    private void saveFields(List<FieldDto> fieldDtoList, Collection collection) {
+        if (fieldDtoList == null || fieldDtoList.isEmpty()) return;
+
+        fieldDtoList
+                .stream()
+                .filter(fieldDto -> !fieldDto.getName().equals("name")
+                        && !fieldRepo.existsByNameAndCollectionId(fieldDto.getName(), collection.getId()))
+                .forEach(fieldDto -> {
+                    Field field = fieldMapper.mapFromCreateDtoToEntity(fieldDto);
+                    field.setCollection(collection);
+                    fieldRepo.save(field);
+                });
     }
 }

@@ -14,9 +14,6 @@ public abstract class CollectionMapper {
     @Autowired
     private TopicRepo topicRepo;
 
-    @Autowired
-    private FieldMapper fieldMapper;
-
     @Mapping(target = "topic", expression = "java(getTopic(src.getTopicId()))")
     public abstract Collection mapFromCreateDtoToEntity(CollectionCreateDto src);
 
@@ -25,6 +22,6 @@ public abstract class CollectionMapper {
 
     @Named("getTopic")
     public Topic getTopic(Long topicId) {
-        return topicRepo.findById(topicId).orElse(null);
+        return topicId == null ? null : topicRepo.findById(topicId).orElse(null);
     }
 }

@@ -5,6 +5,7 @@ import com.example.itransitioncourseproject.payloads.request.item.ItemCreateDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
 import com.example.itransitioncourseproject.projections.CollectionProjection;
 import com.example.itransitioncourseproject.projections.FieldProjection;
+import com.example.itransitioncourseproject.projections.ItemDetailProjection;
 import com.example.itransitioncourseproject.projections.TagProjection;
 import com.example.itransitioncourseproject.services.CollectionService;
 import com.example.itransitioncourseproject.services.ItemService;
@@ -81,5 +82,12 @@ public class ItemController {
         ApiResponse apiResponse = itemService.createItem(collectionId, itemCreateDto, currentUser);
         redirectAttributes.addFlashAttribute("response", apiResponse);
         return "redirect:/api/v1/items/collection/" + collectionId;
+    }
+
+    @GetMapping("/{id}")
+    public String getItemById(@PathVariable Long id, Model model) {
+        ItemDetailProjection itemDetails = itemService.getItemDetailsById(id);
+        model.addAttribute("item", itemDetails);
+        return "item";
     }
 }

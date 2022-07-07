@@ -39,9 +39,20 @@
                                        th:text="${item.collection.author.firstName + ' ' + item.collection.author.lastName}">
                                     </p>
                                 </div>
+
                                 <div class="widgets-icons bg-light-success text-success ms-auto">
                                     <i class="bx bxs-wallet"></i>
                                 </div>
+
+                                <a th:href="@{'/api/v1/items/' + item.id}" class="widgets-icons bg-light-success text-success ms-auto">
+                                    <i class="text-primary" data-feather="eye"></i>
+                                    View
+                                </a>
+
+                                <a class="widgets-icons bg-light-success text-success ms-auto">
+                                    <i class="text-primary" data-feather="trash-2"></i>
+                                    Delete
+                                </a>
                             </div>
                         </div>
                     </div>

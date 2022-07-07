@@ -4,12 +4,14 @@ import com.example.itransitioncourseproject.entities.Collection;
 import com.example.itransitioncourseproject.entities.Item;
 import com.example.itransitioncourseproject.entities.User;
 import com.example.itransitioncourseproject.entities.Value;
+import com.example.itransitioncourseproject.exceptions.ObjectNotFoundException;
 import com.example.itransitioncourseproject.mappers.ItemMapper;
 import com.example.itransitioncourseproject.mappers.ValueMapper;
 import com.example.itransitioncourseproject.payloads.request.ValueCreateDto;
 import com.example.itransitioncourseproject.payloads.request.item.ItemCreateDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
 import com.example.itransitioncourseproject.projections.FieldProjection;
+import com.example.itransitioncourseproject.projections.ItemDetailProjection;
 import com.example.itransitioncourseproject.projections.ItemProjection;
 import com.example.itransitioncourseproject.repositories.CollectionRepo;
 import com.example.itransitioncourseproject.repositories.FieldRepo;
@@ -63,6 +65,13 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemProjection> getItemsByTagId(Long collectionId) {
         return itemRepo.getItemsByTagId(collectionId);
+    }
+
+    @Override
+    public ItemDetailProjection getItemDetailsById(Long itemId) {
+        if (!itemRepo.existsById(itemId))
+            throw new ObjectNotFoundException("Item with id: " + itemId + " not found!");
+        return itemRepo.getItemDetailById(itemId);
     }
 
     @Override

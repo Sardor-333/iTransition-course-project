@@ -1,6 +1,7 @@
 package com.example.itransitioncourseproject.repositories;
 
 import com.example.itransitioncourseproject.entities.Item;
+import com.example.itransitioncourseproject.projections.ItemDetailProjection;
 import com.example.itransitioncourseproject.projections.ItemProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -79,4 +80,20 @@ public interface ItemRepo extends JpaRepository<Item, Long> {
                     "order by i.created_at desc"
     )
     List<ItemProjection> getItemsByTagId(@Param("tagId") Long tagId);
+
+    @Query(
+            nativeQuery = true,
+            value = "select i.id                                        as id,\n" +
+                    "       to_char(i.created_at, 'yyyy-MM-dd HH24:MI') as createdAt,\n" +
+                    "       to_char(i.updated_at, 'yyyy-MM-dd HH24:MI') as updatedAt,\n" +
+                    "       i.name                                      as name,\n" +
+                    "       coalesce(count(c.*), 0)                     as commentsCount,\n" +
+                    "       coalesce(count(l.*), 0)                     as likesCount\n" +
+                    "from items i\n" +
+                    "         left join comments c on c.item_id = i.id\n" +
+                    "         left join likes l on l.item_id = i.id\n" +
+                    "where i.id = :itemId\n" +
+                    "group by i.id"
+    )
+    ItemDetailProjection getItemDetailById(@Param("itemId") Long id);
 }

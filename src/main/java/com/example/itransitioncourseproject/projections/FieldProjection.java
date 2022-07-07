@@ -7,4 +7,8 @@ public interface FieldProjection {
     String getName();
 
     String getFieldType();
+
+    String getCreatedAt();
+
+    String getUpdatedAt();
 }

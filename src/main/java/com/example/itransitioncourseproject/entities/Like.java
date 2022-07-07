@@ -22,7 +22,4 @@ public class Like extends AbsEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", nullable = false, referencedColumnName = "id")
     Item item;
-
-    @Column(nullable = false)
-    boolean isLike = true;
 }

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head"></head>
+
+<body>
+<!--wrapper-->
+<div class="wrapper">
+
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <header th:replace="fragments/header :: header"></header>
+
+    <div class="page-wrapper">
+        <div class="page-content">
+
+            <!--breadcrumb-->
+            <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+                <div class="breadcrumb-title pe-3">Items</div>
+                <div class="ps-3">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0 p-0">
+                            <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Item Details</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!--end breadcrumb-->
+
+
+            <!-- start main card -->
+            <div class="card">
+                <div class="row g-0">
+                    <div class="col-md-4 border-end">
+
+                        <!-- Images -->
+                        <img th:src="@{assets/images/products/13.png}" class="img-fluid" alt="...">
+                        <div class="row mb-3 row-cols-auto g-2 justify-content-center mt-3">
+                            <div class="col"><img th:src="@{assets/images/products/12.png}" width="70"
+                                                  class="border rounded cursor-pointer" alt=""></div>
+                            <div class="col"><img th:src="@{assets/images/products/11.png}" width="70"
+                                                  class="border rounded cursor-pointer" alt=""></div>
+                            <div class="col"><img th:src="@{assets/images/products/14.png}" width="70"
+                                                  class="border rounded cursor-pointer" alt=""></div>
+                            <div class="col"><img th:src="@{assets/images/products/15.png}" width="70"
+                                                  class="border rounded cursor-pointer" alt=""></div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${item.name}"></h4>
+                            <div class="d-flex gap-3 py-3">
+                                <div class="cursor-pointer">
+                                    <i class='bx bxs-star text-warning'></i>
+                                    <i class='bx bxs-star text-warning'></i>
+                                    <i class='bx bxs-star text-warning'></i>
+                                    <i class='bx bxs-star text-warning'></i>
+                                    <i class='bx bxs-star text-secondary'></i>
+                                </div>
+
+                                <div class="text-success" th:text="${item.commentsCount + ' comments'}">
+                                    <i class="text-primary" data-feather="message-square"></i>
+                                </div>
+
+                                <div class="text-success" th:text="${item.likesCount + ' likes'}">
+                                    <i class="text-primary bx bx-like" data-feather="heart"></i>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="price h4">$149.00</span>
+                                <span class="text-muted">/per kg</span>
+                            </div>
+
+                            <p class="card-text fs-6">
+                                Virgil Abloh’s Off-White is a streetwear-inspired collection that
+                                continues to break away from the conventions of mainstream fashion. Made in Italy, these
+                                black and brown Odsy-1000 low-top sneakers.
+                            </p>
+
+                            <dl class="row">
+
+                                <div th:each="value: ${item.values}">
+
+                                    <!-- IF TEXT -->
+                                    <div th:if="${value.field.fieldType == 'text'}">
+                                        <dt class="col-sm-3" th:text="${value.field.name}"></dt>
+                                        <dd class="col-sm-9" th:text="${value.targetValue}"></dd>
+                                    </div>
+
+                                    <!-- IF TEXTAREA -->
+                                    <div th:if="${value.field.fieldType == 'textarea'}">
+                                        <dt class="col-sm-3" th:text="${value.field.name}"></dt>
+                                        <dd class="col-sm-9" th:text="${value.targetValue}"></dd>
+                                    </div>
+
+                                    <!-- IF NUMBER -->
+                                    <div th:if="${value.field.fieldType == 'number'}">
+                                        <dt class="col-sm-3" th:text="${value.field.name}"></dt>
+                                        <dd class="col-sm-9" th:text="${value.targetValue}"></dd>
+                                    </div>
+
+                                    <!-- IF DATE -->
+                                    <div th:if="${value.field.fieldType == 'date'}">
+                                        <dt class="col-sm-3" th:text="${value.field.name}"></dt>
+                                        <dd class="col-sm-9" th:text="${value.targetValue}"></dd>
+                                    </div>
+
+                                    <div th:if="${value.field.fieldType == 'checkbox'}">
+                                        <dt class="col-sm-3" th:text="${value.field.name}"></dt>
+                                        <dd class="col-sm-9" th:text="${value.targetValue == 'on' ? 'Yes' : 'No'}"></dd>
+                                    </div>
+                                </div>
+
+                                <dt class="col-sm-3">Model#</dt>
+                                <dd class="col-sm-9">Odsy-1000</dd>
+
+                                <dt class="col-sm-3">Color</dt>
+                                <dd class="col-sm-9">Brown</dd>
+
+                                <dt class="col-sm-3">Delivery</dt>
+                                <dd class="col-sm-9">Russia, USA, and Europe</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+
+                <div class="card-body">
+                    <ul class="nav nav-tabs nav-primary mb-0" role="tablist">
+
+                        <!-- Tags -->
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab"
+                               href="ecommerce-products-details.html#item-tags" role="tab" aria-selected="false">
+                                <div class="d-flex align-items-center">
+                                    <div class="tab-icon"><i class='bx bx-bookmark-alt font-18 me-1'></i>
+                                    </div>
+                                    <div class="tab-title">Tags</div>
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- Comments -->
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab"
+                               href="ecommerce-products-details.html#item-comments" role="tab" aria-selected="false">
+                                <div class="d-flex align-items-center">
+                                    <div class="tab-icon"><i class='bx bx-star font-18 me-1'></i>
+                                    </div>
+                                    <div class="tab-title">Comments</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content pt-3">
+
+                        <div class="tab-pane fade" id="item-tags" role="tabpanel">
+                            <!-- Tags -->
+                        </div>
+
+                        <div class="tab-pane fade" id="item-comments" role="tabpanel">
+                            <!-- Comments -->
+                            <div class="chat-content" id="comments">
+
+                                <!-- Comment 1 -->
+<!--                                <div class="chat-content-leftside">-->
+<!--                                    <div class="d-flex">-->
+<!--                                        <img src="assets/images/avatars/avatar-3.png" width="48" height="48" class="rounded-circle"-->
+<!--                                             alt=""/>-->
+<!--                                        <div class="flex-grow-1 ms-2">-->
+<!--                                            <p class="mb-0 chat-time">Harvey, 2:35 PM</p>-->
+<!--                                            <p class="chat-left-msg">Hi, harvey where are you now a days?</p>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+                                <!-- Comment 2 -->
+<!--                                <div class="chat-content-rightside">-->
+<!--                                    <div class="d-flex">-->
+<!--                                        <div class="flex-grow-1 me-2">-->
+<!--                                            <p class="mb-0 chat-time text-end">you, 2:49 PM</p>-->
+<!--                                            <p class="chat-right-msg">i have already purchased the admin template</p>-->
+<!--                                        </div>-->
+<!--                                        <img src="assets/images/avatars/avatar-3.png" width="48" height="48" class="rounded-circle"-->
+<!--                                             alt=""/>-->
+<!--                                    </div>-->
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- end main card -->
+
+        </div>
+    </div>
+    <div th:replace="fragments/theme-customizer :: theme-customizer"></div>
+
+    <script th:inline="javascript">
+        const comments = [[${item.comments}]];
+    </script>
+
+    <script th:src="@{/assets/js/custom/delete-collection.js}"></script>
+    <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.min.js}"></script>
+    <script th:src="@{/assets/plugins/simplebar/js/simplebar.min.js}"></script>
+    <script th:src="@{/assets/plugins/metismenu/js/metisMenu.min.js}"></script>
+    <script th:src="@{/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js}"></script>
+    <script th:src="@{/assets/js/app.js}"></script>
+
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+</body>
+
+</html>

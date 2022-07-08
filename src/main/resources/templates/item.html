@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head th:replace="fragments/head :: head"></head>
 
@@ -14,7 +14,6 @@
     <div class="page-wrapper">
         <div class="page-content">
 
-            <!--breadcrumb-->
             <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
                 <div class="breadcrumb-title pe-3">Items</div>
                 <div class="ps-3">
@@ -27,24 +26,42 @@
                     </nav>
                 </div>
             </div>
-            <!--end breadcrumb-->
 
-
-            <!-- start main card -->
             <div class="card">
                 <div class="row g-0">
                     <div class="col-md-4 border-end">
 
                         <!-- Images -->
-                        <img th:src="@{assets/images/products/13.png}" class="img-fluid" alt="...">
+                        <img th:src="@{/assets/images/gallery/01.png}" class="img-fluid" alt="...">
                         <div class="row mb-3 row-cols-auto g-2 justify-content-center mt-3">
-                            <div class="col"><img th:src="@{assets/images/products/12.png}" width="70"
+
+                            <!-- NOT LIKED -->
+                            <div id="like-item">
+                                <a>
+                                    <span class="iconify"
+                                          data-icon="icon-park-outline:like"
+                                          data-width="50"
+                                          data-height="50"></span>
+                                </a>
+                            </div>
+
+                            <!-- LIKED -->
+                            <div id="dislike-item">
+                                <a>
+                                    <span class="iconify"
+                                          data-icon="flat-color-icons:like"
+                                          data-width="50"
+                                          data-height="50"></span>
+                                </a>
+                            </div>
+
+                            <div class="col"><img th:src="@{/assets/images/gallery/01.png}" width="70"
                                                   class="border rounded cursor-pointer" alt=""></div>
-                            <div class="col"><img th:src="@{assets/images/products/11.png}" width="70"
+                            <div class="col"><img th:src="@{/assets/images/gallery/01.png}" width="70"
                                                   class="border rounded cursor-pointer" alt=""></div>
-                            <div class="col"><img th:src="@{assets/images/products/14.png}" width="70"
+                            <div class="col"><img th:src="@{/assets/images/gallery/01.png}" width="70"
                                                   class="border rounded cursor-pointer" alt=""></div>
-                            <div class="col"><img th:src="@{assets/images/products/15.png}" width="70"
+                            <div class="col"><img th:src="@{/assets/images/gallery/01.png}" width="70"
                                                   class="border rounded cursor-pointer" alt=""></div>
                         </div>
 
@@ -61,11 +78,11 @@
                                     <i class='bx bxs-star text-secondary'></i>
                                 </div>
 
-                                <div class="text-success" th:text="${item.commentsCount + ' comments'}">
+                                <div class="text-success" th:text="${#lists.size(item.comments) + ' comments'}">
                                     <i class="text-primary" data-feather="message-square"></i>
                                 </div>
 
-                                <div class="text-success" th:text="${item.likesCount + ' likes'}">
+                                <div class="text-success" th:text="${#lists.size(item.likes) + ' likes'}">
                                     <i class="text-primary bx bx-like" data-feather="heart"></i>
                                 </div>
                             </div>
@@ -114,15 +131,6 @@
                                         <dd class="col-sm-9" th:text="${value.targetValue == 'on' ? 'Yes' : 'No'}"></dd>
                                     </div>
                                 </div>
-
-                                <dt class="col-sm-3">Model#</dt>
-                                <dd class="col-sm-9">Odsy-1000</dd>
-
-                                <dt class="col-sm-3">Color</dt>
-                                <dd class="col-sm-9">Brown</dd>
-
-                                <dt class="col-sm-3">Delivery</dt>
-                                <dd class="col-sm-9">Russia, USA, and Europe</dd>
                             </dl>
                         </div>
                     </div>
@@ -159,65 +167,125 @@
 
                     <div class="tab-content pt-3">
 
+                        <!-- Tags -->
                         <div class="tab-pane fade" id="item-tags" role="tabpanel">
-                            <!-- Tags -->
+                            <a th:each="tag: ${item.tags}"
+                               th:text="${tag.name}"
+                               class="chip chip-md"
+                               th:href="${'/api/v1/items/tag/' + tag.id}"
+                            >
+                            </a>
                         </div>
 
                         <div class="tab-pane fade" id="item-comments" role="tabpanel">
-                            <!-- Comments -->
-                            <div class="chat-content" id="comments">
 
-                                <!-- Comment 1 -->
-<!--                                <div class="chat-content-leftside">-->
-<!--                                    <div class="d-flex">-->
-<!--                                        <img src="assets/images/avatars/avatar-3.png" width="48" height="48" class="rounded-circle"-->
-<!--                                             alt=""/>-->
-<!--                                        <div class="flex-grow-1 ms-2">-->
-<!--                                            <p class="mb-0 chat-time">Harvey, 2:35 PM</p>-->
-<!--                                            <p class="chat-left-msg">Hi, harvey where are you now a days?</p>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
+                            <!-- COMMENTS -->
+                            <div class="email-sidebar-header d-grid">
+                                <a data-toggle="modal"
+                                   href="#modal-leave-comment"
+                                   class="btn btn-primary"
+                                >
+                                    <i class='bx bx-plus me-2'></i>
+                                    Leave a comment
+                                </a>
+                            </div>
 
-                                <!-- Comment 2 -->
-<!--                                <div class="chat-content-rightside">-->
-<!--                                    <div class="d-flex">-->
-<!--                                        <div class="flex-grow-1 me-2">-->
-<!--                                            <p class="mb-0 chat-time text-end">you, 2:49 PM</p>-->
-<!--                                            <p class="chat-right-msg">i have already purchased the admin template</p>-->
-<!--                                        </div>-->
-<!--                                        <img src="assets/images/avatars/avatar-3.png" width="48" height="48" class="rounded-circle"-->
-<!--                                             alt=""/>-->
-<!--                                    </div>-->
+                            <br/>
+                            <h6 class="mb-0 text-uppercase">Comments</h6>
+                            <br/>
+                            <div class="card radius-10">
+                                <div class="card-body">
+                                    <ul class="list-unstyled" id="comments">
+                                    </ul>
                                 </div>
+                            </div>
 
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- POPUP -->
+            <div class="modal" id="modal-leave-comment" tabindex="-1" role="dialog">
+                <div class="card">
+                    <div class="card-header bg-dark text-white py-2 cursor-pointer">
+                        <div class="d-flex align-items-center">
+                            <div class="compose-mail-title">New Comment</div>
+                            <button type="button"
+                                    class="close compose-mail-close ms-auto"
+                                    data-dismiss="modal"
+                                    aria-label="Close"
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="email-form">
+
+                            <div class="mb-3">
+                                <label for="new-comment-body">Comment Body</label>
+                                <textarea id="new-comment-body"
+                                          class="form-control"
+                                          placeholder="Comment..."
+                                >
+                                </textarea>
+                            </div>
+
+                            <div class="mb-0">
+                                <div class="d-flex align-items-center">
+                                    <div class="ms-2">
+                                        <button type="button" class="btn border-0 btn-sm btn-white"><i
+                                                class="lni lni-text-format"></i>
+                                        </button>
+                                        <button type="button" class="btn border-0 btn-sm btn-white"><i
+                                                class='bx bx-link-alt'></i>
+                                        </button>
+                                        <button type="button" class="btn border-0 btn-sm btn-white"><i
+                                                class="lni lni-emoji-tounge"></i>
+                                        </button>
+                                        <button type="button" class="btn border-0 btn-sm btn-white"><i
+                                                class="lni lni-google-drive"></i>
+                                        </button>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <button type="button"
+                                                class="btn border-0 btn-sm btn-white"
+                                                id="btn-send-comment"
+                                        >
+                                            <i class='bx bx-send'></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
-            <!-- end main card -->
 
         </div>
+        <!-- end main card -->
     </div>
-    <div th:replace="fragments/theme-customizer :: theme-customizer"></div>
+</div>
+<div th:replace="fragments/theme-customizer :: theme-customizer"></div>
 
-    <script th:inline="javascript">
-        const comments = [[${item.comments}]];
-    </script>
+<script th:inline="javascript">
+    const comments = [[${item.comments}]];
+    const item = [[${item}]];
+</script>
+<script th:src="@{/assets/js/custom/item.js}"></script>
 
-    <script th:src="@{/assets/js/custom/delete-collection.js}"></script>
-    <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
-    <script th:src="@{/assets/js/jquery.min.js}"></script>
-    <script th:src="@{/assets/plugins/simplebar/js/simplebar.min.js}"></script>
-    <script th:src="@{/assets/plugins/metismenu/js/metisMenu.min.js}"></script>
-    <script th:src="@{/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js}"></script>
-    <script th:src="@{/assets/js/app.js}"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/plugins/simplebar/js/simplebar.min.js}"></script>
+<script th:src="@{/assets/plugins/metismenu/js/metisMenu.min.js}"></script>
+<script th:src="@{/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/js/app.js}"></script>
 
-    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-    <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
 </body>
 

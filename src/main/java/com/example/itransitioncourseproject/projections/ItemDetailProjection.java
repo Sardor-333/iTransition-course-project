@@ -14,10 +14,7 @@ public interface ItemDetailProjection {
 
     String getName();
 
-    // todo : delete if using thymeleaf it is possible to get model list length
-    Integer getCommentsCount();
-
-    Integer getLikesCount();
+    Boolean getLikedByMe();
 
     @Value("#{@collectionRepo.getCollectionByItemId(target.id)}")
     CollectionProjection getCollection();

@@ -1,85 +1,201 @@
-$(document).ready(function () {
-
-    initiallyAppendComments(); // LIST COMMENTS
-
+const websocket = new SockJS('/ws-endpoint');
+const stompClient = Stomp.over(websocket);
 
 
+
+
+
+
+
+
+
+
+
+
+
+// INIT
+appendInitialComments();
+connectToWebsocket();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// WEBSOCKET
+function connectToWebsocket() {
+    stompClient.connect({}, function (frame) {
+        subscribeToComments();
+    });
+    console.log('=== CONNECTED TO WEBSOCKET ===');
+}
+
+function subscribeToComments() {
+    stompClient.subscribe(
+        '/topic/items/' + item.id + '/comments',
+
+        function (response) {
+            const comment = JSON.parse(response.body);
+
+            appendSingleComment(comment, true);
+        }
+    )
+    console.log('=== SUBSCRIBED TO COMMENTS ===');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// LEAVE COMMENT
+const btnSendComment = document.getElementById('btn-send-comment');
+btnSendComment.addEventListener('click', function (e) {
+    console.log('=== BTN SEND COMMENT PRESSED ===');
+    sendLeaveCommentRequest(item.id);
 });
 
-// -------------------------------------------------------------- //
-function initiallyAppendComments() {
+function sendLeaveCommentRequest(itemId) {
+    let commentBody = document.getElementById('new-comment-body').value;
+    stompClient.send(
+        '/app/items/' + itemId + '/comments',
+        {},
+        JSON.stringify(
+            {
+                'body': commentBody
+            }
+        )
+    )
+    console.log('=== SEND COMMENT TO THE API ===');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// DRAW COMMENTS
+function appendInitialComments() {
+
     for (let i = 0; i < comments.length; i++) {
-        if (i % 2 === 0)
-            appendContactToLeft(comments[i]);
-        else
-            appendContactToRight(comments[i]);
+        let comment = comments[i];
+        appendSingleComment(comment, false);
     }
 }
 
-function appendContactToLeft(comment) {
-    const commentsBlock = document.getElementById('comments');
+function appendSingleComment(comment, toTheTop) {
 
-    let divChatContentLeftside = document.createElement('div');
-    divChatContentLeftside.classList.add('chat-content-leftside');
-    commentsBlock.appendChild(divChatContentLeftside);
+    let li = document.createElement('li');
+    li.classList.add('d-flex', 'align-items-center', 'border-bottom', 'pb-2');
 
-    let divDFlex = document.createElement('div');
-    divDFlex.classList.add('d-flex');
-    divChatContentLeftside.appendChild(divDFlex);
+    let img = document.createElement('img');
+    img.src = comment.user.imgUrl;
+    img.classList.add('rounded-circle', 'p-1', 'border');
+    img.width = 90;
+    img.height = 90;
+    img.alt = 'User img';
+    li.appendChild(img);
 
-    let commentOwnerImg = document.createElement('img');
-    commentOwnerImg.src = comment.user.imgUrl;
-    commentOwnerImg.width = 48;
-    commentOwnerImg.height = 48;
-    commentOwnerImg.classList.add('rounded-circle');
-    commentOwnerImg.alt = 'Comment owner img';
-    divDFlex.appendChild(commentOwnerImg);
+    let group = document.createElement('div');
+    group.classList.add('flex-grow-1', 'ms-3');
+    group.innerHTML = comment.user.firstName + ' ' + comment.user.lastName;
+    li.appendChild(group);
 
-    let divCommentWrapper = document.createElement('div');
-    divCommentWrapper.classList.add('flex-grow-1', 'ms-2');
-    divDFlex.appendChild(divCommentWrapper);
+    let user = document.createElement('h5');
+    user.classList.add('mt-0', 'mb-1');
+    user.innerHTML = comment.body;
+    group.appendChild(user);
 
-    let commentTitle = document.createElement('p');
-    commentTitle.classList.add('mb-0', 'chat-time');
-    commentTitle.innerHTML = comment.user.firstName + ' ' + comment.user.lastName + ', ' + comment.createdAt;
-    divCommentWrapper.appendChild(commentTitle);
-
-    let commentBody = document.createElement('p');
-    commentBody.classList.add('chat-left-msg');
-    commentBody.innerHTML = comment.body;
-    divCommentWrapper.appendChild(commentBody);
+    const ul = document.getElementById('comments');
+    if (toTheTop)
+        ul.prepend(li);
+    else
+        ul.appendChild(li);
 }
 
-function appendContactToRight(comment) {
-    const commentsBlock = document.getElementById('comments');
 
-    let divChatContentRightSide = document.createElement('div');
-    divChatContentRightSide.classList.add('chat-content-rightside');
-    commentsBlock.appendChild(divChatContentRightSide);
 
-    let dFlex = document.createElement('div');
-    dFlex.classList.add('d-flex');
-    divChatContentRightSide.appendChild(dFlex);
 
-    let commentWrapper = document.createElement('div');
-    commentWrapper.classList.add('flex-grow-1', 'me-2');
-    dFlex.appendChild(commentWrapper);
 
-    let commentTitle = document.createElement('p');
-    commentTitle.classList.add('mb-0', 'chat-time', 'text-end');
-    commentTitle.innerHTML = comment.user.firstName + ' ' + comment.user.lastName + ', ' + comment.createdAt;
-    commentWrapper.appendChild(commentTitle);
 
-    let commentBody = document.createElement('p');
-    commentBody.classList.add('chat-right-msg');
-    commentBody.innerHTML = comment.body;
-    commentWrapper.appendChild(commentBody);
 
-    let commentOwnerImg = document.createElement('img');
-    commentOwnerImg.src = comment.user.imgUrl;
-    commentOwnerImg.width = 48;
-    commentOwnerImg.height = 48;
-    commentOwnerImg.classList.add('rounded-circle');
-    dFlex.appendChild(commentOwnerImg);
+
+
+
+
+
+
+
+
+
+
+// LIKE OR DISLIKE
+const btnLike = document.getElementById('like-item');
+const btnDislike = document.getElementById('dislike-item');
+
+if (item.likedByMe) {
+    btnLike.style.display="none";
+} else {
+    btnDislike.style.display="none";
 }
-// -------------------------------------------------------------- //
+
+// WHEN PRESSED
+btnLike.addEventListener('click', function (e) {
+    sendRequestLikeOrDislikeItem();
+});
+
+btnDislike.addEventListener('click', function (e) {
+    sendRequestLikeOrDislikeItem();
+});
+
+function sendRequestLikeOrDislikeItem() {
+
+    fetch('/api/v1/likes/item/' + item.id, {
+        method: 'post'
+    }).then(response => location.reload())
+}

@@ -23,6 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] WHITE_LIST = {
+
+            // BASE
             BaseUrl.API_BASE,
             BaseUrl.API_HOME,
             BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/auth/register",
@@ -40,6 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // TOPICS
             BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/topics",
 
+            // WEBSOCKET
+            "/ws-endpoint",
+
+            // ASSETS
             "/assets/css/**",
             "/assets/flags/**",
             "/assets/fonts/**",

@@ -19,7 +19,7 @@ public interface ItemService {
 
     List<ItemProjection> getItemsByTagId(Long tagId);
 
-    ItemDetailProjection getItemDetailsById(Long itemId);
+    ItemDetailProjection getItemDetailsById(Long itemId, User currentUser);
 
     List<FieldProjection> getCollectionFields(Long collectionId);
 

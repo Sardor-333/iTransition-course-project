@@ -18,7 +18,19 @@ public interface CommentRepo extends JpaRepository<Comment, Long> {
                     "       to_char(c.updated_at, 'yyyy-MM-dd HH24:MI') as updatedAt\n" +
                     "from comments c\n" +
                     "         join items i on c.item_id = i.id\n" +
-                    "where i.id = :itemId"
+                    "where i.id = :itemId " +
+                    "order by c.created_at desc"
     )
     List<CommentProjection> getCommentsByItemId(@Param("itemId") Long itemId);
+
+    @Query(
+            nativeQuery = true,
+            value = "select c.id                                        as id,\n" +
+                    "       c.body                                      as body,\n" +
+                    "       to_char(c.created_at, 'yyyy-MM-dd HH24:MI') as createdAt,\n" +
+                    "       to_char(c.updated_at, 'yyyy-MM-dd HH24:MI') as updatedAt\n" +
+                    "from comments c\n" +
+                    "where c.id = :commentId"
+    )
+    CommentProjection getCommentById(@Param("commentId") Long commentId);
 }

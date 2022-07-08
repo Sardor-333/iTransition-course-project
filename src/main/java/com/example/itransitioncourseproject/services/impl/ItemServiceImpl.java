@@ -68,10 +68,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDetailProjection getItemDetailsById(Long itemId) {
+    public ItemDetailProjection getItemDetailsById(Long itemId, User currentUser) {
         if (!itemRepo.existsById(itemId))
             throw new ObjectNotFoundException("Item with id: " + itemId + " not found!");
-        return itemRepo.getItemDetailById(itemId);
+        return itemRepo.getItemDetailById(itemId, currentUser == null ? null : currentUser.getId());
     }
 
     @Override

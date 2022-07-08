@@ -13,19 +13,34 @@
         <div class="page-content">
 
             <div sec:authorize="isAuthenticated()">
-                <div th:if="${#authentication.getPrincipal().getId() == collection.author.id}">
+                <div sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
                     <a th:href="${'/api/v1/items/create/' + collection.id}" class="btn btn-primary">
                         Add New Item
                     </a>
                 </div>
-                <div th:unless="${#authentication.getPrincipal().getId() != collection.author.id}">
-                    <div sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                <div sec:authorize="!hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                    <div th:if="${#authentication.getPrincipal().getId() == collection.author.id}">
                         <a th:href="${'/api/v1/items/create/' + collection.id}" class="btn btn-primary">
                             Add New Item
                         </a>
                     </div>
                 </div>
             </div>
+
+<!--            <div sec:authorize="isAuthenticated()">-->
+<!--                <div th:if="${#authentication.getPrincipal().getId() == collection.author.id}">-->
+<!--                    <a th:href="${'/api/v1/items/create/' + collection.id}" class="btn btn-primary">-->
+<!--                        Add New Item-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <div th:unless="${#authentication.getPrincipal().getId() != collection.author.id}">-->
+<!--                    <div sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">-->
+<!--                        <a th:href="${'/api/v1/items/create/' + collection.id}" class="btn btn-primary">-->
+<!--                            Add New Item-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
 
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
                 <div class="col" th:each="item: ${items}">
@@ -44,7 +59,8 @@
                                     <i class="bx bxs-wallet"></i>
                                 </div>
 
-                                <a th:href="@{'/api/v1/items/' + item.id}" class="widgets-icons bg-light-success text-success ms-auto">
+                                <a th:href="${'/api/v1/items/' + item.id}"
+                                   class="widgets-icons bg-light-success text-success ms-auto">
                                     <i class="text-primary" data-feather="eye"></i>
                                     View
                                 </a>

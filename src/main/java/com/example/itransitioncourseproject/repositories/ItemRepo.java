@@ -87,13 +87,17 @@ public interface ItemRepo extends JpaRepository<Item, Long> {
                     "       to_char(i.created_at, 'yyyy-MM-dd HH24:MI') as createdAt,\n" +
                     "       to_char(i.updated_at, 'yyyy-MM-dd HH24:MI') as updatedAt,\n" +
                     "       i.name                                      as name,\n" +
-                    "       coalesce(count(c.*), 0)                     as commentsCount,\n" +
-                    "       coalesce(count(l.*), 0)                     as likesCount\n" +
+                    "       case\n" +
+                    "           when :userId is null then false\n" +
+                    "           when :userId in (\n" +
+                    "               select l.liked_by\n" +
+                    "               from items i2\n" +
+                    "                        join likes l on l.item_id = i2.id\n" +
+                    "               where i2.id = :itemId\n" +
+                    "           ) then true\n" +
+                    "           else false end                          as likedByMe\n" +
                     "from items i\n" +
-                    "         left join comments c on c.item_id = i.id\n" +
-                    "         left join likes l on l.item_id = i.id\n" +
-                    "where i.id = :itemId\n" +
-                    "group by i.id"
+                    "where i.id = :itemId"
     )
-    ItemDetailProjection getItemDetailById(@Param("itemId") Long id);
+    ItemDetailProjection getItemDetailById(@Param("itemId") Long itemId, @Param("userId") Long userId);
 }

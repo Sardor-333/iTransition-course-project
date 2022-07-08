@@ -3,7 +3,6 @@ package com.example.itransitioncourseproject.controllers;
 import com.example.itransitioncourseproject.entities.User;
 import com.example.itransitioncourseproject.payloads.request.item.ItemCreateDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
-import com.example.itransitioncourseproject.projections.CollectionProjection;
 import com.example.itransitioncourseproject.projections.FieldProjection;
 import com.example.itransitioncourseproject.projections.ItemDetailProjection;
 import com.example.itransitioncourseproject.projections.TagProjection;
@@ -37,21 +36,21 @@ public class ItemController {
      * PUBLIC
      */
     @GetMapping
-    public ModelAndView getItems(ModelMap model) {
+    public String getItems(Model model) {
         model.addAttribute("items", itemService.getItems());
-        return new ModelAndView("items", model);
+        return "items";
     }
 
     /**
      * PUBLIC
      */
     @GetMapping("/collection/{collectionId}")
-    public ModelAndView getItemsByCollection(@PathVariable Long collectionId, ModelMap model) {
-        CollectionProjection collection = collectionService.getCollectionById(collectionId);
-        model.addAttribute("collection", collection);
+    public String getItemsByCollection(@PathVariable Long collectionId, Model model) {
 
+        model.addAttribute("collection", collectionService.getCollectionById(collectionId));
         model.addAttribute("items", itemService.getItemsByCollectionId(collectionId));
-        return new ModelAndView("collection-items", model);
+
+        return "collection-items";
     }
 
     /**
@@ -85,8 +84,10 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public String getItemById(@PathVariable Long id, Model model) {
-        ItemDetailProjection itemDetails = itemService.getItemDetailsById(id);
+    public String getItemById(@PathVariable Long id,
+                              Model model,
+                              @AuthenticationPrincipal User currentUser) {
+        ItemDetailProjection itemDetails = itemService.getItemDetailsById(id, currentUser);
         model.addAttribute("item", itemDetails);
         return "item";
     }

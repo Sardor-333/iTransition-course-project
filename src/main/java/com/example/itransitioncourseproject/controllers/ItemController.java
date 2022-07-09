@@ -1,8 +1,11 @@
 package com.example.itransitioncourseproject.controllers;
 
+import com.example.itransitioncourseproject.entities.Item;
 import com.example.itransitioncourseproject.entities.User;
+import com.example.itransitioncourseproject.payloads.request.SearchDto;
 import com.example.itransitioncourseproject.payloads.request.item.ItemCreateDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
+import com.example.itransitioncourseproject.payloads.response.SearchResult;
 import com.example.itransitioncourseproject.projections.FieldProjection;
 import com.example.itransitioncourseproject.projections.ItemDetailProjection;
 import com.example.itransitioncourseproject.projections.TagProjection;
@@ -83,12 +86,25 @@ public class ItemController {
         return "redirect:/api/v1/items/collection/" + collectionId;
     }
 
-    @GetMapping("/{id}")
-    public String getItemById(@PathVariable Long id,
+    @GetMapping("/{itemId}")
+    public String getItemById(@PathVariable Long itemId,
                               Model model,
                               @AuthenticationPrincipal User currentUser) {
-        ItemDetailProjection itemDetails = itemService.getItemDetailsById(id, currentUser);
+        ItemDetailProjection itemDetails = itemService.getItemDetailsById(itemId, currentUser);
         model.addAttribute("item", itemDetails);
         return "item";
+    }
+
+    @DeleteMapping("/{itemId}")
+    public String deleteItemById(@PathVariable Long itemId, @AuthenticationPrincipal User currentUser) {
+        ApiResponse response = itemService.deleteItemById(itemId, currentUser);
+        return "redirect:/" + BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/items";
+    }
+
+    @GetMapping("/search")
+    public String searchItems(@ModelAttribute SearchDto searchDto, Model model) {
+        SearchResult<Item> itemSearchResult = itemService.searchItems(searchDto);
+        model.addAttribute("searchResult" ,itemSearchResult);
+        return "search-result";
     }
 }

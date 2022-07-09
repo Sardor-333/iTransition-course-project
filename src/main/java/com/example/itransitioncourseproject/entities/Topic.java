@@ -3,6 +3,7 @@ package com.example.itransitioncourseproject.entities;
 import com.example.itransitioncourseproject.entities.abs.AbsEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @Table(name = "topics")
 public class Topic extends AbsEntity {
 
+    @FullTextField
     @Column(nullable = false, unique = true)
     String name;
 

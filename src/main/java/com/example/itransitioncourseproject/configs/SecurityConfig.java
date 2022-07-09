@@ -32,15 +32,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             // COLLECTIONS
             BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/collections",
-            BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/collections/*",
+            BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/collections/{collectionId:[\\d+]}",
 
             // ITEMS
             BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/items",
-            BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/items/collection/*",
-            BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/items/tag/*",
+            BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/items/collection/{collectionId:[\\d+]}",
+            BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/items/tag/{tagId:[\\d+]}",
 
             // TOPICS
             BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/topics",
+
+            // SEARCH
+            BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/items/search",
 
             // WEBSOCKET
             "/ws-endpoint",

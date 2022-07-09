@@ -60,14 +60,14 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public Paged<CollectionProjection> getCollections(Integer page, Integer size) {
-        PageSizeUtils.validatePageAndSize(page, size);
+        PageSizeUtils.validatePageAndSize(page, size, collectionRepo);
         Page<CollectionProjection> collectionsPage = collectionRepo.getCollectionsPageable(PageRequest.of(page - 1, size));
         return new Paged<>(collectionsPage, Paging.of(collectionsPage.getTotalPages(), page, size));
     }
 
     @Override
     public Paged<CollectionProjection> getMyCollections(Integer page, Integer size, User currentUser) {
-        PageSizeUtils.validatePageAndSize(page, size);
+        PageSizeUtils.validatePageAndSize(page, size, collectionRepo);
         Page<CollectionProjection> collectionsPage = collectionRepo.getMyCollections(currentUser.getId(), PageRequest.of(page - 1, size));
         return new Paged<>(collectionsPage, Paging.of(collectionsPage.getTotalPages(), page, size));
     }
@@ -93,16 +93,13 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public ApiResponse editCollection(Long collectionId, CollectionEditDto collectionEditDto, MultipartFile img, User currentUser) {
-        if (collectionRepo.existsByNameAndUserId(collectionEditDto.getName(), currentUser.getId()))
-            return new ApiResponse(false, messageSource.getMessage("error.userAlreadyHasCollectionWithName", new Object[]{collectionEditDto.getName()}, Locale.getDefault()));
-
         Collection collection = collectionRepo.findById(collectionId).orElse(null);
         boolean userHasAccessToCollection = authUtils.userHasAccessToCollection(collection, currentUser);
         if (!userHasAccessToCollection)
             return new ApiResponse(false, messageSource.getMessage("error.accessDenied", null, Locale.getDefault()));
 
         collectionMapper.mapFromEditDtoToEntity(collectionEditDto, collection);
-        collection.setImg(saveImgOnEdit(collection, img));
+        setImgOnEdit(collection, img);
         collectionRepo.save(collection);
 
         return new ApiResponse(true, messageSource.getMessage("ok.collectionEdited", null, Locale.getDefault()));
@@ -150,17 +147,17 @@ public class CollectionServiceImpl implements CollectionService {
         return null;
     }
 
-    private CloudinaryResource saveImgOnEdit(Collection collection, MultipartFile img) {
+    private void setImgOnEdit(Collection collection, MultipartFile img) {
         try {
             if (multipartService.isValidMultipart(img)) {
                 if (collection.getImg() != null) {
                     cloudinaryResourceRepo.delete(collection.getImg());
                 }
-                return cloudinaryResourceRepo.save(multipartService.generateCloudinaryResourceFromMultipart(img));
+                CloudinaryResource cloudinaryResource = cloudinaryResourceRepo.save(multipartService.generateCloudinaryResourceFromMultipart(img));
+                collection.setImg(cloudinaryResource);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
     }
 }

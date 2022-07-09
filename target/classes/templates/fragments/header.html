@@ -7,12 +7,24 @@
                 <i class='bx bx-menu'></i>
             </div>
             <div class="search-bar flex-grow-1">
-                <form class="position-relative search-bar-box" method="get"
-                      th:action="@{/api/v1/collections/search}">
-                    <input type="text" class="form-control search-control" th:placeholder="#{menu.typetosearch}"> <span
-                        class="position-absolute top-50 search-show translate-middle-y"><i
-                        class='bx bx-search'></i></span>
-                    <button type="submit" class="position-absolute top-50 search-close translate-middle-y">
+
+                <form class="position-relative search-bar-box"
+                      method="get"
+                      th:action="@{/api/v1/items/search}">
+
+                    <input id="search"
+                           type="text"
+                           name="searchKey"
+                           class="form-control search-control"
+                           th:placeholder="#{menu.typetosearch}"
+                    >
+
+                    <span class="position-absolute top-50 search-show translate-middle-y">
+                        <i class='bx bx-search'></i>
+                    </span>
+
+                    <button type="submit"
+                            class="position-absolute top-50 search-close translate-middle-y">
                         <i class='bx bx-x'></i>
                     </button>
                 </form>
@@ -27,7 +39,8 @@
                     </li>
                     <li class="nav-item dropdown dropdown-large">
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Language
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">

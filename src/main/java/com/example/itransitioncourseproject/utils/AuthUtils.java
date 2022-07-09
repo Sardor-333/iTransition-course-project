@@ -20,10 +20,11 @@ public final class AuthUtils {
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(role.toString()));
     }
 
-    public boolean userHasAccessToCollection(Collection collection, User user) {
+    public boolean userHasAccessToCollection(Collection collection, User currentUser) {
         if (collection == null)
             return false;
 
-        return !this.hasRole(user, UserRole.ROLE_USER) || collection.getUser().getId().equals(user.getId());
+        // IF SIMPLE USER AND IS NOT THE OWNER OF THE COLLECTION THEN DOES NOT HAVE ACCESS
+        return !(this.hasRole(currentUser, UserRole.ROLE_USER) && !collection.getUser().getId().equals(currentUser.getId()));
     }
 }

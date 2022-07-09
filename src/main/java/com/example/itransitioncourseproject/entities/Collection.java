@@ -3,6 +3,8 @@ package com.example.itransitioncourseproject.entities;
 import com.example.itransitioncourseproject.entities.abs.AbsEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,9 +18,11 @@ import java.util.List;
 @Table(name = "collections")
 public class Collection extends AbsEntity {
 
+    @FullTextField
     @Column(nullable = false)
     String name;
 
+    @FullTextField
     @Column(columnDefinition = "TEXT")
     String description;
 
@@ -33,9 +37,11 @@ public class Collection extends AbsEntity {
     @OneToMany(mappedBy = "collection", cascade = CascadeType.ALL)
     List<Item> items;
 
+    @IndexedEmbedded
     @OneToMany(mappedBy = "collection", cascade = CascadeType.ALL)
     List<Field> fields;
 
+    @IndexedEmbedded
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     Topic topic;

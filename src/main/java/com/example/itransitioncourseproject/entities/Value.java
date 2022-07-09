@@ -3,6 +3,7 @@ package com.example.itransitioncourseproject.entities;
 import com.example.itransitioncourseproject.entities.abs.AbsEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 
 import javax.persistence.*;
 
@@ -23,6 +24,7 @@ public class Value extends AbsEntity {
     @JoinColumn(nullable = false)
     Field field;
 
+    @FullTextField
     @Column(nullable = false, columnDefinition = "TEXT")
     String targetValue;
 }

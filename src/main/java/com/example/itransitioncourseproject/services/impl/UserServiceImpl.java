@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Paged<UserProjection> getUsers(Integer page, Integer size) {
-        PageSizeUtils.validatePageAndSize(page, size);
+        PageSizeUtils.validatePageAndSize(page, size, userRepo);
         Page<UserProjection> usersPage = userRepo.getUsers(PageRequest.of(page - 1, size, Sort.Direction.DESC, "logged_at"));
         return new Paged<>(usersPage, Paging.of(usersPage.getTotalPages(), page, size));
     }

@@ -3,6 +3,7 @@ package com.example.itransitioncourseproject.entities;
 import com.example.itransitioncourseproject.entities.abs.AbsEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 
 import javax.persistence.*;
 
@@ -23,6 +24,7 @@ public class Comment extends AbsEntity {
     @JoinColumn(nullable = false)
     Item item;
 
+    @FullTextField
     @Column(nullable = false)
     String body;
 }

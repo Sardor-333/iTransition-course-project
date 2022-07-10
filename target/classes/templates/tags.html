@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+
+<body>
+<div class="wrapper">
+
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <header th:replace="fragments/header :: header"></header>
+
+    <div class="page-wrapper">
+        <div class="page-content">
+
+            <div th:if="${response != null}">
+                <p th:if="${response.success}" th:text="${response.message}" class="alert alert-success"></p>
+                <p th:if="${!response.success}" th:text="${response.message}" class="alert alert-danger"></p>
+            </div>
+
+            <a class="btn btn-primary" th:href="@{/api/v1/tags/create}">Create New Tag</a>
+
+            <h6 class="mb-0 text-uppercase">Tags</h6>
+            <hr/>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="tag-table" class="table table-striped table-bordered">
+
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Items Count</th>
+                                <th>Created Time</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="tag: ${tags.page}">
+                                <td th:text="${tag.id}"></td>
+                                <td th:text="${tag.name}"></td>
+                                <td th:text="${tag.itemsCount}"></td>
+                                <td th:text="${tag.createdAt}"></td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/theme-customizer :: theme-customizer"></div>
+
+<script>
+    function sendDeleteTagRequest(tagId) {
+        fetch('/api/v1/tags/' + tagId, {
+            method: 'delete'
+        }).then(response => location.reload());
+    }
+</script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/plugins/simplebar/js/simplebar.min.js}"></script>
+<script th:src="@{/assets/plugins/metismenu/js/metisMenu.min.js}"></script>
+<script th:src="@{/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/plugins/datatable/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/assets/plugins/datatable/js/dataTables.bootstrap5.min.js}"></script>
+<script th:src="@{/assets/js/app.js}"></script>
+</body>
+</html>

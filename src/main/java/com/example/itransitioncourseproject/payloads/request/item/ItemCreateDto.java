@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ public class ItemCreateDto {
     // item name
     String name;
 
-    List<Long> tagIdList;
+    Set<Long> tagIdList;
 
     List<ValueCreateDto> valueCreateDtoList;
 }

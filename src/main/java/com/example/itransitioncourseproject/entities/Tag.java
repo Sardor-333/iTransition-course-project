@@ -5,11 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import java.util.List;
+import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,6 +21,10 @@ public class Tag extends AbsEntity {
     @Column(nullable = false, updatable = false, unique = true)
     String name;
 
-    @ManyToMany(mappedBy = "tags")
-    List<Item> items;
+    @ManyToMany(mappedBy = "tags", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    Set<Item> items;
+
+    public Tag(String name) {
+        this.name = name;
+    }
 }

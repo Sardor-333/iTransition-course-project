@@ -9,6 +9,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmb
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -41,10 +42,10 @@ public class Item extends AbsEntity {
     List<Comment> comments; // searchable field
 
     @IndexedEmbedded
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             joinColumns = @JoinColumn(name = "item_id", nullable = false, referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id", nullable = false, referencedColumnName = "id")
     )
-    List<Tag> tags; // searchable field
+    Set<Tag> tags; // searchable field
 }

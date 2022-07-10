@@ -44,10 +44,12 @@
                                 Language
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a th:href="@{/(lang='en')}" class="dropdown-item">
+
+                                <a class="dropdown-item" id="en">
                                     <div class="app-title" th:text="#{menu.english}"></div>
                                 </a>
-                                <a th:href="@{/(lang='uz')}" class="dropdown-item">
+
+                                <a class="dropdown-item" id="uz">
                                     <div class="app-title" th:text="#{menu.uzbek}"></div>
                                 </a>
                             </div>

@@ -142,7 +142,7 @@ function appendSingleComment(comment, toTheTop) {
     li.appendChild(img);
 
     let group = document.createElement('div');
-    group.classList.add('flex-grow-1', 'ms-3', 'text-muted');
+    group.classList.add('flex-grow-1', 'ms-3');
     group.innerHTML = comment.user.firstName + ' ' + comment.user.lastName + ', ' + comment.createdAt;
     li.appendChild(group);
 

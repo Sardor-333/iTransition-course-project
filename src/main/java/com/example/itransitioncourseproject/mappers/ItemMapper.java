@@ -1,6 +1,5 @@
 package com.example.itransitioncourseproject.mappers;
 
-import com.example.itransitioncourseproject.entities.Collection;
 import com.example.itransitioncourseproject.entities.Item;
 import com.example.itransitioncourseproject.entities.Tag;
 import com.example.itransitioncourseproject.exceptions.ObjectNotFoundException;
@@ -11,7 +10,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -25,10 +24,10 @@ public abstract class ItemMapper {
     public abstract Item mapFromCreateDtoToEntity(ItemCreateDto src);
 
     @Named("getItemTags")
-    protected List<Tag> getItemTags(List<Long> tagIdList) {
+    protected Set<Tag> getItemTags(Set<Long> tagIdList) {
         return tagIdList
                 .stream()
                 .map(tagId -> tagRepo.findById(tagId).orElseThrow(() -> new ObjectNotFoundException("Tag with id: " + tagId + " not found!")))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 }

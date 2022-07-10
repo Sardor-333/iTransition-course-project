@@ -100,4 +100,6 @@ public interface ItemRepo extends JpaRepository<Item, Long> {
                     "where i.id = :itemId"
     )
     ItemDetailProjection getItemDetailById(@Param("itemId") Long itemId, @Param("userId") Long userId);
+
+    long countAllByTagsId(Long tags_id);
 }

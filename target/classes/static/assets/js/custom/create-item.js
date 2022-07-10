@@ -40,5 +40,5 @@ function sendCreateItemRequest() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(reqBody)
-    }).then(response => location.reload())
+    }).then(response => console.log(response.ok ? 'OK' : 'NOT OK'));
 }

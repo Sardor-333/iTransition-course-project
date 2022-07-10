@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/head :: head"></head>
 
 <body>
@@ -17,7 +17,11 @@
                 <p th:if="${!response.success}" th:text="${response.message}" class="alert alert-danger"></p>
             </div>
 
-            <a class="btn btn-primary" th:href="@{/api/v1/tags/create}">Create New Tag</a>
+            <a sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
+                    class="btn btn-primary"
+                    th:href="@{/api/v1/tags/create}">
+                Create New Tag
+            </a>
 
             <h6 class="mb-0 text-uppercase">Tags</h6>
             <hr/>

@@ -83,7 +83,7 @@ public class ItemController {
                                 RedirectAttributes redirectAttributes) {
         ApiResponse apiResponse = itemService.createItem(collectionId, itemCreateDto, currentUser);
         redirectAttributes.addFlashAttribute("response", apiResponse);
-        return "redirect:/api/v1/items/collection/" + collectionId;
+        return "redirect:" + BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/items/collection/" + collectionId;
     }
 
     @GetMapping("/{itemId}")

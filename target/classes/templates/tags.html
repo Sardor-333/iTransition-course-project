@@ -28,6 +28,7 @@
 
                             <thead>
                             <tr>
+                                <th>#NO</th>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Items Count</th>
@@ -37,6 +38,7 @@
 
                             <tbody>
                             <tr th:each="tag: ${tags.page}">
+                                <td th:text="${tagStat.index + 1}"></td>
                                 <td th:text="${tag.id}"></td>
                                 <td th:text="${tag.name}"></td>
                                 <td th:text="${tag.itemsCount}"></td>
@@ -48,6 +50,31 @@
                     </div>
                 </div>
             </div>
+
+            <nav aria-label="Page navigation" class="paging">
+                <ul class="pagination" th:if="${tags.page.getTotalPages() > 1}">
+                    <li class="page-item" th:classappend="${!tags.paging.isPrevEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/api/v1/tags?page=' + ${tags.paging.pageNumber - 1}}"
+                           tabindex="-1" th:text="#{menu.previous}"></a>
+                    </li>
+                    <th:block th:each="item : ${tags.paging.getItems()}">
+                        <li class="page-item"
+                            th:classappend="${item.index == tags.paging.pageNumber? 'active' : ''}"
+                            th:if="${item.pageItemType.name() == 'PAGE'}">
+                            <a class="page-link" th:href="@{'/api/v1/tags?page=' + ${item.index}}"
+                               th:text="${item.index}"></a>
+                        </li>
+                        <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${!tags.paging.isNextEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/api/v1/tags?page=' + ${tags.paging.pageNumber + 1}}"
+                           th:text="#{menu.next}"></a>
+                    </li>
+                </ul>
+            </nav>
+
         </div>
     </div>
 </div>

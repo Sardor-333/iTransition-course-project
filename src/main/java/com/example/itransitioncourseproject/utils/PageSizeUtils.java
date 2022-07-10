@@ -8,7 +8,7 @@ import java.io.Serializable;
 public final class PageSizeUtils {
 
     public static final String DEFAULT_PAGE = "1";
-    public static final String DEFAULT_SIZE = "25";
+    public static final String DEFAULT_SIZE = "10";
 
     private static final Integer MAX_SIZE = 20;
     private static final Integer MIN_SIZE = 5;

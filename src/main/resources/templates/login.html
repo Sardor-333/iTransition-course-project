@@ -61,7 +61,7 @@
 
                                 <!--               Login form                 -->
                                 <div class="form-body">
-                                    <form class="row g-3" method="post" th:action="@{/login}">
+                                    <form class="row g-3" method="post" th:action="@{/api/v1/auth/login}">
 
                                         <p th:if="${param.error}" th:text="#{error.usernameOrPasswordError}"
                                            class="alert alert-danger">

@@ -89,4 +89,6 @@ public interface CollectionRepo extends JpaRepository<Collection, Long> {
     Page<CollectionProjection> getMyCollections(@Param("userId") Long userId, Pageable pageable);
 
     boolean existsByNameAndUserId(String name, Long owner_id);
+
+    long countAllByTopicId(Long topic_id);
 }

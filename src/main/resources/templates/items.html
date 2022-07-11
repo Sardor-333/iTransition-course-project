@@ -25,16 +25,16 @@
                                     </p>
                                 </div>
 
-                                <div class="widgets-icons bg-light-success text-success ms-auto">
-                                    <i class="bx bxs-wallet"></i>
-                                </div>
-
-                                <a th:href="${'/api/v1/items/' + item.id}" class="widgets-icons bg-light-success text-success ms-auto">
+                                <a th:href="${'/api/v1/items/' + item.id}"
+                                   class="widgets-icons bg-light-success text-success ms-auto">
                                     <i class="text-primary" data-feather="eye"></i>
                                     View
                                 </a>
 
-                                <a class="widgets-icons bg-light-success text-success ms-auto">
+                                <a sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
+                                   class="widgets-icons bg-light-success text-success ms-auto"
+                                   th:onclick="'deleteItem(\'' + ${item.id} + '\');'"
+                                >
                                     <i class="text-primary" data-feather="trash-2"></i>
                                     Delete
                                 </a>
@@ -52,6 +52,8 @@
 <!-- Theme Customizer -->
 <div th:replace="fragments/theme-customizer :: theme-customizer"></div>
 
+<script th:src="@{/assets/js/custom/lang.js}"></script>
+<script th:src="@{/assets/js/custom/delete-item.js}"></script>
 <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/assets/js/jquery.min.js}"></script>
 <script th:src="@{/assets/plugins/simplebar/js/simplebar.min.js}"></script>

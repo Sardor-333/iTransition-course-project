@@ -4,7 +4,7 @@ import com.example.itransitioncourseproject.entities.Field;
 import com.example.itransitioncourseproject.entities.Value;
 import com.example.itransitioncourseproject.enums.FieldType;
 import com.example.itransitioncourseproject.exceptions.ObjectNotFoundException;
-import com.example.itransitioncourseproject.payloads.request.ValueCreateDto;
+import com.example.itransitioncourseproject.payloads.request.ValueDto;
 import com.example.itransitioncourseproject.repositories.FieldRepo;
 import com.example.itransitioncourseproject.validation.DateTimeValidator;
 import org.mapstruct.Mapper;
@@ -27,7 +27,7 @@ public abstract class ValueMapper {
 
     @Mapping(expression = "java(getField(src.getFieldName(), collectionId))", target = "field")
     @Mapping(expression = "java(getTargetValue(getField(src.getFieldName(), collectionId), src.getFieldValue()))", target = "targetValue")
-    public abstract Value mapFromCreateDtoToEntity(ValueCreateDto src, Long collectionId);
+    public abstract Value mapFromCreateDtoToEntity(ValueDto src, Long collectionId);
 
     @Named("getField")
     protected Field getField(String fieldName, Long collectionId) {

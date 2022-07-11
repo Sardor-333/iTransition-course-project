@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -27,7 +28,7 @@ public class CommentController {
 
     @MessageMapping("/items/{itemId}/comments")
     public void leaveComment(@DestinationVariable(value = "itemId") Long itemId,
-                             @Payload CommentCreateDto commentCreateDto,
+                             @Valid @Payload CommentCreateDto commentCreateDto,
                              Principal principal) {
         Authentication authentication = (Authentication) principal;
         User currentUser = (User) authentication.getPrincipal();

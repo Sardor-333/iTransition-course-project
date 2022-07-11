@@ -16,7 +16,7 @@ public interface UserService {
 
     UserProjection getUser(User user);
 
-    ApiResponse deleteUser(Long id); // todo
+    ApiResponse deleteUser(Long id);
 
     ApiResponse editProfile(ProfileDto profileDto, User currentUser);
 

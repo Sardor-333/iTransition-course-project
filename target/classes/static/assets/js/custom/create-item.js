@@ -1,6 +1,19 @@
 $("#btn-save-item").on('click', function () {
     sendCreateItemRequest();
-})
+});
+
+function sendCreateItemRequest() {
+    const reqBody = extractItemData();
+    console.log(JSON.stringify(reqBody));
+
+    fetch('/api/v1/items/create/' + collectionId, {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reqBody)
+    }).then(response => location.reload());
+}
 
 function extractItemData() {
     const itemName = $("#item-name").val();
@@ -28,17 +41,4 @@ function extractItemData() {
     item.valueCreateDtoList = valueCreateDtoList;
 
     return item;
-}
-
-function sendCreateItemRequest() {
-    const reqBody = extractItemData();
-    console.log(JSON.stringify(reqBody));
-
-    fetch('/api/v1/items/create/' + collectionId, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(reqBody)
-    }).then(response => console.log(response.ok ? 'OK' : 'NOT OK'));
 }

@@ -27,36 +27,17 @@
                 </div>
             </div>
 
-<!--            <div sec:authorize="isAuthenticated()">-->
-<!--                <div th:if="${#authentication.getPrincipal().getId() == collection.author.id}">-->
-<!--                    <a th:href="${'/api/v1/items/create/' + collection.id}" class="btn btn-primary">-->
-<!--                        Add New Item-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--                <div th:unless="${#authentication.getPrincipal().getId() != collection.author.id}">-->
-<!--                    <div sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">-->
-<!--                        <a th:href="${'/api/v1/items/create/' + collection.id}" class="btn btn-primary">-->
-<!--                            Add New Item-->
-<!--                        </a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
                 <div class="col" th:each="item: ${items}">
                     <div class="card radius-10">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div>
-                                    <p class="mb-0 text-secondary" th:text="${item.collection.name}">Revenue</p>
+                                    <p class="mb-0 text-secondary" th:text="${item.collection.name}"></p>
                                     <h4 class="my-1" th:text="${item.name}"></h4>
                                     <p class="mb-0 font-13 text-success"
                                        th:text="${item.collection.author.firstName + ' ' + item.collection.author.lastName}">
                                     </p>
-                                </div>
-
-                                <div class="widgets-icons bg-light-success text-success ms-auto">
-                                    <i class="bx bxs-wallet"></i>
                                 </div>
 
                                 <a th:href="${'/api/v1/items/' + item.id}"
@@ -65,10 +46,23 @@
                                     View
                                 </a>
 
-                                <a class="widgets-icons bg-light-success text-success ms-auto">
-                                    <i class="text-primary" data-feather="trash-2"></i>
-                                    Delete
-                                </a>
+                                <div sec:authorize="isAuthenticated()">
+                                    <div sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                                        <a class="widgets-icons bg-light-success text-success ms-auto">
+                                            <i class="text-primary" data-feather="trash-2"></i>
+                                            Delete
+                                        </a>
+                                    </div>
+                                    <div sec:authorize="!hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                                        <div th:if="${#authentication.getPrincipal().getId() == collection.author.id}">
+                                            <a th:onclick="'deleteItem(\'' + ${item.id} + '\');'"
+                                                    class="widgets-icons bg-light-success text-success ms-auto">
+                                                <i class="text-primary" data-feather="trash-2"></i>
+                                                Delete
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -83,6 +77,8 @@
 <!-- Theme Customizer -->
 <div th:replace="fragments/theme-customizer :: theme-customizer"></div>
 
+<script th:src="@{/assets/js/custom/lang.js}"></script>
+<script th:src="@{/assets/js/custom/delete-item.js}"></script>
 <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/assets/js/jquery.min.js}"></script>
 <script th:src="@{/assets/plugins/simplebar/js/simplebar.min.js}"></script>

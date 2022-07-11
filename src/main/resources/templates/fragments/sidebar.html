@@ -36,15 +36,15 @@
                     </a>
                 </li>
 
-                <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                <li>
                     <a th:href="@{/api/v1/tags}"
                        th:text="#{sidebar.tags}">
                         <i class="bx bx-right-arrow-alt"></i>
                     </a>
                 </li>
 
-                <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
-                    <a th:href="@{/api/v1/topics}"
+                <li>
+                    <a th:href="@{/api/v1/topics/pageable}"
                        th:text="#{sidebar.topics}">
                         <i class="bx bx-right-arrow-alt"></i>
                     </a>

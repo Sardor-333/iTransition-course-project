@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/head :: head"></head>
+
+<body>
+<div class="wrapper">
+
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <header th:replace="fragments/header :: header"></header>
+
+    <div class="page-wrapper">
+        <div class="page-content">
+
+            <div th:if="${response != null}">
+                <p th:if="${response.success}" th:text="${response.message}" class="alert alert-success"></p>
+                <p th:if="${!response.success}" th:text="${response.message}" class="alert alert-danger"></p>
+            </div>
+
+            <a sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
+               class="btn btn-primary"
+               th:href="@{/api/v1/topics/create}">
+                Create New Topic
+            </a>
+
+            <h6 class="mb-0 text-uppercase">Topics</h6>
+            <hr/>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="topic-table" class="table table-striped table-bordered">
+
+                            <thead>
+                            <tr>
+                                <th>#NO</th>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Collections Count</th>
+                                <th>Created Time</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="topic: ${topics.page}">
+                                <td th:text="${topicStat.index + 1}"></td>
+                                <td th:text="${topic.id}"></td>
+                                <td th:text="${topic.name}"></td>
+                                <td th:text="${topic.collectionsCount}"></td>
+                                <td th:text="${topic.createdAt}"></td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <nav aria-label="Page navigation" class="paging">
+                <ul class="pagination" th:if="${topics.page.getTotalPages() > 1}">
+                    <li class="page-item" th:classappend="${!topics.paging.isPrevEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/api/v1/topics/pageable?page=' + ${topics.paging.pageNumber - 1}}"
+                           tabindex="-1" th:text="#{menu.previous}"></a>
+                    </li>
+                    <th:block th:each="item : ${topics.paging.getItems()}">
+                        <li class="page-item"
+                            th:classappend="${item.index == topics.paging.pageNumber? 'active' : ''}"
+                            th:if="${item.pageItemType.name() == 'PAGE'}">
+                            <a class="page-link" th:href="@{'/api/v1/topics/pageable?page=' + ${item.index}}"
+                               th:text="${item.index}"></a>
+                        </li>
+                        <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${!topics.paging.isNextEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/api/v1/topics/pageable?page=' + ${topics.paging.pageNumber + 1}}"
+                           th:text="#{menu.next}"></a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/theme-customizer :: theme-customizer"></div>
+
+<script th:src="@{/assets/js/custom/lang.js}"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/plugins/simplebar/js/simplebar.min.js}"></script>
+<script th:src="@{/assets/plugins/metismenu/js/metisMenu.min.js}"></script>
+<script th:src="@{/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/plugins/datatable/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/assets/plugins/datatable/js/dataTables.bootstrap5.min.js}"></script>
+<script th:src="@{/assets/js/app.js}"></script>
+</body>
+</html>

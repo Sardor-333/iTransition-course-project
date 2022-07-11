@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -78,7 +79,7 @@ public class ItemController {
 
     @PostMapping("/create/{collectionId}")
     public String createNewItem(@PathVariable Long collectionId,
-                                @RequestBody ItemCreateDto itemCreateDto,
+                                @Valid @RequestBody ItemCreateDto itemCreateDto,
                                 @AuthenticationPrincipal User currentUser,
                                 RedirectAttributes redirectAttributes) {
         ApiResponse apiResponse = itemService.createItem(collectionId, itemCreateDto, currentUser);
@@ -96,15 +97,19 @@ public class ItemController {
     }
 
     @DeleteMapping("/{itemId}")
-    public String deleteItemById(@PathVariable Long itemId, @AuthenticationPrincipal User currentUser) {
+    public String deleteItemById(@PathVariable Long itemId,
+                                 @AuthenticationPrincipal User currentUser,
+                                 RedirectAttributes redirectAttributes) {
         ApiResponse response = itemService.deleteItemById(itemId, currentUser);
-        return "redirect:/" + BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/items";
+        redirectAttributes.addFlashAttribute("response", response);
+        return "redirect:" + BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/items";
     }
 
     @GetMapping("/search")
-    public String searchItems(@ModelAttribute SearchDto searchDto, Model model) {
+    public String searchItems(@Valid @ModelAttribute SearchDto searchDto,
+                              Model model) {
         SearchResult<Item> itemSearchResult = itemService.searchItems(searchDto);
-        model.addAttribute("searchResult" ,itemSearchResult);
+        model.addAttribute("searchResult", itemSearchResult);
         return "search-result";
     }
 }

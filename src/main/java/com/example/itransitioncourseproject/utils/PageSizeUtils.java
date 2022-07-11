@@ -13,7 +13,6 @@ public final class PageSizeUtils {
     private static final Integer MAX_SIZE = 20;
     private static final Integer MIN_SIZE = 5;
 
-    // todo : reimplement logic
     public static <T, ID extends Serializable> void validatePageAndSize(Integer page, Integer size, JpaRepository<T, ID> repository) {
         // VALIDATING SIZE
         if (size < PageSizeUtils.MIN_SIZE)

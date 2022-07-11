@@ -8,7 +8,7 @@ import com.example.itransitioncourseproject.exceptions.ObjectNotFoundException;
 import com.example.itransitioncourseproject.mappers.ItemMapper;
 import com.example.itransitioncourseproject.mappers.ValueMapper;
 import com.example.itransitioncourseproject.payloads.request.SearchDto;
-import com.example.itransitioncourseproject.payloads.request.ValueCreateDto;
+import com.example.itransitioncourseproject.payloads.request.ValueDto;
 import com.example.itransitioncourseproject.payloads.request.item.ItemCreateDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
 import com.example.itransitioncourseproject.projections.FieldProjection;
@@ -113,15 +113,15 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemMapper.mapFromCreateDtoToEntity(itemCreateDto);
         item.setCollection(collection);
         itemRepo.save(item);
-        saveValuesOnCreate(itemCreateDto.getValueCreateDtoList(), item);
+        saveValuesOnCreate(itemCreateDto.getValueDtoList(), item);
 
         return new ApiResponse(true, null);
     }
 
-    private void saveValuesOnCreate(List<ValueCreateDto> valueCreateDtoList, Item item) {
-        valueCreateDtoList
-                .forEach(valueCreateDto -> {
-                    Value value = valueMapper.mapFromCreateDtoToEntity(valueCreateDto, item.getCollection().getId());
+    private void saveValuesOnCreate(List<ValueDto> valueDtoList, Item item) {
+        valueDtoList
+                .forEach(valueDto -> {
+                    Value value = valueMapper.mapFromCreateDtoToEntity(valueDto, item.getCollection().getId());
                     value.setItem(item);
                     valueRepo.save(value);
                 });
@@ -150,7 +150,7 @@ public class ItemServiceImpl implements ItemService {
                 .where(f -> f.match()
                         .fields(SEARCHABLE_FIELDS)
                         .matching(searchDto.getSearchKey()))
-                .fetch(searchDto.getFetch());
+                .fetch(Integer.MAX_VALUE);
 
         Duration duration = itemSearchResult.took();
         return new com.example.itransitioncourseproject.payloads.response.SearchResult<>(itemSearchResult.hits(), duration.toMillis());

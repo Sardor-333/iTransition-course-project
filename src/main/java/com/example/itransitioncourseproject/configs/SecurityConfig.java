@@ -27,6 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // BASE
             BaseUrl.API_BASE,
             BaseUrl.API_HOME,
+
+            // AUTH
             BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/auth/register",
             BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/auth/login",
 
@@ -44,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             // TOPICS
             BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/topics",
+            BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/topics/pageable",
 
             // SEARCH
             BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/items/search",

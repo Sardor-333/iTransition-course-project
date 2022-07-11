@@ -1,9 +1,11 @@
 package com.example.itransitioncourseproject.payloads.request.item;
 
-import com.example.itransitioncourseproject.payloads.request.ValueCreateDto;
+import com.example.itransitioncourseproject.payloads.request.ValueDto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Set;
 
@@ -14,12 +16,10 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemCreateDto {
 
-    // todo : validation
-
-    // item name
+    @NotBlank(message = "Item name must not be blank")
     String name;
 
     Set<Long> tagIdList;
 
-    List<ValueCreateDto> valueCreateDtoList;
+    List<@Valid ValueDto> valueDtoList;
 }

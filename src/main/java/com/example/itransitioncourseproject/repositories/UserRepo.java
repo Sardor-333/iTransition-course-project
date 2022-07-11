@@ -31,7 +31,7 @@ public interface UserRepo extends JpaRepository<User, Long> {
                     "       cr.secure_url                                       as imgUrl\n" +
                     "from users u\n" +
                     "         left join cloudinary_resources cr on cr.id = u.photo_id " +
-                    "order by u.logged_at"
+                    "order by u.logged_at desc"
     )
     Page<UserProjection> getUsers(Pageable pageable);
 

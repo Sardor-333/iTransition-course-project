@@ -22,6 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/collections")
 @RequiredArgsConstructor
@@ -66,7 +68,7 @@ public class CollectionController {
      */
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String createCollection(@RequestPart(name = "photo", required = false) MultipartFile photo,
-                                   @RequestPart(name = "collection") CollectionCreateDto collectionCreateDto,
+                                   @Valid @RequestPart(name = "collection") CollectionCreateDto collectionCreateDto,
                                    @AuthenticationPrincipal User currentUser,
                                    RedirectAttributes redirectAttributes) {
         ApiResponse apiResponse = collectionService.createCollection(collectionCreateDto, photo, currentUser);
@@ -84,8 +86,8 @@ public class CollectionController {
     @PostMapping(value = "/edit/{collectionId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
     public ResponseEntity<ApiResponse> editCollection(@PathVariable Long collectionId,
-                                                      @RequestPart(name = "collection") CollectionEditDto collectionEditDto,
                                                       @RequestPart(name = "img", required = false) MultipartFile img,
+                                                      @Valid @RequestPart(name = "collection") CollectionEditDto collectionEditDto,
                                                       @AuthenticationPrincipal User currentUser) {
         ApiResponse response = collectionService.editCollection(collectionId, collectionEditDto, img, currentUser);
         return ResponseEntity.status(response.isSuccess() ? 200 : 409).body(response);
@@ -95,7 +97,9 @@ public class CollectionController {
      * SUPER_ADMIN or ADMIN or OWNER OF THE COLLECTION
      */
     @DeleteMapping("/{collectionId}")
-    public RedirectView deleteCollection(@PathVariable Long collectionId, @AuthenticationPrincipal User user, RedirectAttributes redirectAttributes) {
+    public RedirectView deleteCollection(@PathVariable Long collectionId,
+                                         @AuthenticationPrincipal User user,
+                                         RedirectAttributes redirectAttributes) {
         ApiResponse apiResponse = collectionService.deleteCollection(collectionId, user);
         redirectAttributes.addFlashAttribute("response", apiResponse);
         return new RedirectView(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/collections/my");

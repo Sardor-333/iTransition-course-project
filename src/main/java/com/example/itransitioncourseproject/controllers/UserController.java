@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/users")
@@ -66,7 +67,7 @@ public class UserController {
      * AUTHENTICATED
      */
     @PostMapping("/profile")
-    public RedirectView editProfile(@ModelAttribute ProfileDto profileDto,
+    public RedirectView editProfile(@Valid @ModelAttribute ProfileDto profileDto,
                                     RedirectAttributes redirectAttrs,
                                     @AuthenticationPrincipal User currentUser) {
         ApiResponse apiResponse = userService.editProfile(profileDto, currentUser);
@@ -79,22 +80,18 @@ public class UserController {
      */
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     @PostMapping("/{userId}/changeRole")
-    public RedirectView changeRole(@PathVariable Long userId, RedirectAttributes redirectAttrs) {
+    public RedirectView changeRole(@PathVariable Long userId,
+                                   RedirectAttributes redirectAttrs) {
         ApiResponse apiResponse = userService.changeRole(userId);
         redirectAttrs.addFlashAttribute("response", apiResponse);
         return new RedirectView(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/users");
     }
-
-    // Todo: delete user
 
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         ApiResponse apiResponse = userService.deleteUser(id);
         redirectAttributes.addFlashAttribute("response", apiResponse);
-        return "redirect:/api/v1/users";
+        return "redirect:" + BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/users";
     }
-
-    // Todo: edit user profile for admin
-    // Todo: get profile info for admin
 }

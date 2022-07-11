@@ -121,12 +121,10 @@ submitFormButton.addEventListener('click', function () {
     const collectionPhoto = document.getElementById('collection-img').files[0];
     formData.append('photo', collectionPhoto);
 
-    if (fieldDtoList.length > 0) {
-        fetch('/api/v1/collections/create', {
-            method: 'post',
-            body: formData
-        }).then(response => location.reload());
-    }
+    fetch('/api/v1/collections/create', {
+        method: 'post',
+        body: formData
+    }).then(response => location.reload());
 });
 // ------------------------------------------------------------ //
 

@@ -25,6 +25,9 @@ public abstract class ItemMapper {
 
     @Named("getItemTags")
     protected Set<Tag> getItemTags(Set<Long> tagIdList) {
+        if (tagIdList == null || tagIdList.isEmpty())
+            return null;
+
         return tagIdList
                 .stream()
                 .map(tagId -> tagRepo.findById(tagId).orElseThrow(() -> new ObjectNotFoundException("Tag with id: " + tagId + " not found!")))

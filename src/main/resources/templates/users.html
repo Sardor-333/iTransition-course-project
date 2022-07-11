@@ -105,16 +105,18 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="d-flex order-actions">
-                                        <!-- Unblock -->
-                                        <a th:if="${user.role.name != 'ROLE_SUPER_ADMIN'}"
-                                           data-toggle="modal"
-                                           href="#modal-manage-role"
-                                           th:data-user-id="${user.id}"
-                                           th:data-role-name="${user.role.name}"
-                                        >
-                                            <i class="fadeIn animated bx bx-user"></i>
-                                        </a>
+                                    <div class="d-flex order-actions"
+                                         th:if="${user.role.name != 'ROLE_SUPER_ADMIN'}">
+                                        <a th:if="${user.role.name == 'ROLE_ADMIN'}"
+                                           th:text="'Make user'"
+                                           th:onclick="'changeRole(\'' + ${user.id} + '\');'"
+                                           class="btn btn-primary"
+                                        ></a>
+                                        <a th:if="${user.role.name == 'ROLE_USER'}"
+                                           th:text="'Make admin'"
+                                           th:onclick="'changeRole(\'' + ${user.id} + '\');'"
+                                           class="btn btn-primary"
+                                        ></a>
                                     </div>
                                 </td>
                             </tr>
@@ -147,79 +149,14 @@
                 </ul>
             </nav>
 
-            <div class="modal" id="modal-manage-role" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-
-                    <!--Content-->
-                    <div class="modal-content">
-                        <div class="modal-header text-center">
-                            <h5 class="modal-title w-100 font-weight-bold py-2">
-                                <strong><span>Role management</span></strong></h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-
-                        <!--Body-->
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col">
-                                    <button type="button" class="btn btn-primary px-5" id="modal-body">
-                                        <i class='bx bx-user mr-1'></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
 </div>
 
 <div th:replace="fragments/theme-customizer :: theme-customizer"></div>
 
-<script>
-
-    function enableOrDisableUser(userId) {
-        fetch('/api/v1/users/profile/' + userId + '/enableOrDisable', {
-            method: 'post'
-        }).then(response => location.reload());
-    }
-
-    function deleteUser(userId) {
-        fetch('/api/v1/users/' + userId, {
-            method: 'delete'
-        }).then(response => location.reload());
-    }
-
-    function changeRole(userId) {
-        fetch('/api/v1/users/' + userId + '/changeRole', {
-            method: 'post'
-        }).then(response => location.reload());
-    }
-
-    $("#modal-manage-role").on('shown.bs.modal', function (e) {
-        const userId = $(e.relatedTarget).data('user-id');
-        const roleName = $(e.relatedTarget).data('role-name');
-
-        console.log('USER id: ' + userId);
-        console.log('ROLE name: ' + roleName);
-
-        const button = document.getElementById('modal-body');
-        button.innerHTML = roleName === 'ROLE_ADMIN' ? 'Make user' : 'Make admin';
-
-        button.addEventListener('click', function (e) {
-            e.preventDefault();
-            fetch('/api/v1/users/' + userId + '/changeRole', {
-                method: 'post'
-            }).then(resp => location.reload());
-        })
-    });
-
-</script>
+<script th:src="@{/assets/js/custom/lang.js}"></script>
+<script th:src="@{/assets/js/custom/users.js}"></script>
 <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/assets/js/jquery.min.js}"></script>
 <script th:src="@{/assets/plugins/simplebar/js/simplebar.min.js}"></script>

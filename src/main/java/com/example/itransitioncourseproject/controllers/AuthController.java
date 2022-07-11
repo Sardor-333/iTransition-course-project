@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.util.Objects;
 
 @Controller
@@ -35,7 +36,7 @@ public class AuthController {
      * REGISTER USER
      */
     @PostMapping("/register")
-    public String register(@ModelAttribute RegisterDto registerDto, Model model) {
+    public String register(@Valid @ModelAttribute RegisterDto registerDto, Model model) {
         ApiResponse response = authService.register(registerDto);
         model.addAttribute("response", response);
         return "register";

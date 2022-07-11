@@ -93,20 +93,6 @@
                             <div class="col">
                                 <div class="list-group list-group-flush">
                                     <a class="list-group-item active d-flex align-items-center"
-                                       th:href="@{'/api/v1/collections/' + ${col.id}}"
-                                    >
-                                        <i class="bx bx-cog me-3 font-20"></i>
-                                        <span>
-											Details
-										</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="list-group list-group-flush">
-                                    <a class="list-group-item active d-flex align-items-center"
                                        th:href="@{'/api/v1/items/collection/' + ${col.id}}"
                                     >
                                         <i class="bx bx-cog me-3 font-20"></i>
@@ -155,6 +141,7 @@
     </div>
     <div th:replace="fragments/theme-customizer :: theme-customizer"></div>
 
+    <script th:src="@{/assets/js/custom/lang.js}"></script>
     <script th:src="@{/assets/js/custom/delete-collection.js}"></script>
     <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/assets/js/jquery.min.js}"></script>

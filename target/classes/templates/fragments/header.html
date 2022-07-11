@@ -45,13 +45,13 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                                <a class="dropdown-item" id="en">
+                                <button class="dropdown-item btn btn-primary" id="en">
                                     <div class="app-title" th:text="#{menu.english}"></div>
-                                </a>
+                                </button>
 
-                                <a class="dropdown-item" id="uz">
+                                <button class="dropdown-item btn btn-primary" id="uz">
                                     <div class="app-title" th:text="#{menu.uzbek}"></div>
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </li>
@@ -346,4 +346,19 @@
             </div>
         </nav>
     </div>
+
+    <script>
+
+        $("#en").click(function () {
+            let currentLocation = window.location.href.split('?')[0];
+            window.location.replace(currentLocation + '?lang=en');
+        });
+
+        $("#uz").click(function () {
+            let currentLocation = window.location.href.split('?')[0];
+            window.location.replace(currentLocation + '?lang=uz');
+        });
+        
+    </script>
+
 </header>

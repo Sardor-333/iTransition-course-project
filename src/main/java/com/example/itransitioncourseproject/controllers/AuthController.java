@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.validation.Valid;
 import java.util.Objects;
 
 @Controller
@@ -24,27 +23,18 @@ public class AuthController {
 
     private final AuthService authService;
 
-    /**
-     * GET REGISTER PAGE
-     */
     @GetMapping("/register")
     public String getRegisterPage() {
         return "register";
     }
 
-    /**
-     * REGISTER USER
-     */
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute RegisterDto registerDto, Model model) {
+    public String register(@ModelAttribute RegisterDto registerDto, Model model) {
         ApiResponse response = authService.register(registerDto);
         model.addAttribute("response", response);
         return "register";
     }
 
-    /**
-     * GET LOGIN PAGE
-     */
     @GetMapping("/login")
     public String getLoginPage(@AuthenticationPrincipal UserDetails principal) {
         return Objects.isNull(principal) ? "login" : "redirect:/home";

@@ -22,7 +22,7 @@
                         <div class="clearfix" style="justify-items: center">
                             <div class="mb-0 float-start text-secondary">
                                 <strong th:text="${item.likesCount}"></strong>
-                                Likes
+                                 Likes
                             </div>
                             <br>
                             <div class="mb-0 float-start text-secondary">
@@ -31,9 +31,8 @@
                             </div>
                             <br>
                             <div class="mb-0 float-end fw-bold">
-                                <span
-                                        class="me-2 text-secondary">
-                                Collection:
+                                <span class="me-2 text-secondary">
+                                    Collection:
                                 </span>
                                 <span th:text="${item.collection.name}">
                                 </span>
@@ -56,7 +55,10 @@
                                 <i class='bx bxs-star text-warning'></i>
                                 <i class='bx bxs-star text-secondary'></i>
                             </div>
-                            <p class="mb-0 ms-auto">4.2(182)</p>
+                            <a class="mb-0 ms-auto btn btn-primary"
+                               th:text="#{menu.itemDetails}"
+                               th:href="@{'/api/v1/items/' + ${item.id}}"
+                            ></a>
                         </div>
                     </div>
                 </div>
@@ -126,8 +128,7 @@
                                        th:onclick="'deleteCollection(\'' + ${col.id} + '\');'"
                                     >
                                         <i class="bx bx-cog me-3 font-20"></i>
-                                        <span>
-											Delete
+                                        <span th:text="#{menu.delete}">
 										</span>
                                     </a>
                                 </div>

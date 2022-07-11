@@ -26,7 +26,7 @@ public abstract class ValueMapper {
     private DateTimeValidator dateTimeValidator;
 
     @Mapping(expression = "java(getField(src.getFieldName(), collectionId))", target = "field")
-    @Mapping(expression = "java(getTargetValue(getField(src.getFieldName(), collectionId), src.getFieldValue()))", target = "targetValue")
+    @Mapping(expression = "java(getTargetValue(getField(src.getFieldName(), collectionId), src.getTargetValue()))", target = "targetValue")
     public abstract Value mapFromCreateDtoToEntity(ValueDto src, Long collectionId);
 
     @Named("getField")

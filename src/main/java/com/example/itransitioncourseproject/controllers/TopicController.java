@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -52,7 +51,7 @@ public class TopicController {
 
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     @PostMapping("/create")
-    public String createTopic(@Valid @ModelAttribute TopicCreateDto topicCreateDto) {
+    public String createTopic(@ModelAttribute TopicCreateDto topicCreateDto) {
         return "redirect:" + BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/topics";
     }
 }

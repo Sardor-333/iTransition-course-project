@@ -32,4 +32,35 @@ button.addEventListener('click', function () {
                 location.reload();
             })
     })
-})
+});
+
+// EDIT COLLECTION
+// WHEN WINDOW LOADS LOAD ALL TOPICS
+window.onload = () => {
+    loadTopics();
+}
+
+function loadTopics() {
+    // EXTRACT CURRENT TOPIC FROM MODEL
+    console.log('=== COLLECTION TOPIC ID === ' + selectedTopicId);
+
+    fetch('/api/v1/topics', {
+        method: 'get'
+    }).then(response => {
+        response.json()
+            .then(topics => {
+                const select = document.getElementById('topicId');
+
+                for (let i = 0; i < topics.length; i++) {
+                    const currTopic = topics[i];
+
+                    const opt = document.createElement('option');
+                    opt.value = currTopic.id;
+                    opt.text = currTopic.name;
+                    if (currTopic.id === selectedTopicId) opt.selected = true;
+
+                    select.appendChild(opt);
+                }
+            })
+    })
+}

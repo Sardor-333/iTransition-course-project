@@ -11,7 +11,7 @@ spring:
     password: ddaa5eebac6855fc200ff9716775ed839d8229d487cf947f99365a52853e6407
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:

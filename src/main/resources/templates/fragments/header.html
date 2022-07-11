@@ -39,16 +39,19 @@
                     </li>
                     <li class="nav-item dropdown dropdown-large">
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Language
+                            <button class="btn btn-secondary dropdown-toggle"
+                                    type="button"
+                                    id="dropdownMenuButton"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                    th:text="#{header.language}"
+                            >
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-
                                 <button class="dropdown-item btn btn-primary" id="en">
                                     <div class="app-title" th:text="#{menu.english}"></div>
                                 </button>
-
                                 <button class="dropdown-item btn btn-primary" id="uz">
                                     <div class="app-title" th:text="#{menu.uzbek}"></div>
                                 </button>

@@ -19,8 +19,9 @@
 
             <a sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
                class="btn btn-primary"
-               th:href="@{/api/v1/topics/create}">
-                Create New Topic
+               th:href="@{/api/v1/topics/create}"
+               th:text="#{menu.createNewTopic}"
+            >
             </a>
 
             <h6 class="mb-0 text-uppercase">Topics</h6>

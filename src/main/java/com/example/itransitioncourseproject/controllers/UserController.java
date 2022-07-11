@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 @Controller
 @RequestMapping(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/users")
@@ -67,7 +66,7 @@ public class UserController {
      * AUTHENTICATED
      */
     @PostMapping("/profile")
-    public RedirectView editProfile(@Valid @ModelAttribute ProfileDto profileDto,
+    public RedirectView editProfile(@ModelAttribute ProfileDto profileDto,
                                     RedirectAttributes redirectAttrs,
                                     @AuthenticationPrincipal User currentUser) {
         ApiResponse apiResponse = userService.editProfile(profileDto, currentUser);

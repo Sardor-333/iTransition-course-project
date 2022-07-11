@@ -26,15 +26,15 @@
 
                     <!-- Collection name -->
                     <div class="col">
-                        <label for="collectionName">Edit collection name</label>
+                        <label for="collectionName" th:text="#{menu.editCollectionName}"></label>
                         <input id="collectionName" name="name" type="text" class="form-control"
                                th:value="${collection.name}">
                     </div>
 
                     <!-- Collection photo -->
                     <div class="col">
-                        <label for="collectionImg" th:if="${collection.imgUrl != null}">Upload new img</label>
-                        <label for="collectionImg" th:if="${collection.imgUrl == null}">Upload img</label>
+                        <label for="collectionImg" th:if="${collection.imgUrl != null}" th:text="#{menu.uploadNewImg}"></label>
+                        <label for="collectionImg" th:if="${collection.imgUrl == null}" th:text="#{menu.uploadImg}"></label>
                         <input name="collectionImg" id="collectionImg" type="file" class="form-control">
                     </div>
                 </div>
@@ -42,20 +42,20 @@
 
                     <!-- Description -->
                     <div class="col">
-                        <label for="collectionDescription">Edit description</label>
+                        <label for="collectionDescription" th:text="#{menu.editCollectionDescription}"></label>
                         <textarea name="description" class="form-control" id="collectionDescription" rows="3"
                                   th:text="${collection.description}"></textarea>
                     </div>
 
                     <!-- Topics -->
                     <div class="col">
-                        <label for="topicId">Edit topic</label>
+                        <label for="topicId" th:text="#{menu.editTopic}"></label>
                         <select id="topicId" name="topicId" class="form-control">
                         </select>
                     </div>
                 </div>
 
-                <a class="btn btn-primary" id="submit-form-button">Submit form</a>
+                <a class="btn btn-primary" id="submit-form-button" th:text="#{menu.saveCollection}"></a>
             </form>
         </div>
     </div>
@@ -64,40 +64,9 @@
 <!-- Theme Customizer -->
 <div th:replace="fragments/theme-customizer :: theme-customizer"></div>
 
-<!-- Load topics -->
 <script th:inline="javascript">
-    // WHEN WINDOW LOADS LOAD ALL TOPICS
-    window.onload = () => {
-        loadTopics();
-    }
-
-    function loadTopics() {
-        // EXTRACT CURRENT TOPIC FROM MODEL
-        let selectedTopicId=[[${collection.topic.id}]];
-        console.log('=== COLLECTION TOPIC ID === ' + selectedTopicId);
-
-        fetch('/api/v1/topics', {
-            method: 'get'
-        }).then(response => {
-            response.json()
-                .then(topics => {
-                    const select = document.getElementById('topicId');
-
-                    for (let i = 0; i < topics.length; i++) {
-                        const currTopic = topics[i];
-
-                        const opt = document.createElement('option');
-                        opt.value = currTopic.id;
-                        opt.text = currTopic.name;
-                        if (currTopic.id === selectedTopicId) opt.selected=true;
-
-                        select.appendChild(opt);
-                    }
-                })
-        })
-    }
+    const selectedTopicId = [[${collection.topic.id}]];
 </script>
-
 <script th:src="@{/assets/js/custom/lang.js}"></script>
 <script th:src="@{/assets/js/custom/edit-collection.js}"></script>
 <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>

@@ -17,5 +17,5 @@ public class ValueDto {
     String fieldName;
 
     @NotNull(message = "Field name must not be null")
-    String fieldValue;
+    String targetValue;
 }

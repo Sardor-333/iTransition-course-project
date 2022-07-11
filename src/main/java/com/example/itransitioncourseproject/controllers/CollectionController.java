@@ -22,8 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.validation.Valid;
-
 @Controller
 @RequestMapping(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/collections")
 @RequiredArgsConstructor
@@ -68,7 +66,7 @@ public class CollectionController {
      */
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String createCollection(@RequestPart(name = "photo", required = false) MultipartFile photo,
-                                   @Valid @RequestPart(name = "collection") CollectionCreateDto collectionCreateDto,
+                                   @RequestPart(name = "collection") CollectionCreateDto collectionCreateDto,
                                    @AuthenticationPrincipal User currentUser,
                                    RedirectAttributes redirectAttributes) {
         ApiResponse apiResponse = collectionService.createCollection(collectionCreateDto, photo, currentUser);
@@ -87,7 +85,7 @@ public class CollectionController {
     @ResponseBody
     public ResponseEntity<ApiResponse> editCollection(@PathVariable Long collectionId,
                                                       @RequestPart(name = "img", required = false) MultipartFile img,
-                                                      @Valid @RequestPart(name = "collection") CollectionEditDto collectionEditDto,
+                                                      @RequestPart(name = "collection") CollectionEditDto collectionEditDto,
                                                       @AuthenticationPrincipal User currentUser) {
         ApiResponse response = collectionService.editCollection(collectionId, collectionEditDto, img, currentUser);
         return ResponseEntity.status(response.isSuccess() ? 200 : 409).body(response);

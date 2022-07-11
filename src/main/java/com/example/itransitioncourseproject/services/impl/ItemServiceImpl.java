@@ -9,7 +9,7 @@ import com.example.itransitioncourseproject.mappers.ItemMapper;
 import com.example.itransitioncourseproject.mappers.ValueMapper;
 import com.example.itransitioncourseproject.payloads.request.SearchDto;
 import com.example.itransitioncourseproject.payloads.request.ValueDto;
-import com.example.itransitioncourseproject.payloads.request.item.ItemCreateDto;
+import com.example.itransitioncourseproject.payloads.request.item.ItemDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
 import com.example.itransitioncourseproject.projections.FieldProjection;
 import com.example.itransitioncourseproject.projections.ItemDetailProjection;
@@ -104,16 +104,16 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ApiResponse createItem(Long collectionId, ItemCreateDto itemCreateDto, User currentUser) {
+    public ApiResponse createItem(Long collectionId, ItemDto itemDto, User currentUser) {
         Collection collection = collectionRepo.findById(collectionId).orElse(null);
         boolean userHasAccessToCollection = authUtils.userHasAccessToCollection(collection, currentUser);
         if (!userHasAccessToCollection)
             return new ApiResponse(false, messageSource.getMessage("error.accessDenied", null, Locale.getDefault()));
 
-        Item item = itemMapper.mapFromCreateDtoToEntity(itemCreateDto);
+        Item item = itemMapper.mapFromCreateDtoToEntity(itemDto);
         item.setCollection(collection);
         itemRepo.save(item);
-        saveValuesOnCreate(itemCreateDto.getValueDtoList(), item);
+        saveValuesOnCreate(itemDto.getValueDtoList(), item);
 
         return new ApiResponse(true, null);
     }

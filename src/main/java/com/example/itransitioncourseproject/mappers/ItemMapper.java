@@ -3,7 +3,7 @@ package com.example.itransitioncourseproject.mappers;
 import com.example.itransitioncourseproject.entities.Item;
 import com.example.itransitioncourseproject.entities.Tag;
 import com.example.itransitioncourseproject.exceptions.ObjectNotFoundException;
-import com.example.itransitioncourseproject.payloads.request.item.ItemCreateDto;
+import com.example.itransitioncourseproject.payloads.request.item.ItemDto;
 import com.example.itransitioncourseproject.repositories.TagRepo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -21,7 +21,7 @@ public abstract class ItemMapper {
 
     @Mapping(expression = "java(src.getName())", target = "name")
     @Mapping(expression = "java(getItemTags(src.getTagIdList()))", target = "tags")
-    public abstract Item mapFromCreateDtoToEntity(ItemCreateDto src);
+    public abstract Item mapFromCreateDtoToEntity(ItemDto src);
 
     @Named("getItemTags")
     protected Set<Tag> getItemTags(Set<Long> tagIdList) {

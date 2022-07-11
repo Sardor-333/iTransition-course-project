@@ -43,9 +43,10 @@
                             <div class="border p-4 rounded">
 
                                 <div class="text-center">
-                                    <h3 class="">Sign Up</h3>
-                                    <p>Already have an account?
+                                    <h3 class="" th:text="#{menu.signup}"></h3>
+                                    <p>
                                         <a th:href="@{/api/v1/auth/login}">Sign in here</a>
+                                        Already have an account?
                                     </p>
                                 </div>
 
@@ -65,14 +66,14 @@
 
                                         <!--                   First name                     -->
                                         <div class="col-sm-6">
-                                            <label for="firstName" class="form-label">First Name</label>
+                                            <label for="firstName" class="form-label" th:text="#{menu.firstName}"></label>
                                             <input type="text" name="firstName" class="form-control" id="firstName"
                                                    placeholder="First name">
                                         </div>
 
                                         <!--                   Last name                     -->
                                         <div class="col-sm-6">
-                                            <label for="inputLastName" class="form-label">Last Name</label>
+                                            <label for="inputLastName" class="form-label" th:text="#{menu.lastName}"></label>
                                             <input type="text" name="lastName" class="form-control" id="inputLastName"
                                                    placeholder="Last name">
                                         </div>
@@ -86,7 +87,7 @@
 
                                         <!--                   Password                     -->
                                         <div class="col-12">
-                                            <label for="inputChoosePassword" class="form-label">Password</label>
+                                            <label for="inputChoosePassword" class="form-label" th:text="#{menu.password}"></label>
                                             <div class="input-group" id="show_hide_password">
                                                 <input type="password" name="password" class="form-control border-end-0"
                                                        id="inputChoosePassword" value=""
@@ -100,7 +101,7 @@
                                         <div class="col-12">
                                             <div class="input-group">
                                                 <div class="col-sm-3">
-                                                    <h6 class="mb-0">Upload image</h6>
+                                                    <h6 class="mb-0" th:text="#{menu.uploadImg}"></h6>
                                                 </div>
                                                 <div class="col-sm-9 text-secondary">
                                                     <input type="file" name="profileImg" class="form-control"
@@ -113,9 +114,8 @@
                                         <!--                   Sign up button                     -->
                                         <div class="col-12">
                                             <div class="d-grid">
-                                                <button type="submit" class="btn btn-primary">
+                                                <button type="submit" class="btn btn-primary" th:text="#{menu.signup}">
                                                     <i class='bx bx-user'></i>
-                                                    Sign up
                                                 </button>
                                             </div>
                                         </div>

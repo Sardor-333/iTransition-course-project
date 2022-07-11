@@ -52,9 +52,10 @@
                             <div class="border p-4 rounded">
 
                                 <div class="text-center">
-                                    <h3 class="">Sign in</h3>
-                                    <p>Don't have an account yet?
+                                    <h3 th:text="#{menu.signin}"></h3>
+                                    <p>
                                         <a th:href="@{/api/v1/auth/register}">Sign up here</a>
+                                        Do not have an account yet?
                                     </p>
                                 </div>
 
@@ -83,7 +84,7 @@
                                         </div>
 
                                         <div class="col-12">
-                                            <label for="inputChoosePassword" class="form-label">Enter Password</label>
+                                            <label for="inputChoosePassword" class="form-label" th:text="#{menu.enterPassword}"></label>
                                             <div class="input-group" id="show_hide_password">
                                                 <input type="password" name="password" class="form-control border-end-0"
                                                        id="inputChoosePassword"
@@ -97,8 +98,8 @@
 
                                         <div class="col-12">
                                             <div class="d-grid">
-                                                <button type="submit" class="btn btn-primary"><i
-                                                        class="bx bxs-lock-open"></i>Sign in
+                                                <button type="submit" class="btn btn-primary" th:text="#{menu.signin}">
+                                                    <i class="bx bxs-lock-open"></i>
                                                 </button>
                                             </div>
                                         </div>

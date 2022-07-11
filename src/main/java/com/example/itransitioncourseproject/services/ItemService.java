@@ -3,7 +3,7 @@ package com.example.itransitioncourseproject.services;
 import com.example.itransitioncourseproject.entities.Item;
 import com.example.itransitioncourseproject.entities.User;
 import com.example.itransitioncourseproject.payloads.request.SearchDto;
-import com.example.itransitioncourseproject.payloads.request.item.ItemCreateDto;
+import com.example.itransitioncourseproject.payloads.request.item.ItemDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
 import com.example.itransitioncourseproject.payloads.response.SearchResult;
 import com.example.itransitioncourseproject.projections.FieldProjection;
@@ -26,7 +26,8 @@ public interface ItemService {
 
     List<FieldProjection> getCollectionFields(Long collectionId);
 
-    ApiResponse createItem(Long collectionId, ItemCreateDto itemCreateDto, User currentUser);
+
+    ApiResponse createItem(Long collectionId, ItemDto itemDto, User currentUser);
 
     ApiResponse deleteItemById(Long itemId, User currentUser);
 

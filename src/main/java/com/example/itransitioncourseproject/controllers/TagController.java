@@ -14,8 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-
 @Controller
 @RequestMapping(BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/tags")
 @RequiredArgsConstructor
@@ -40,7 +38,7 @@ public class TagController {
 
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     @PostMapping("/create")
-    public String createTag(@Valid @ModelAttribute TagCreateDto tagCreateDto,
+    public String createTag(@ModelAttribute TagCreateDto tagCreateDto,
                             RedirectAttributes redirectAttributes) {
         ApiResponse response = tagService.createTag(tagCreateDto);
         redirectAttributes.addFlashAttribute("response", response);

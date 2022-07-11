@@ -17,7 +17,7 @@
             <p th:if="${!response.success}" th:text="${response.message}" class="alert alert-danger"></p>
         </div>
 
-        <a class="btn btn-primary" th:href="@{/api/v1/collections/create}">Create collection</a>
+        <a class="btn btn-primary" th:href="@{/api/v1/collections/create}" th:text="#{menu.createCollection}"></a>
         <div class="page-content">
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 product-grid">
@@ -27,8 +27,14 @@
                         <div class="card-body">
                             <h6 class="card-title cursor-pointer" th:text="${col.name}"></h6>
                             <div class="clearfix">
-                                <p class="mb-0 float-start text-secondary"><strong th:text="${col.itemsCount}"></strong>
-                                    Items</p>
+                                <p class="mb-0 float-start text-secondary">
+                                    <strong th:text="${col.itemsCount}"></strong>
+                                    Items
+                                </p>
+                                <p class="mb-0 float-start text-secondary">
+                                    <strong th:text="${col.author.firstName + ' ' + col.author.lastName}"></strong>
+                                    Author
+                                </p>
                                 <p class="mb-0 float-end fw-bold"><span
                                         class="me-2 text-secondary">Topic: </span><span
                                         th:text="${col.topic.name}"></span>
@@ -53,8 +59,7 @@
                                        th:href="@{'/api/v1/items/collection/' + ${col.id}}"
                                     >
                                         <i class="bx bx-cog me-3 font-20"></i>
-                                        <span>
-											Items
+                                        <span th:text="#{menu.items}">
 										</span>
                                     </a>
                                 </div>
@@ -67,8 +72,7 @@
                                        th:href="@{'/api/v1/collections/edit/' + ${col.id}}"
                                     >
                                         <i class="bx bx-cog me-3 font-20"></i>
-                                        <span>
-											Edit
+                                        <span th:text="#{menu.edit}">
 										</span>
                                     </a>
                                 </div>
@@ -81,8 +85,7 @@
                                        th:onclick="'deleteCollection(\'' + ${col.id} + '\');'"
                                     >
                                         <i class="bx bx-cog me-3 font-20"></i>
-                                        <span>
-											Delete
+                                        <span th:text="#{menu.delete}">
 										</span>
                                     </a>
                                 </div>
@@ -124,17 +127,7 @@
 <!-- Theme Customizer -->
 <div th:replace="fragments/theme-customizer :: theme-customizer"></div>
 
-<script>
-    function deleteCollection(collectionId) {
-        fetch('/api/v1/collections/'+collectionId, {
-            method:'delete'
-        }).then(response => {
-            console.log('=== COLLECTION DELETED ===');
-            location.reload();
-        });
-    }
-</script>
-
+<script th:src="@{/assets/js/custom/delete-collection.js}"></script>
 <script th:src="@{/assets/js/custom/lang.js}"></script>
 <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/assets/js/jquery.min.js}"></script>

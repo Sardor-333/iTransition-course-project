@@ -14,6 +14,12 @@
             <div class="container">
                 <div class="main-body">
                     <div class="row">
+
+                        <div th:if="${response != null}">
+                            <p th:if="${response.success}" th:text="${response.message}" class="alert alert-success"></p>
+                            <p th:if="${!response.success}" th:text="${response.message}" class="alert alert-danger"></p>
+                        </div>
+
                         <div class="col-lg-4">
                             <div class="card">
                                 <div class="card-body">
@@ -27,6 +33,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-lg-8">
                             <div class="card">
                                 <form class="card-body" th:action="@{/api/v1/users/profile}" method="post" enctype="multipart/form-data">
@@ -34,7 +41,7 @@
                                     <!-- FIRST NAME -->
                                     <div class="row mb-3">
                                         <div class="col-sm-3">
-                                            <h6 class="mb-0">First name</h6>
+                                            <h6 class="mb-0" th:text="#{menu.firstName}"></h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
                                             <input type="text" name="firstName" class="form-control"
@@ -45,7 +52,7 @@
                                     <!-- LAST NAME -->
                                     <div class="row mb-3">
                                         <div class="col-sm-3">
-                                            <h6 class="mb-0">Last Name</h6>
+                                            <h6 class="mb-0" th:text="#{menu.lastName}"></h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
                                             <input type="text" name="lastName" class="form-control"
@@ -74,7 +81,7 @@
 
                                     <div class="row mb-3">
                                         <div class="col-sm-3">
-                                            <h6 class="mb-0">Upload image</h6>
+                                            <h6 class="mb-0" th:text="#{menu.uploadImg}"></h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
                                             <input type="file" name="profileImg" class="form-control" id="inputGroupFile04"
@@ -86,7 +93,7 @@
                                     <div class="row">
                                         <div class="col-sm-3"></div>
                                         <div class="col-sm-9 text-secondary">
-                                            <input type="submit" class="btn btn-primary px-4" value="Save Changes"/>
+                                            <input type="submit" class="btn btn-primary px-4" th:value="#{menu.saveProfile}"/>
                                         </div>
                                     </div>
                                 </form>

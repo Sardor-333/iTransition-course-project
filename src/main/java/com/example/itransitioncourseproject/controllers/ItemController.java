@@ -3,7 +3,7 @@ package com.example.itransitioncourseproject.controllers;
 import com.example.itransitioncourseproject.entities.Item;
 import com.example.itransitioncourseproject.entities.User;
 import com.example.itransitioncourseproject.payloads.request.SearchDto;
-import com.example.itransitioncourseproject.payloads.request.item.ItemCreateDto;
+import com.example.itransitioncourseproject.payloads.request.item.ItemDto;
 import com.example.itransitioncourseproject.payloads.response.ApiResponse;
 import com.example.itransitioncourseproject.payloads.response.SearchResult;
 import com.example.itransitioncourseproject.projections.FieldProjection;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -66,6 +65,15 @@ public class ItemController {
         return new ModelAndView("items", model);
     }
 
+    @GetMapping("/{itemId}")
+    public String getItemById(@PathVariable Long itemId,
+                              Model model,
+                              @AuthenticationPrincipal User currentUser) {
+        ItemDetailProjection itemDetails = itemService.getItemDetailsById(itemId, currentUser);
+        model.addAttribute("item", itemDetails);
+        return "item";
+    }
+
     @GetMapping("/create/{collectionId}")
     public String getItemCreatePage(@PathVariable Long collectionId, Model model) {
         List<FieldProjection> collectionFields = itemService.getCollectionFields(collectionId);
@@ -79,21 +87,12 @@ public class ItemController {
 
     @PostMapping("/create/{collectionId}")
     public String createNewItem(@PathVariable Long collectionId,
-                                @Valid @RequestBody ItemCreateDto itemCreateDto,
+                                @RequestBody ItemDto itemDto,
                                 @AuthenticationPrincipal User currentUser,
                                 RedirectAttributes redirectAttributes) {
-        ApiResponse apiResponse = itemService.createItem(collectionId, itemCreateDto, currentUser);
+        ApiResponse apiResponse = itemService.createItem(collectionId, itemDto, currentUser);
         redirectAttributes.addFlashAttribute("response", apiResponse);
         return "redirect:" + BaseUrl.API_PREFIX + BaseUrl.API_VERSION + "/items/collection/" + collectionId;
-    }
-
-    @GetMapping("/{itemId}")
-    public String getItemById(@PathVariable Long itemId,
-                              Model model,
-                              @AuthenticationPrincipal User currentUser) {
-        ItemDetailProjection itemDetails = itemService.getItemDetailsById(itemId, currentUser);
-        model.addAttribute("item", itemDetails);
-        return "item";
     }
 
     @DeleteMapping("/{itemId}")
@@ -106,7 +105,7 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public String searchItems(@Valid @ModelAttribute SearchDto searchDto,
+    public String searchItems(@ModelAttribute SearchDto searchDto,
                               Model model) {
         SearchResult<Item> itemSearchResult = itemService.searchItems(searchDto);
         model.addAttribute("searchResult", itemSearchResult);

@@ -50,7 +50,6 @@ function addCustomField(customFields) {
     selectFieldType.add(new Option('Number', 'number'));
     selectFieldType.add(new Option('Date', 'date'));
     selectFieldType.add(new Option('Checkbox', 'checkbox'));
-    selectFieldType.add(new Option('File', 'file'));
 
     colFieldType.appendChild(selectFieldType);
 

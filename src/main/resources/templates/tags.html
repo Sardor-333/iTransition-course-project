@@ -19,11 +19,12 @@
 
             <a sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')"
                     class="btn btn-primary"
-                    th:href="@{/api/v1/tags/create}">
-                Create New Tag
+                    th:href="@{/api/v1/tags/create}"
+               th:text="#{menu.createNewTag}"
+            >
             </a>
 
-            <h6 class="mb-0 text-uppercase">Tags</h6>
+            <h6 class="mb-0 text-uppercase" th:text="#{sidebar.tags}"></h6>
             <hr/>
             <div class="card">
                 <div class="card-body">
@@ -35,7 +36,7 @@
                                 <th>#NO</th>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Items Count</th>
+                                <th th:text="#{menu.items}"></th>
                                 <th>Created Time</th>
                             </tr>
                             </thead>
